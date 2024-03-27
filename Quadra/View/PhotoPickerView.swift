@@ -9,22 +9,20 @@ import SwiftUI
 import PhotosUI
 
 struct PhotoPickerView: View {
-    var width: CGFloat
-    var heigh: CGFloat
+    var geometry: GeometryProxy
     @Binding var photosPickerItem: PhotosPickerItem?
     @Binding var image: Image?
     var action: (()->())?
     
     var body: some View {
-        ZStack(alignment: .center) {
+        ZStack() {
             if let image = image {
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: width,
-                           height: heigh)
-                    .clipped()
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .frame(width: geometry.size.width * 0.85,
+                           height: geometry.size.height/3)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
                     .northWestShadow()
             }
             PhotosPicker(selection: $photosPickerItem,
@@ -38,31 +36,32 @@ struct PhotoPickerView: View {
                     }
             }
             if photosPickerItem != nil {
-                EdgeButtonView(action: {
-                    photosPickerItem = nil
-                }, image: Image(systemName: "trash"))
+                EdgeButtonView(image: Image(systemName: "trash"),
+                               edge: .topRight,
+                               action: { photosPickerItem = nil })
             }
         }
         .background(
-            RoundedRectangle(cornerRadius: 10)
-                .frame(width: width,
-                       height: heigh)
+            RoundedRectangle(cornerRadius: 8)
+                .frame(width: geometry.size.width * 0.85,
+                       height: geometry.size.height/3)
                 .foregroundStyle(.element)
                 .northWestShadow()
         )
-        .frame(width: width,
-               height: heigh)
+        .frame(width: geometry.size.width * 0.85,
+               height: geometry.size.height/3)
         .onChange(of: photosPickerItem) {
             action?()
         }
+        .padding(.vertical)
     }
 }
 
 
 #Preview {
-    PhotoPickerView(width: 300,
-                    heigh: 300,
-                    photosPickerItem: .constant(nil),
-                    image: .constant(nil))
-    .padding()
+    GeometryReader { geometry in
+        PhotoPickerView(geometry: geometry,
+                        photosPickerItem: .constant(nil),
+                        image: .constant(nil))
+    }
 }

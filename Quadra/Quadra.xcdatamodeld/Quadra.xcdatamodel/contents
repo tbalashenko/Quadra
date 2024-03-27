@@ -2,11 +2,17 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="23C64" minimumToolsVersion="Xcode 15.0" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Item" representedClassName="Item" syncable="YES">
         <attribute name="additionTime" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="archiveTag" attributeType="String"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="image" optional="YES" attributeType="Binary" valueTransformerName="ImageTransformer" customClassName="NSImage"/>
+        <attribute name="isArchived" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="lastRepetition" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="mustBeDeleted" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="needMoveToArchive" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="needMoveToThisMonth" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="needMoveToThisWeek" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="phraseToRemember" attributeType="String"/>
-        <attribute name="repetitionCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="repetitionCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="status" attributeType="Transformable" valueTransformerName="StatusTransformer" customClassName=".Status"/>
         <attribute name="transcription" optional="YES" attributeType="String"/>
         <attribute name="translation" attributeType="String"/>

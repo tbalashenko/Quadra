@@ -9,17 +9,20 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-    @State var id = UUID()
-    @EnvironmentObject var manager: DataManager
-    @Environment(\.managedObjectContext) var viewContext
-    @FetchRequest(sortDescriptors: [])  var items: FetchedResults<Item>
+    @EnvironmentObject var dataManager: DataManager
     @State var showCreateCardView = false
     
     var body: some View {
-        NavigationView {
-            SwipeView(items: items)
-                .padding(.horizontal)
-                .background(Color.element)
+        GeometryReader { geometry in
+            NavigationStack {
+                ZStack {
+                    EmptyView()
+                    SwipeView()
+                        .padding(geometry.size.width/11)
+                        .background(Color.element)
+                        .environmentObject(dataManager)
+                        .environment(\.managedObjectContext, dataManager.container.viewContext)
+                }
                 .toolbar {
                     ToolbarItem {
                         Button {
@@ -28,34 +31,43 @@ struct ContentView: View {
                             Label("Add Item", systemImage: "plus")
                         }
                     }
-                }.id(id)
+                    ToolbarItem {
+                        Button {
+                            filter()
+                        } label: {
+                            Label("Add Item", systemImage: "line.3.horizontal.decrease.circle.fill")
+                        }
+                    }
+                }
                 .sheet(isPresented: $showCreateCardView, onDismiss: updateView) {
                     NavigationStack {
                         CreateCardView(showCreateCardView: $showCreateCardView)
-                            .environmentObject(manager)
-                            .environment(\.managedObjectContext, manager.container.viewContext)
                     }
                 }
+            }
         }
     }
     
-    ///A crutch until update from FetchRequest works in swiftUI, or until I find a solution
-    func updateView() {
-        id = UUID()
+    func filter() {
+        
     }
     
-    private func deleteItems(offsets: IndexSet) {
-        let index = offsets[offsets.startIndex]
-        //viewModel.delete(index: index)
+    func updateView() {
+        //dataManager.update()
     }
 }
 
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
+
+struct FilterView: View {
+    var body: some View {
+        Text("")
+    }
+}
+
+
+#Preview {
+    FilterView()
+}
 
 #Preview {
     ContentView()

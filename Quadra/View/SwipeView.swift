@@ -5,37 +5,32 @@
 //  Created by Tatyana Balashenko on 14/03/2024.
 //
 
-import SwiftUI
-
-//
-//  SwipeView.swift
-//  Quadra
-//
-//  Created by Tatyana Balashenko on 14/03/2024.
-//
-
+import CoreData
 import SwiftUI
 
 struct SwipeView: View {
-    var items: FetchedResults<Item>
+    @EnvironmentObject var dataManager: DataManager
+    @Environment(\.managedObjectContext) var viewContext
     
     @State private var removalTransition = AnyTransition.trailingBottom
     private let dragThreshold: CGFloat = 80.0
     @GestureState private var dragState = DragState.inactive
     @State private var lastIndex = 1
     @State var cardViews: [CardView] = []
+    @State private var previousItems: [Item] = []
+    @State private var itemToDelete: Item?
+    @State var isDisappeared: Bool = true
     
     var body: some View {
         GeometryReader { geometry in
             VStack {
                 ZStack {
-                    ForEach(cardViews) { cardView in
+                    ForEach(cardViews.reversed()) { cardView in
                         cardView
                             .zIndex(self.isTopCard(cardView: cardView) ? 1 : 0) // 1 for top layer.
                             .offset(x: self.isTopCard(cardView: cardView) ? self.dragState.translation.width : 0, y: self.isTopCard(cardView: cardView) ? self.dragState.translation.height : 0)
                             .scaleEffect(self.dragState.isDragging && self.isTopCard(cardView: cardView) ? 0.95 : 1.0)
                             .rotationEffect(Angle(degrees: self.isTopCard(cardView: cardView) ? Double(self.dragState.translation.width / 10) : 0))
-                            .animation(.interpolatingSpring(stiffness: 180, damping: 100))
                             .transition(self.removalTransition)
                             .gesture(LongPressGesture(minimumDuration: 0.01)
                                 .sequenced(before: DragGesture())
@@ -67,22 +62,42 @@ struct SwipeView: View {
                                                 return
                                             }
                                             if drag.translation.width < -self.dragThreshold || drag.translation.width > self.dragThreshold {
-                                                self.moveCard()
+                                                withAnimation(.interpolatingSpring(stiffness: 180, damping: 100)) {
+                                                    self.moveCard()
+                                                }
                                             }
-                                        })
-                            )
+                                        }))
                     }
                 }
             }
-            .onAppear() {
-                if items.count > 0 {
-                    for index in 0...items.count - 1 {
-                        cardViews.append(CardView(item: items[index], geometry: geometry))
-                    }
+            .onAppear {
+                isDisappeared = false
+                updateCardViews(geometry: geometry)
+            }
+            .onDisappear {
+                isDisappeared = true
+                cardViews.removeAll()
+                dataManager.cleanUp()
+            }
+            .onReceive(dataManager.$items) { newItems in
+                if !isDisappeared, newItems != previousItems {
+                    previousItems = newItems
+                    updateCardViews(geometry: geometry)
                 }
             }
         }
-        
+    }
+    
+    func updateCardViews(geometry: GeometryProxy) {
+        cardViews.removeAll()
+        dataManager.items.forEach { item in
+            let cardView = CardView(item: item,
+                                    geometry: geometry,
+                                    presentationMode: .swipe,
+                                    deleteAction: { removeCard() },
+                                    moveButtonAction: { dataManager.setNewStatus(for: item) })
+            cardViews.append(cardView)
+        }
     }
     
     private func isTopCard(cardView: CardView) -> Bool {
@@ -93,15 +108,22 @@ struct SwipeView: View {
     }
     
     private func moveCard() {
-        let temp = cardViews.removeFirst()
+        guard let removedCard = cardViews.first else { return }
         
-        self.lastIndex += 1
-        let item = items[lastIndex % items.count]
+        let item = removedCard.item
         
-        let newCardView = CardView(item: item, geometry: temp.geometry)
+        dataManager.incrementCounter(for: item)
         
-        cardViews.append(newCardView)
+        cardViews.removeFirst()
     }
     
-    
+    private func removeCard() {
+        guard let removedCard = cardViews.first else { return }
+        
+        let item = removedCard.item
+        
+        dataManager.setMustBeRemoved(item: item)
+        
+        cardViews.removeFirst()
+    }
 }

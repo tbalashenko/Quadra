@@ -9,38 +9,6 @@ import Foundation
 import CoreData
 import SwiftUI
 
-extension Item {
-    //    static func getAllItems() -> [Item] {
-    //        let context = PersistenceController.shared.container.viewContext
-    //        let fetchRequest: NSFetchRequest<Item> = Item.fetchRequest()
-    //        do {
-    //            let items = try context.fetch(fetchRequest)
-    //            return items
-    //        }
-    //        catch let error as NSError {
-    //            print("Error getting ShoppingItems: \(error.localizedDescription), \(error.userInfo)")
-    //        }
-    //        return [Item]()
-    //    }
-    //
-    //    static func addNewItem(item: Item) -> Item {
-    //        let context = PersistenceController.shared.container.viewContext
-    //        let newItem = Item(context: context)
-    //        newItem.id = UUID()
-    //        newItem.timestamp = Date()
-    //        return newItem
-    //    }
-    //
-    //    static func saveChanges() {
-    //        PersistenceController.shared.saveContext()
-    //    }
-    //
-    //    static func delete(item: Item) {
-    //        PersistenceController.shared.container.viewContext.delete(item)
-    //        saveChanges()
-    //    }
-}
-
 extension Source {
     static var source1 = Source(title: "XCode", color: .catawba)
     static var source2 = Source(title: "PE", color: .whiteCoffee)
@@ -51,8 +19,24 @@ extension Source {
 }
 
 extension Item {
+    var needSetNewStatus: Bool {
+        self.needMoveToThisWeek || self.needMoveToThisMonth || self.needMoveToArchive
+    }
+    
+    var getNewStatus: Status {
+        if self.needMoveToThisWeek {
+            return .thisWeek
+        } else if self.needMoveToThisMonth {
+            return .thisMonth
+        } else if self.needMoveToArchive {
+            return .archive
+        }
+        
+        return self.status
+    }
+    
     static var sampleData = [Item(image: UIImage(named: "test")?.pngData(),
-                                  //archiveTag: "#2024-2",
+                                  archiveTag: "#2024-2",
                                   //audioNote: nil,
                                   phraseToRemember: "Connection interrupted: will attempt to reconnect",
                                   translation: "Соединение прервано: будет предпринята попытка восстановить",
@@ -66,7 +50,7 @@ extension Item {
                                   transcription: "ejfiwje",
                                   status: .input),
                              Item(image: UIImage(named: "test2")?.pngData(),
-                                  //archiveTag: "#2024-1",
+                                  archiveTag: "#2024-1",
                                   //audioNote: nil,
                                   phraseToRemember: "Message from debugger: killed",
                                   translation: "Сообщение от дебаггера: убито",
@@ -75,7 +59,7 @@ extension Item {
                                   transcription: "IUHIUHI",
                                   status: .input),
                              Item(image: UIImage(named: "test")?.pngData(),
-                                  //archiveTag: "#2024-1",
+                                  archiveTag: "#2024-1",
                                   //audioNote: nil,
                                   phraseToRemember: "Message from debugger: killed",
                                   translation: "Сообщение от дебаггера: убито",
@@ -84,7 +68,7 @@ extension Item {
                                   transcription: "IUHIUHI",
                                   status: .input),
                              Item(image: UIImage(named: "test2")?.pngData(),
-                                  //archiveTag: "#2024-1",
+                                  archiveTag: "#2024-1",
                                   //audioNote: nil,
                                   phraseToRemember: "Message from debugger: killed",
                                   translation: "Сообщение от дебаггера: убито",
@@ -98,9 +82,7 @@ extension Item {
 
 extension Item {
     convenience init(image: Data?,
-//                     archiveTag: String,
-//                     archiveTagColor: Color = .blue,
-                     //                     audioNote: Data?,
+                     archiveTag: String,
                      phraseToRemember: String,
                      translation: String,
                      lastRepetition: Date,
@@ -109,10 +91,10 @@ extension Item {
                      additionTime: Date = Date(),
                      status: Status) {
         let entity = NSEntityDescription.entity(forEntityName: "Item",
-                                                in: DataManager.shared.container.viewContext)
-        self.init(entity: entity!, insertInto: DataManager.shared.container.viewContext)
+                                                in: DataManager().container.viewContext)
+        self.init(entity: entity!, insertInto: DataManager().container.viewContext)
         self.id = UUID()
-        //self.archiveTag = ArchiveTag(title: archiveTag, color: archiveTagColor)
+        self.archiveTag = archiveTag
         //        self.audioNote = audioNote
         self.phraseToRemember = phraseToRemember
         self.translation = translation

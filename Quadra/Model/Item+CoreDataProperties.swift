@@ -16,17 +16,22 @@ extension Item {
         return NSFetchRequest<Item>(entityName: "Item")
     }
 
-    @NSManaged public var additionTime: Date?
-    @NSManaged public var id: UUID?
+    @NSManaged public var additionTime: Date
+    @NSManaged public var id: UUID
     @NSManaged public var image: Data?
     @NSManaged public var lastRepetition: Date?
     @NSManaged public var phraseToRemember: String
     @NSManaged public var translation: String?
     @NSManaged public var transcription: String?
-    @NSManaged public var repetitionCount: Int64
+    @NSManaged public var repetitionCounter: Int64
     @NSManaged public var status: Status
     @NSManaged public var sources: NSSet?
-
+    @NSManaged public var archiveTag: String
+    @NSManaged public var isArchived: Bool
+    @NSManaged public var needMoveToThisWeek: Bool
+    @NSManaged public var needMoveToThisMonth: Bool
+    @NSManaged public var needMoveToArchive: Bool
+    @NSManaged public var mustBeDeleted: Bool
 }
 
 // MARK: Generated accessors for sources

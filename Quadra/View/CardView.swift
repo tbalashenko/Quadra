@@ -7,15 +7,27 @@
 
 import SwiftUI
 
+enum CardViewPresentationMode {
+    case swipe, view
+}
+
 struct CardView: View {
-    var item: Item
+    @Environment(\.dismiss) var dismiss
+    @ObservedObject var item: Item
     
-    let id = UUID()
     var geometry: GeometryProxy
-    var gridLayout: [GridItem] = [ GridItem(.adaptive(minimum: 100, maximum: 300)), GridItem(.adaptive(minimum: 100, maximum: 300)), GridItem(.adaptive(minimum: 100, maximum: 300)) ]
+    let id = UUID()
+    let presentationMode: CardViewPresentationMode
+    
+    var deleteAction: (()->())?
+    var moveButtonAction: (()->())?
+    
+    var gridLayout: [GridItem] = [ GridItem(.adaptive(minimum: 100, maximum: 300)), 
+                                   GridItem(.adaptive(minimum: 100, maximum: 300)),
+                                   GridItem(.adaptive(minimum: 100, maximum: 300)) ]
+    
     @State var showTranslation = false
-    #warning("change it")
-    @State var showAdditionalInfo = true
+    @State var showAdditionalInfo = false
     @State private var totalHeight = CGFloat.infinity
     
     var body: some View {
@@ -27,64 +39,107 @@ struct CardView: View {
                         Image(uiImage: uiImage)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: geometry.size.width - 32,
+                            .frame(width: geometry.size.width,
                                    height: geometry.size.height * 1/2)
                             .clipped()
                             .northWestShadow()
                     }
+                    
+                    if presentationMode == .swipe {
+                        EdgeButtonView(image: Image(systemName: "trash.circle.fill"),
+                                       edge: .topLeft,
+                                       action: {
+                            deleteAction?()
+                        })
+                        EdgeButtonView(image: Image(systemName: "info.circle.fill"),
+                                       edge: .topRight,
+                                       action: { showAdditionalInfo.toggle()
+                        })
+                    }
+                    
                     VStack {
-                        HStack {
-                            Spacer()
-                            Button(action: {
-                                showAdditionalInfo.toggle()
-                            }, label: {
-                                Image(systemName: "info.circle.fill")
-                                    .frame(width: 22, height: 22)
-                            })
-                            .buttonStyle(.transparentButtonStyle)
-                            .padding()
-                        }
                         Spacer()
                         HStack {
                             Spacer()
                             TagView(text: item.status.title,
                                     backgroundColor: Color(hex: item.status.color))
-                                .padding()
                         }
                     }
+                    .padding()
                 }
-                .frame(width: geometry.size.width - 32,
+                .frame(width: geometry.size.width,
                        height: geometry.size.height * 1/2)
                 
                 Text(!showTranslation ? (item.phraseToRemember ) : item.translation ?? "refewf")
+                    .font(.title2)
                     .bold()
-                    .padding(.horizontal)
-                    .onTapGesture {
-                        showTranslation.toggle()
-                    }
+                    .padding()
+                    .onTapGesture { showTranslation.toggle() }
                 
                 if !showTranslation, let transcripton = item.transcription {
                     Text("[" + transcripton + "]")
                 }
                 
                 if showAdditionalInfo {
-                    VStack {
-                        if let sources = item.sources?.allObjects as? [Source] {
-                            TagCloudView(items: sources, geometry: geometry, totalHeight: $totalHeight)
+                    HStack {
+                        VStack(alignment: .leading, spacing: 6) {
+                            if let sources = item.sources?.allObjects as? [Source] {
+                                TagCloudView(items: sources, geometry: geometry, totalHeight: $totalHeight)
+                            }
+                            styledText("Added: ", regularPart: formatDate(item.additionTime))
+                            styledText("Number of repetitions: ", regularPart: String(item.repetitionCounter))
+                            if let lastRepetition = item.lastRepetition {
+                                styledText("Last repetition: ", regularPart: formatDate(lastRepetition))
+                            }
                         }
-                        if let additionTime = item.additionTime {
-                            Text("Added: \(additionTime.formatted(date: .abbreviated, time: .shortened))")
-                        }
-                        Text("Number of repetitions: 0")
+                        Spacer()
                     }
+                    .padding()
+                }
+                if item.needSetNewStatus {
+                    getButton(for: item, geometry: geometry)
                 }
                 Spacer()
             }
             .background(.element)
             .cornerRadius(8)
             .northWestShadow()
-            .padding()
+            .onAppear {
+                if presentationMode == .view {
+                    showAdditionalInfo = true
+                }
+            }
         }
+        .background(.element)
+    }
+    
+    func styledText(_ boldPart: String, regularPart: String) -> Text {
+        let boldText = Text(boldPart).bold()
+        let regularText = Text(regularPart)
+        return boldText + regularText
+    }
+    
+    private func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
+    }
+    
+    func getButton(for item: Item, geometry: GeometryProxy) -> some View {
+        Button {
+            moveButtonAction?()
+        } label: {
+            HStack {
+                Spacer()
+                Text("Move to")
+                let status = item.getNewStatus
+                TagView(text: status.title,
+                        backgroundColor: Color(hex: status.color))
+                Spacer()
+            }
+        }
+        .buttonStyle(NeuButtonStyle(width: geometry.size.width / 2, height: 40))
     }
 }
 
@@ -92,19 +147,19 @@ struct CardView: View {
 
 extension CardView: Identifiable { }
 
-#Preview {
-    GeometryReader { geometry in
-        CardView(item: Item(image: UIImage(named: "test")?.pngData(),
-                            //archiveTag: "#2024-2",
-                            //audioNote: nil,
-                            phraseToRemember: "Connection interrupted: will attempt to reconnect",
-                            translation: "Соединение прервано: будет предпринята попытка восстановить",
-                            lastRepetition: Date(),
-                            sources: [Source(title: "Xcode", color: .blue), Source(title: "Xcode", color: .purple)],
-                            transcription: "ejfiwje",
-                            status: .input),
-                 geometry: geometry)
-    }
-}
+//#Preview {
+//    GeometryReader { geometry in
+//        CardView(item: Item(image: UIImage(named: "test")?.pngData(),
+//                            archiveTag: "#2024-2",
+//                            //audioNote: nil,
+//                            phraseToRemember: "Connection interrupted: will attempt to reconnect",
+//                            translation: "Соединение прервано: будет предпринята попытка восстановить",
+//                            lastRepetition: Date(),
+//                            sources: [Source(title: "Xcode", color: .blue), Source(title: "Xcode", color: .purple)],
+//                            transcription: "ejfiwje",
+//                            status: .input),
+//                 geometry: geometry, presentationMode: .view)
+//    }
+//}
 
 

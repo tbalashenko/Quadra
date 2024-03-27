@@ -20,13 +20,11 @@ struct NeuTextFieldStyle: TextFieldStyle {
                     .shadow(.inner(color: .shadow, radius: 3, x: 3, y: 3))
             )
             .clipShape(RoundedRectangle(cornerRadius: 8))
-        //.northWestInnerShadow()
             .padding(.horizontal)
     }
 }
 
 #Preview {
-    
     VStack {
         Spacer()
         TextField("Test", text: .constant("Test"), axis: .vertical)

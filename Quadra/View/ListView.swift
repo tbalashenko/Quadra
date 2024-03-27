@@ -8,24 +8,33 @@
 import SwiftUI
 
 struct ListView: View {
-    @EnvironmentObject var manager: DataManager
+    @EnvironmentObject var dataManager: DataManager
     @Environment(\.managedObjectContext) var viewContext
-    @FetchRequest(sortDescriptors: [])  var items: FetchedResults<Item>
+    @State private var previousItems: [Item] = []
     
     var body: some View {
         GeometryReader() { geometry in
-            NavigationView {
-                List(items) { item in
-                    ListRow(item: item)
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(Color.element)
-                        .background(
-                            NavigationLink("", destination: CardView(item: item, geometry: geometry))
+            NavigationStack {
+                List {
+                    ForEach(dataManager.items) { item in
+                        ListRow(item: item)
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.element)
+                            .background(
+                                NavigationLink("",
+                                               destination: CardView(item: item,
+                                                                     geometry: geometry,
+                                                                     presentationMode: .view)
+                                                .environmentObject(dataManager)
+                                                .environment(\.managedObjectContext, dataManager.container.viewContext)
+                                                .padding(.horizontal, geometry.size.width/12)
+                                                .padding(.vertical, geometry.size.width/12)
+                                                .background(Color.element))
                                 .opacity(0)
-                        )
+                            )
+                    }.onDelete(perform: delete)
                 }
                 .listStyle(.plain)
-                .listRowInsets(.none)
                 .background(Color.element)
                 .toolbar {
                     ToolbarItem {
@@ -36,64 +45,38 @@ struct ListView: View {
                         }
                     }
                 }
+                .onReceive(dataManager.$items) { newItems in
+                    if newItems != previousItems {
+                        previousItems = newItems
+                    }
+                }
+                .onAppear {
+                    print("ListView appeared")
+                    dataManager.cleanUp()
+                }
+                .onDisappear {
+                    print("ListView disappeared")
+                    dataManager.cleanUp()
+                }
             }
         }
     }
-    
     
     func filter() {
         
     }
-}
-
-//#Preview {
-//    var iitems = [" no NSValueTransformer with class name 'StatusTransformer' was found for attribute 'status' on entity 'Item'"]
-//
-//    return ListView(iitems: iitems)
-//}
-
-
-struct ListRow: View {
-    var item: Item
     
-    var body: some View {
-        HStack {
-            VStack {
-                HStack {
-                    Text(item.phraseToRemember)
-                        .padding(8)
-                    Spacer()
-                }
-                HStack {
-                    Spacer()
-                    TagView(text: item.status.title,
-                            backgroundColor: Color(hex: item.status.color))
-                    .padding(.vertical, 4)
-                }
-            }
-            Spacer()
-            if let data = item.image,
-               let uiImage = UIImage(data: data) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .frame(width: 88, height: 88)
-                    .background(Color.element)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .northWestShadow()
-            }
+    private func deleteItem(item: Item) {
+        dataManager.deleteItem(item)
+    }
+    
+    private func delete(at offsets: IndexSet) {
+        for index in offsets {
+            dataManager.deleteItem(dataManager.items[index])
         }
-        //.padding()
-        .background(Color.element
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            .northWestShadow()
-        )
     }
 }
-
 
 #Preview {
-    VStack {
-        ListRow(item: Item.sampleData.first!)
-        ListRow(item: Item.sampleData.last!)
-    }
+    return ListView()
 }
