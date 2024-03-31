@@ -8,11 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		A01D2A742BB4C4CA00AE1790 /* ListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01D2A732BB4C4CA00AE1790 /* ListRow.swift */; };
+		A01D2A762BB4C78800AE1790 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01D2A752BB4C78800AE1790 /* FilterView.swift */; };
+		A01D2A782BB9C40100AE1790 /* UIApplication+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01D2A772BB9C40100AE1790 /* UIApplication+Ext.swift */; };
+		A01D2A7A2BB9D6DD00AE1790 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01D2A792BB9D6DD00AE1790 /* InfoView.swift */; };
 		A01E189C2BA3211000A03412 /* QuadraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E189B2BA3211000A03412 /* QuadraApp.swift */; };
 		A01E189E2BA3211000A03412 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E189D2BA3211000A03412 /* ContentView.swift */; };
 		A01E18A02BA3211300A03412 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A01E189F2BA3211300A03412 /* Assets.xcassets */; };
 		A01E18A32BA3211300A03412 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A01E18A22BA3211300A03412 /* Preview Assets.xcassets */; };
-		A01E18A52BA3211300A03412 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E18A42BA3211300A03412 /* DataManager.swift */; };
+		A01E18A52BA3211300A03412 /* CardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E18A42BA3211300A03412 /* CardManager.swift */; };
 		A01E18A82BA3211300A03412 /* Quadra.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A01E18A62BA3211300A03412 /* Quadra.xcdatamodeld */; };
 		A01E18BD2BA32F9E00A03412 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E18BC2BA32F9E00A03412 /* ListView.swift */; };
 		A01E18C22BA334F600A03412 /* Item+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E18C12BA334F600A03412 /* Item+Ext.swift */; };
@@ -42,16 +45,20 @@
 		A0751AE82BADBED500CF252C /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0751AE72BADBED500CF252C /* Date+Ext.swift */; };
 		A0AC3A022BA9AB4C006DA5DA /* Status+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AC3A012BA9AB4C006DA5DA /* Status+Ext.swift */; };
 		A0AC3A042BA9ACAE006DA5DA /* ArchiveTag+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AC3A032BA9ACAE006DA5DA /* ArchiveTag+Ext.swift */; };
+		A0FB58772BBA022600104EB4 /* SourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FB58762BBA022600104EB4 /* SourceManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A01D2A732BB4C4CA00AE1790 /* ListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRow.swift; sourceTree = "<group>"; };
+		A01D2A752BB4C78800AE1790 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
+		A01D2A772BB9C40100AE1790 /* UIApplication+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Ext.swift"; sourceTree = "<group>"; };
+		A01D2A792BB9D6DD00AE1790 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		A01E18982BA3211000A03412 /* Quadra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Quadra.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A01E189B2BA3211000A03412 /* QuadraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadraApp.swift; sourceTree = "<group>"; };
 		A01E189D2BA3211000A03412 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A01E189F2BA3211300A03412 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A01E18A22BA3211300A03412 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		A01E18A42BA3211300A03412 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		A01E18A42BA3211300A03412 /* CardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardManager.swift; sourceTree = "<group>"; };
 		A01E18A72BA3211300A03412 /* Quadra.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Quadra.xcdatamodel; sourceTree = "<group>"; };
 		A01E18BC2BA32F9E00A03412 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		A01E18C12BA334F600A03412 /* Item+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Item+Ext.swift"; sourceTree = "<group>"; };
@@ -82,6 +89,7 @@
 		A0751AE72BADBED500CF252C /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
 		A0AC3A012BA9AB4C006DA5DA /* Status+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Status+Ext.swift"; sourceTree = "<group>"; };
 		A0AC3A032BA9ACAE006DA5DA /* ArchiveTag+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchiveTag+Ext.swift"; sourceTree = "<group>"; };
+		A0FB58762BBA022600104EB4 /* SourceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +158,7 @@
 				A0AC3A012BA9AB4C006DA5DA /* Status+Ext.swift */,
 				A023FEF92BAB480400FAB13C /* SwipeView+Ext.swift */,
 				A01E18C72BA7179800A03412 /* View+Ext.swift */,
+				A01D2A772BB9C40100AE1790 /* UIApplication+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -158,11 +167,12 @@
 			isa = PBXGroup;
 			children = (
 				A01E18C52BA36B3000A03412 /* ColorScheme.swift */,
-				A01E18A42BA3211300A03412 /* DataManager.swift */,
+				A01E18A42BA3211300A03412 /* CardManager.swift */,
 				A03E936B2BA9C78800B6E381 /* Item+CoreDataClass.swift */,
 				A03E936C2BA9C78800B6E381 /* Item+CoreDataProperties.swift */,
 				A03E936D2BA9C78800B6E381 /* Source+CoreDataClass.swift */,
 				A03E936E2BA9C78800B6E381 /* Source+CoreDataProperties.swift */,
+				A0FB58762BBA022600104EB4 /* SourceManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -172,6 +182,7 @@
 			children = (
 				A01E18CB2BA72BAB00A03412 /* CardView.swift */,
 				A01E189D2BA3211000A03412 /* ContentView.swift */,
+				A01D2A752BB4C78800AE1790 /* FilterView.swift */,
 				A01E18EC2BA78DD000A03412 /* CreateCardView.swift */,
 				A023FEF32BAB114B00FAB13C /* EdgeButtonView.swift */,
 				A01D2A732BB4C4CA00AE1790 /* ListRow.swift */,
@@ -181,6 +192,7 @@
 				A01E18C32BA33A2700A03412 /* SwipeView.swift */,
 				A023FEED2BAA216800FAB13C /* TagCloudView.swift */,
 				A023FEEF2BAA22ED00FAB13C /* TagView.swift */,
+				A01D2A792BB9D6DD00AE1790 /* InfoView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -272,7 +284,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A01E18A52BA3211300A03412 /* DataManager.swift in Sources */,
+				A01E18A52BA3211300A03412 /* CardManager.swift in Sources */,
 				A0AC3A042BA9ACAE006DA5DA /* ArchiveTag+Ext.swift in Sources */,
 				A01E18C82BA7179800A03412 /* View+Ext.swift in Sources */,
 				A0751AE82BADBED500CF252C /* Date+Ext.swift in Sources */,
@@ -282,12 +294,15 @@
 				A023FEF02BAA22ED00FAB13C /* TagView.swift in Sources */,
 				A01D2A742BB4C4CA00AE1790 /* ListRow.swift in Sources */,
 				A01E18A82BA3211300A03412 /* Quadra.xcdatamodeld in Sources */,
+				A01D2A762BB4C78800AE1790 /* FilterView.swift in Sources */,
 				A01E18ED2BA78DD000A03412 /* CreateCardView.swift in Sources */,
 				A01E18BD2BA32F9E00A03412 /* ListView.swift in Sources */,
 				A01E18CA2BA71C4700A03412 /* TransparentButtonStyle.swift in Sources */,
 				A03E93722BA9C78800B6E381 /* Source+CoreDataProperties.swift in Sources */,
 				A01E18CC2BA72BAB00A03412 /* CardView.swift in Sources */,
 				A023FEFA2BAB480400FAB13C /* SwipeView+Ext.swift in Sources */,
+				A0FB58772BBA022600104EB4 /* SourceManager.swift in Sources */,
+				A01D2A782BB9C40100AE1790 /* UIApplication+Ext.swift in Sources */,
 				A01E18D02BA7415500A03412 /* Source+Ext.swift in Sources */,
 				A059AFD32BA8BD2500CAE6E8 /* Image+Ext.swift in Sources */,
 				A01E189E2BA3211000A03412 /* ContentView.swift in Sources */,
@@ -298,6 +313,7 @@
 				A023FEF42BAB114B00FAB13C /* EdgeButtonView.swift in Sources */,
 				A0AC3A022BA9AB4C006DA5DA /* Status+Ext.swift in Sources */,
 				A01E18C62BA36B3000A03412 /* ColorScheme.swift in Sources */,
+				A01D2A7A2BB9D6DD00AE1790 /* InfoView.swift in Sources */,
 				A03E93712BA9C78800B6E381 /* Source+CoreDataClass.swift in Sources */,
 				A023FEF22BAB0EA400FAB13C /* NeuTextFIeldStyle.swift in Sources */,
 				A01E189C2BA3211000A03412 /* QuadraApp.swift in Sources */,

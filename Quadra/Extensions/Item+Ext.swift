@@ -32,7 +32,7 @@ extension Item {
             return .archive
         }
         
-        return self.status
+        return status
     }
     
     static var sampleData = [Item(image: UIImage(named: "test")?.pngData(),
@@ -91,8 +91,8 @@ extension Item {
                      additionTime: Date = Date(),
                      status: Status) {
         let entity = NSEntityDescription.entity(forEntityName: "Item",
-                                                in: DataManager().container.viewContext)
-        self.init(entity: entity!, insertInto: DataManager().container.viewContext)
+                                                in: CardManager().container.viewContext)
+        self.init(entity: entity!, insertInto: CardManager().container.viewContext)
         self.id = UUID()
         self.archiveTag = archiveTag
         //        self.audioNote = audioNote

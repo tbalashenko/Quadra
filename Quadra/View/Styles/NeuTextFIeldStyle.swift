@@ -20,7 +20,6 @@ struct NeuTextFieldStyle: TextFieldStyle {
                     .shadow(.inner(color: .shadow, radius: 3, x: 3, y: 3))
             )
             .clipShape(RoundedRectangle(cornerRadius: 8))
-            .padding(.horizontal)
     }
 }
 

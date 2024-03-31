@@ -13,6 +13,7 @@ extension Color {
     static let whiteCoffee = Color(hex: "e7d7d4")  //beige
     static let morningBlue = Color(hex: "#8c9da4")
     static let puce = Color(hex: "#c88ba2") //flower pink
+    static let offWhiteGray = Color(hex: "#F0F0F0") // light gray
     
     struct Green {
         static var isabelline = Color(hex: "#edf5ec") //very light green

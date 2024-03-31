@@ -8,9 +8,8 @@
 import UIKit
 import CoreData
 
-class DataManager: NSObject, ObservableObject {
+class CardManager: NSObject, ObservableObject {
     @Published var items: [Item] = [Item]()
-    @Published var sources: [Source] = [Source]()
     
     let container: NSPersistentContainer = NSPersistentContainer(name: "Quadra")
     
@@ -43,15 +42,15 @@ class DataManager: NSObject, ObservableObject {
             item.needMoveToArchive = false
         }
         
+        item.lastTimeStatusChanged = Date()
         saveChanges()
     }
     
     public func performCheсks() {
-        cleanUp()
         let items = fetchItems()
         
         for item in items {
-            if item.isArchived { continue }
+            if let date = item.lastTimeStatusChanged, date.isDateToday() || item.isArchived { continue }
             
             if let date = Date().lastSundayOfMonth(for: item.additionTime), date <= Date() {
                 item.needMoveToArchive = true
@@ -77,26 +76,10 @@ class DataManager: NSObject, ObservableObject {
         saveChanges()
     }
     
-    func cleanUp() {
-        let items = fetchItems()
-        
-        for item in items {
-            if item.mustBeDeleted {
-                print(item)
-                deleteItem(item)
-            }
-        }
-    }
-    
     func incrementCounter(for item: Item) {
         item.repetitionCounter += 1
         item.lastRepetition = Date()
         
-        saveChanges()
-    }
-    
-    func setMustBeRemoved( item: Item) {
-        item.mustBeDeleted = true
         saveChanges()
     }
     
@@ -114,7 +97,10 @@ class DataManager: NSObject, ObservableObject {
         item.image = image?.pngData()
         item.sources = NSSet(set: sources)
         item.id = UUID()
-        item.additionTime = Date()
+#warning("change")
+        //item.additionTime = Date()
+        item.additionTime = Date().subtractingDays(60) ?? Date()
+
         item.archiveTag = Date().prepareTag()
         #warning("change")
         item.needMoveToThisWeek = true
@@ -140,7 +126,5 @@ class DataManager: NSObject, ObservableObject {
         } catch {
             print("Error saving context: \(error)")
         }
-        
-        items = fetchItems()
     }
 }

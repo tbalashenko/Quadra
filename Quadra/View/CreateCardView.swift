@@ -10,7 +10,7 @@ import PhotosUI
 import CoreData
 
 struct CreateCardView: View {
-    @EnvironmentObject var manager: DataManager
+    @EnvironmentObject var manager: CardManager
     @Environment(\.managedObjectContext) var viewContext
     @FetchRequest(sortDescriptors: [])  var sources: FetchedResults<Source>
     @State private var totalHeight: CGFloat = CGFloat.infinity
@@ -36,77 +36,85 @@ struct CreateCardView: View {
                                     image: $image) {
                         setImage()
                     }
-                    
-                    TextField("Phrase to remember",
-                              text: $phraseToRemember,
-                              axis: .vertical)
-                    .textFieldStyle(NeuTextFieldStyle())
-                    
-                    TextField("Translation",
-                              text: $translation,
-                              axis: .vertical)
-                    .textFieldStyle(NeuTextFieldStyle())
-                    
-                    TextField("Transcription",
-                              text: $transcription,
-                              axis: .vertical)
-                    .textFieldStyle(NeuTextFieldStyle())
-                    
-                    if !selectedSources.isEmpty {
-                        Text("Selected sources:")
-                            .foregroundStyle(Color.gray)
-                        TagCloudView(items: selectedSources.sorted(),
-                                     geometry: geometry,
-                                     action: { index in selectedSources.remove(selectedSources.sorted()[index])},
-                                     totalHeight: $totalHeight)
-                        Text("Tap to remove")
-                            .font(.footnote)
-                            .foregroundStyle(Color.gray)
-                    }
-                    HStack {
-                        ColorPicker("", selection: $sourceColor)
-                            .frame(width: 22, height: 22)
-                            .northWestShadow()
-                        TextField("Add a new source", text: $newSourceText)
-                            .textFieldStyle(NeuTextFieldStyle())
-                            .onChange(of: newSourceText) { _, _ in
-                                let selectedSourceIDs = Set(selectedSources.map { $0.id })
-                                if newSourceText.isEmpty {
-                                    filteredSources = Array(sources)
-                                        .filter { !selectedSourceIDs.contains($0.id) }
-                                } else {
-                                    filteredSources = Array(sources)
-                                        .filter { $0.title?.localizedCaseInsensitiveContains(newSourceText) ?? false }
-                                        .filter { !selectedSourceIDs.contains($0.id) }
-                                }
-                            }
+                    GroupBox("Phrase") {
+                        TextField("Phrase to remember*",
+                                  text: $phraseToRemember,
+                                  axis: .vertical)
+                        .textFieldStyle(NeuTextFieldStyle())
                         
-                        Button(action: {
-                            if !newSourceText.isEmpty { saveSource() }
-                        }, label: {
-                            Image(systemName: "plus")
-                        })
-                        .buttonStyle(NeuButtonStyle(width: 38, height: 38))
-                        .disabled(newSourceText.isEmpty)
-                        .onChange(of: selectedSources) { _, _ in
-                            let selectedSourceIDs = Set(selectedSources.map { $0.id })
-                            filteredSources = Array(sources)
-                                .filter { !selectedSourceIDs.contains($0.id) }
-                        }
+                        TextField("Translation",
+                                  text: $translation,
+                                  axis: .vertical)
+                        .textFieldStyle(NeuTextFieldStyle())
+                        
+                        TextField("Transcription",
+                                  text: $transcription,
+                                  axis: .vertical)
+                        .textFieldStyle(NeuTextFieldStyle())
                     }
-                    .padding(.horizontal)
                     
-                    TagCloudView(max: 10,
-                                 items: filteredSources.sorted(),
-                                 geometry: geometry,
-                                 action: { index in selectedSources.insert(filteredSources.sorted()[index])},
-                                 totalHeight: $totalHeight)
+                    
+                    GroupBox("Source") {
+                        if !selectedSources.isEmpty {
+                            Text("Selected sources:")
+                                .foregroundStyle(Color.gray)
+                            TagCloudView(items: selectedSources.sorted(),
+                                         geometry: geometry,
+                                         totalHeight: $totalHeight,
+                                         action: { selectedSources.remove(selectedSources.sorted()[$0])})
+                            .frame(width: geometry.size.width * 0.85)
+                            Text("Tap to remove")
+                                .font(.footnote)
+                                .foregroundStyle(Color.gray)
+                        }
+                        HStack {
+                            ColorPicker("", selection: $sourceColor)
+                                .frame(width: 22, height: 22)
+                                .northWestShadow()
+                            TextField("Add a new source", text: $newSourceText)
+                                .textFieldStyle(NeuTextFieldStyle())
+                                .padding(.horizontal)
+                                .onChange(of: newSourceText) { _, _ in
+                                    let selectedSourceIDs = Set(selectedSources.map { $0.id })
+                                    if newSourceText.isEmpty {
+                                        filteredSources = Array(sources)
+                                            .filter { !selectedSourceIDs.contains($0.id) }
+                                    } else {
+                                        filteredSources = Array(sources)
+                                            .filter { $0.title.localizedCaseInsensitiveContains(newSourceText) }
+                                            .filter { !selectedSourceIDs.contains($0.id) }
+                                    }
+                                }
+                            
+                            Button(action: {
+                                if !newSourceText.isEmpty { saveSource() }
+                            }, label: {
+                                Image(systemName: "plus")
+                            })
+                            .buttonStyle(NeuButtonStyle(width: 38, height: 38))
+                            .disabled(newSourceText.isEmpty)
+                            .onChange(of: selectedSources) { _, _ in
+                                let selectedSourceIDs = Set(selectedSources.map { $0.id })
+                                filteredSources = Array(sources)
+                                    .filter { !selectedSourceIDs.contains($0.id) }
+                            }
+                        }
+                        
+                        TagCloudView(max: 10,
+                                     items: filteredSources.sorted(),
+                                     geometry: geometry,
+                                     totalHeight: $totalHeight,
+                                     action: { selectedSources.insert(filteredSources.sorted()[$0])})
+                        .frame(width: geometry.size.width * 0.85)
+                    }
                     Spacer()
                 }
                 .padding()
             }
             .background(.element)
-            .onAppear { filteredSources = Array(sources) }
+            .onAppear {
+                filteredSources = Array(sources)
+            }
             .frame(width: geometry.size.width)
             .navigationTitle("Add a new card")
             .navigationBarTitleDisplayMode(.inline)
@@ -115,6 +123,7 @@ struct CreateCardView: View {
                     Button("Save") {
                         save()
                     }
+                    .disabled(phraseToRemember.isEmpty)
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {

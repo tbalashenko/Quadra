@@ -14,10 +14,19 @@ public class Status: NSObject, NSCoding, NSSecureCoding {
         return true
     }
     
+    let id: Int
     let title: String
     let color: String
     
-    init(title: String, color: Color) {
+    public static let allStatuses = [Status.input,  Status.thisWeek, Status.thisMonth, Status.archive]
+    
+    public static let input = Status(id: 0, title: "#input", color: Color.Green.isabelline)
+    public static let thisWeek = Status(id: 1, title: "#thisWeek", color: Color.Green.gainsboro)
+    public static let thisMonth = Status(id: 2, title: "#thisMonth", color: Color.Green.ashGray)
+    public static let archive = Status(id: 3, title: "#archive", color: Color.Green.darkSeaGreen)
+    
+    private init(id: Int, title: String, color: Color) {
+        self.id = id
         self.title = title
         self.color = color.toHex()
     }
@@ -28,19 +37,16 @@ public class Status: NSObject, NSCoding, NSSecureCoding {
         else {
             return nil
         }
+        self.id = coder.decodeInteger(forKey: "id")
         self.title = title
         self.color = color
     }
     
     public func encode(with coder: NSCoder) {
+        coder.encode(id, forKey: "id")
         coder.encode(title, forKey: "title")
         coder.encode(color, forKey: "color")
     }
-    
-    public static let input = Status(title: "#input", color: Color.Green.isabelline)
-    public static let thisWeek = Status(title: "#thisWeek", color: Color.Green.gainsboro)
-    public static let thisMonth = Status(title: "#thisMonth", color: Color.Green.ashGray)
-    public static let archive = Status(title: "#archive", color: Color.Green.darkSeaGreen)
 }
 
 public class StatusTransformer: ValueTransformer {

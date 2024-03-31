@@ -32,7 +32,7 @@ struct TagView: View {
                 .foregroundColor(foregroundColor)
                 .cornerRadius(8)
         })
-
+        .northWestShadow()
     }
 }
 

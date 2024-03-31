@@ -21,7 +21,7 @@ struct PhotoPickerView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: geometry.size.width * 0.85,
-                           height: geometry.size.height/3)
+                           height: geometry.size.width * 0.85)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .northWestShadow()
             }
@@ -44,12 +44,12 @@ struct PhotoPickerView: View {
         .background(
             RoundedRectangle(cornerRadius: 8)
                 .frame(width: geometry.size.width * 0.85,
-                       height: geometry.size.height/3)
+                       height: geometry.size.width * 0.85)
                 .foregroundStyle(.element)
                 .northWestShadow()
         )
         .frame(width: geometry.size.width * 0.85,
-               height: geometry.size.height/3)
+               height: geometry.size.width * 0.85)
         .onChange(of: photosPickerItem) {
             action?()
         }

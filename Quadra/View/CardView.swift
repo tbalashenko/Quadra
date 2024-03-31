@@ -12,7 +12,6 @@ enum CardViewPresentationMode {
 }
 
 struct CardView: View {
-    @Environment(\.dismiss) var dismiss
     @ObservedObject var item: Item
     
     var geometry: GeometryProxy
@@ -96,8 +95,20 @@ struct CardView: View {
                     }
                     .padding()
                 }
-                if item.needSetNewStatus {
-                    getButton(for: item, geometry: geometry)
+                if item.needSetNewStatus, !item.isArchived, presentationMode == .swipe {
+                    Button {
+                        moveButtonAction?()
+                    } label: {
+                        HStack {
+                            Text("Move to")
+                            TagView(text: item.getNewStatus.title,
+                                    backgroundColor: Color(hex: item.getNewStatus.color)) {
+                                moveButtonAction?()
+                            }
+                        }
+                    }
+                    .buttonStyle(NeuButtonStyle(width: geometry.size.width / 2, height: 40))
+
                 }
                 Spacer()
             }
@@ -110,7 +121,6 @@ struct CardView: View {
                 }
             }
         }
-        .background(.element)
     }
     
     func styledText(_ boldPart: String, regularPart: String) -> Text {
@@ -124,22 +134,6 @@ struct CardView: View {
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
         return formatter.string(from: date)
-    }
-    
-    func getButton(for item: Item, geometry: GeometryProxy) -> some View {
-        Button {
-            moveButtonAction?()
-        } label: {
-            HStack {
-                Spacer()
-                Text("Move to")
-                let status = item.getNewStatus
-                TagView(text: status.title,
-                        backgroundColor: Color(hex: status.color))
-                Spacer()
-            }
-        }
-        .buttonStyle(NeuButtonStyle(width: geometry.size.width / 2, height: 40))
     }
 }
 

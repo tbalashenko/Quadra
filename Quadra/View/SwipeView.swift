@@ -9,17 +9,15 @@ import CoreData
 import SwiftUI
 
 struct SwipeView: View {
-    @EnvironmentObject var dataManager: DataManager
+    @EnvironmentObject var dataManager: CardManager
     @Environment(\.managedObjectContext) var viewContext
+    @Binding var cardViews: [CardView]
+    var swipeAction: (()->())?
     
     @State private var removalTransition = AnyTransition.trailingBottom
-    private let dragThreshold: CGFloat = 80.0
+    @State private var isDisappeared: Bool = true
     @GestureState private var dragState = DragState.inactive
-    @State private var lastIndex = 1
-    @State var cardViews: [CardView] = []
-    @State private var previousItems: [Item] = []
-    @State private var itemToDelete: Item?
-    @State var isDisappeared: Bool = true
+    private let dragThreshold: CGFloat = 80.0
     
     var body: some View {
         GeometryReader { geometry in
@@ -63,67 +61,21 @@ struct SwipeView: View {
                                             }
                                             if drag.translation.width < -self.dragThreshold || drag.translation.width > self.dragThreshold {
                                                 withAnimation(.interpolatingSpring(stiffness: 180, damping: 100)) {
-                                                    self.moveCard()
+                                                    swipeAction?()
                                                 }
                                             }
                                         }))
                     }
                 }
             }
-            .onAppear {
-                isDisappeared = false
-                updateCardViews(geometry: geometry)
-            }
-            .onDisappear {
-                isDisappeared = true
-                cardViews.removeAll()
-                dataManager.cleanUp()
-            }
-            .onReceive(dataManager.$items) { newItems in
-                if !isDisappeared, newItems != previousItems {
-                    previousItems = newItems
-                    updateCardViews(geometry: geometry)
-                }
-            }
         }
     }
     
-    func updateCardViews(geometry: GeometryProxy) {
-        cardViews.removeAll()
-        dataManager.items.forEach { item in
-            let cardView = CardView(item: item,
-                                    geometry: geometry,
-                                    presentationMode: .swipe,
-                                    deleteAction: { removeCard() },
-                                    moveButtonAction: { dataManager.setNewStatus(for: item) })
-            cardViews.append(cardView)
-        }
-    }
+
     
     private func isTopCard(cardView: CardView) -> Bool {
-        guard let index = cardViews.firstIndex(where: { $0.id == cardView.id }) else {
-            return false
-        }
+        guard let index = cardViews.firstIndex(where: { $0.id == cardView.id }) else { return false }
+        
         return index == 0
-    }
-    
-    private func moveCard() {
-        guard let removedCard = cardViews.first else { return }
-        
-        let item = removedCard.item
-        
-        dataManager.incrementCounter(for: item)
-        
-        cardViews.removeFirst()
-    }
-    
-    private func removeCard() {
-        guard let removedCard = cardViews.first else { return }
-        
-        let item = removedCard.item
-        
-        dataManager.setMustBeRemoved(item: item)
-        
-        cardViews.removeFirst()
     }
 }

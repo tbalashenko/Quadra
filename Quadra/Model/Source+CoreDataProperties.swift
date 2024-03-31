@@ -16,9 +16,9 @@ extension Source {
         return NSFetchRequest<Source>(entityName: "Source")
     }
 
-    @NSManaged public var color: String?
-    @NSManaged public var id: UUID?
-    @NSManaged public var title: String?
+    @NSManaged public var color: String
+    @NSManaged public var id: UUID
+    @NSManaged public var title: String
     @NSManaged public var items: NSSet?
 
 }

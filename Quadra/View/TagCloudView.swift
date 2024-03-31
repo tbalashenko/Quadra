@@ -11,8 +11,9 @@ struct TagCloudView: View {
     var max: Int? = nil
     var items: [Source]
     let geometry: GeometryProxy
-    var action: ((Int) -> Void)?
     @Binding var totalHeight: CGFloat
+    var inactiveColor: Color?
+    var action: ((Int) -> Void)?
     
     var body: some View {
         generateContent()
@@ -30,9 +31,8 @@ struct TagCloudView: View {
         
         return ZStack(alignment: .topLeading) {
             ForEach(items.indices, id: \.self) { index in
-                if let title = items[index].title,
-                   let hexColor = items[index].color {
-                    TagView(text: title, backgroundColor: Color(hex: hexColor)) {
+                    TagView(text: items[index].title, 
+                            backgroundColor: inactiveColor ?? Color(hex: items[index].color)) {
                         action?(index)
                     }
                         .padding(4)
@@ -57,10 +57,10 @@ struct TagCloudView: View {
                             }
                             return offset
                         })
-                }
             }
         }
         .background(viewHeightReader($totalHeight))
+        //.frame(width: geometry.size.width * 85)
     }
     
     private func viewHeightReader(_ binding: Binding<CGFloat>) -> some View {
@@ -77,3 +77,6 @@ struct TagCloudView: View {
 //#Preview {
 //    TagCloudView()
 //}
+
+
+
