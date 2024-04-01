@@ -6,9 +6,9 @@
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="image" optional="YES" attributeType="Binary" valueTransformerName="ImageTransformer" customClassName="NSImage"/>
         <attribute name="isArchived" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isReadyToRepeat" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
         <attribute name="lastRepetition" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="lastTimeStatusChanged" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="mustBeDeleted" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="needMoveToArchive" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="needMoveToThisMonth" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="needMoveToThisWeek" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>

@@ -62,12 +62,6 @@ struct ListView: View {
                     if !isFromDateInitialized { setDate() }
                     updateFilteredItems()
                 }
-                .onReceive(dataManager.$items) { newItems in
-                    if newItems != previousItems {
-                        previousItems = newItems
-                        updateFilteredItems()
-                    }
-                }
                 .onChange(of: selectedStatuses) { oldValue, newValue in
                     updateFilteredItems()
                 }
@@ -113,23 +107,17 @@ struct ListView: View {
                 let fromDateComparison = Calendar.current.compare(fromDate, to: item.additionTime, toGranularity: .day)
                 let toDateComparison = Calendar.current.compare(toDate, to: item.additionTime, toGranularity: .day)
                 
-                //let dateRangeMatches = fromDate <= item.additionTime && toDate >= item.additionTime
-                
                 let dateRangeMatches = fromDateComparison != .orderedDescending && toDateComparison != .orderedAscending
                 
                 return statusMatches && sourceMatches && dateRangeMatches
             }
     }
-
-    
-    private func deleteItem(item: Item) {
-        dataManager.deleteItem(item)
-    }
     
     private func delete(at offsets: IndexSet) {
         for index in offsets {
-            dataManager.deleteItem(items[index])
+            dataManager.deleteItem(filteredItems[index])
         }
+        updateFilteredItems()
     }
 }
 

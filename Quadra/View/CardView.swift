@@ -45,11 +45,6 @@ struct CardView: View {
                     }
                     
                     if presentationMode == .swipe {
-                        EdgeButtonView(image: Image(systemName: "trash.circle.fill"),
-                                       edge: .topLeft,
-                                       action: {
-                            deleteAction?()
-                        })
                         EdgeButtonView(image: Image(systemName: "info.circle.fill"),
                                        edge: .topRight,
                                        action: { showAdditionalInfo.toggle()
@@ -58,8 +53,12 @@ struct CardView: View {
                     
                     VStack {
                         Spacer()
-                        HStack {
+                        HStack(spacing: 8) {
                             Spacer()
+                            if item.status.id == 3 {
+                                TagView(text: item.archiveTag,
+                                        backgroundColor: .puce)
+                            }
                             TagView(text: item.status.title,
                                     backgroundColor: Color(hex: item.status.color))
                         }

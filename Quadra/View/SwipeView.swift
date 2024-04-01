@@ -71,8 +71,6 @@ struct SwipeView: View {
         }
     }
     
-
-    
     private func isTopCard(cardView: CardView) -> Bool {
         guard let index = cardViews.firstIndex(where: { $0.id == cardView.id }) else { return false }
         

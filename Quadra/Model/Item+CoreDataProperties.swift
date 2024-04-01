@@ -31,8 +31,8 @@ extension Item {
     @NSManaged public var needMoveToThisWeek: Bool
     @NSManaged public var needMoveToThisMonth: Bool
     @NSManaged public var needMoveToArchive: Bool
-    @NSManaged public var mustBeDeleted: Bool
     @NSManaged public var lastTimeStatusChanged: Date?
+    @NSManaged public var isReadyToRepeat: Bool
 }
 
 // MARK: Generated accessors for sources

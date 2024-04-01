@@ -182,9 +182,10 @@
 			children = (
 				A01E18CB2BA72BAB00A03412 /* CardView.swift */,
 				A01E189D2BA3211000A03412 /* ContentView.swift */,
-				A01D2A752BB4C78800AE1790 /* FilterView.swift */,
 				A01E18EC2BA78DD000A03412 /* CreateCardView.swift */,
 				A023FEF32BAB114B00FAB13C /* EdgeButtonView.swift */,
+				A01D2A752BB4C78800AE1790 /* FilterView.swift */,
+				A01D2A792BB9D6DD00AE1790 /* InfoView.swift */,
 				A01D2A732BB4C4CA00AE1790 /* ListRow.swift */,
 				A01E18BC2BA32F9E00A03412 /* ListView.swift */,
 				A023FEF52BAB12E500FAB13C /* PhotoPickerView.swift */,
@@ -192,7 +193,6 @@
 				A01E18C32BA33A2700A03412 /* SwipeView.swift */,
 				A023FEED2BAA216800FAB13C /* TagCloudView.swift */,
 				A023FEEF2BAA22ED00FAB13C /* TagView.swift */,
-				A01D2A792BB9D6DD00AE1790 /* InfoView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";

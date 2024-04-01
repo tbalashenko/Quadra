@@ -15,43 +15,38 @@ struct ContentView: View {
     @State var showCreateCardView = false
     @State var cardViews: [CardView] = []
     @State private var isDisappeared: Bool = true
-    @State var selectedStatuses = Status.allStatuses
-    @State var fromDate: Date = Date()
-    @State var toDate: Date = Date()
-    @State var selectedSources: [Source] = []
-    @State var minDate = Date()
-    @State private var isFromDateInitialized = false
+    @State private var previousItems: [Item] = []
+    @State var geometryProxy: GeometryProxy?
+    @State var needUpdateView = false
     
     var body: some View {
         GeometryReader { geometry in
             NavigationStack {
-                ZStack {
-                    InfoView()
-                    SwipeView(cardViews: $cardViews) { moveCard() }
-                        .padding(geometry.size.width/11)
-                        .background(Color.element)
-                        .environmentObject(dataManager)
-                        .environment(\.managedObjectContext, dataManager.container.viewContext)
-                        .onAppear {
-                            isDisappeared = false
-                            updateCardViews(geometry: geometry)
-                        }
-                        .onDisappear {
-                            isDisappeared = true
-                            cardViews.removeAll()
-                        }
-                        .onChange(of: items.map { Array(arrayLiteral: $0) }, { oldValue, newValue in
-                            if !isDisappeared {
-                                updateCardViews(geometry: geometry)
-                            }
-                        })
+                VStack {
+                    if cardViews.isEmpty {
+                        InfoView(needUpdateView: $needUpdateView)
+                    } else {
+                        SwipeView(cardViews: $cardViews) { moveCard() }
+                            .padding(geometry.size.width/11)
+                            .environmentObject(dataManager)
+                            .environment(\.managedObjectContext, dataManager.container.viewContext)
+                    }
+                    Spacer()
                 }
+                .background(Color.element)
                 .onAppear {
-                    if !isFromDateInitialized {
-                        let minDate = items.map({ $0.additionTime }).min() ?? Date()
-                        fromDate = minDate
-                        self.minDate = minDate
-                        isFromDateInitialized = true
+                    geometryProxy = geometry
+                    isDisappeared = false
+                    updateCardViews()
+                }
+                .onDisappear {
+                    isDisappeared = true
+                    cardViews.removeAll()
+                }
+                .onChange(of: needUpdateView) { _, _ in
+                    if needUpdateView {
+                        updateCardViews()
+                        needUpdateView = false
                     }
                 }
                 .toolbar {
@@ -62,22 +57,8 @@ struct ContentView: View {
                             Label("Add Item", systemImage: "plus")
                         }
                     }
-                    
-                    ToolbarItem {
-                        NavigationLink(destination:
-                                        FilterView(selectedStatuses: $selectedStatuses,
-                                                   fromDate: $fromDate,
-                                                   toDate: $toDate,
-                                                   selectedSources: $selectedSources,
-                                                   minDate: $minDate)
-                                            .environmentObject(dataManager)
-                                            .environment(\.managedObjectContext, dataManager.container.viewContext)
-                                            .toolbar(.hidden, for: .tabBar)) {
-                                                Label("Filter", systemImage: "line.3.horizontal.decrease.circle.fill")
-                                            }
-                    }
                 }
-                .sheet(isPresented: $showCreateCardView, onDismiss: updateView) {
+                .sheet(isPresented: $showCreateCardView, onDismiss: updateCardViews) {
                     NavigationStack {
                         CreateCardView(showCreateCardView: $showCreateCardView)
                     }
@@ -86,19 +67,23 @@ struct ContentView: View {
         }
     }
     
-    func updateCardViews(geometry: GeometryProxy) {
+    func updateCardViews() {
         cardViews.removeAll()
-        items.forEach { item in
-            let cardView = CardView(item: item,
-                                    geometry: geometry,
-                                    presentationMode: .swipe,
-                                    deleteAction: { removeCard() },
-                                    moveButtonAction: {
-                dataManager.setNewStatus(for: item)
-                moveCard()
-            })
-            cardViews.append(cardView)
-        }
+        items
+            .reversed()
+            .filter { $0.isReadyToRepeat }
+            .forEach { item in
+                if let geometryProxy = geometryProxy {
+                    let cardView = CardView(item: item,
+                                            geometry: geometryProxy,
+                                            presentationMode: .swipe,
+                                            moveButtonAction: {
+                        dataManager.setNewStatus(for: item)
+                        moveCard()
+                    })
+                    cardViews.append(cardView)
+                }
+            }
     }
     
     private func moveCard() {
@@ -107,24 +92,6 @@ struct ContentView: View {
         let item = removedCard.item
         dataManager.incrementCounter(for: item)
         cardViews.removeFirst()
-    }
-    
-    private func removeCard() {
-        guard let removedCard = cardViews.first else { return }
-        
-        let item = removedCard.item
-        
-        cardViews.removeFirst()
-        dataManager.deleteItem(item)
-    }
-    
-    
-    func filter() {
-        
-    }
-    
-    func updateView() {
-        //dataManager.update()
     }
 }
 
