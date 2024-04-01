@@ -21,7 +21,7 @@ struct ListView: View {
     @State var filteredItems: [Item] = []
     @State private var isFromDateInitialized = false
     @State var minDate = Date()
-    
+
     var body: some View {
         GeometryReader { geometry in
             NavigationStack {
@@ -33,7 +33,7 @@ struct ListView: View {
             }
         }
     }
-    
+
     private func listViewContent(geometry: GeometryProxy) -> some View {
         List {
             ForEach(filteredItems) { item in
@@ -57,7 +57,7 @@ struct ListView: View {
             ToolbarItem {
                 NavigationLink(destination:
                                 FilterView(selectedStatuses: $selectedStatuses,
-                                           selectedArchiveTags: $selectedArchiveTags, 
+                                           selectedArchiveTags: $selectedArchiveTags,
                                            fromDate: $fromDate,
                                            toDate: $toDate,
                                            selectedSources: $selectedSources,
@@ -71,20 +71,20 @@ struct ListView: View {
             }
         }
     }
-    
+
     func performChecks() {
         if !isFromDateInitialized { setDate() }
     }
-    
+
     func setDate() {
         let (minDate, maxDate) = dataManager.getMinMaxDate()
-    
+
         fromDate = minDate
         self.minDate = minDate
         toDate = maxDate
         isFromDateInitialized = true
     }
-    
+
     func updateFilteredItems() {
         filteredItems = Array(items)
             .filter { item in
@@ -103,24 +103,24 @@ struct ListView: View {
                         sourceMatches = sources.contains(where: { selectedSources.contains($0) })
                     }
                 }
-                
+
                 let fromDateComparison = Calendar.current.compare(fromDate, to: item.additionTime, toGranularity: .day)
                 let toDateComparison = Calendar.current.compare(toDate, to: item.additionTime, toGranularity: .day)
-                
+
                 let dateRangeMatches = fromDateComparison != .orderedDescending && toDateComparison != .orderedAscending
-                
+
                 let archiveTagMatches: Bool
-                
+
                 if selectedArchiveTags.isEmpty {
                     archiveTagMatches = true
                 } else {
                     archiveTagMatches = selectedArchiveTags.contains(item.archiveTag)
                 }
-                
+
                 return statusMatches && sourceMatches && dateRangeMatches && archiveTagMatches
             }
     }
-    
+
     private func delete(at offsets: IndexSet) {
         for index in offsets {
             dataManager.deleteItem(filteredItems[index])
@@ -129,7 +129,7 @@ struct ListView: View {
     }
 }
 
-//#Preview {
+// #Preview {
 //    return ListView()
 //        .environmentObject(DataManager())
-//}
+// }

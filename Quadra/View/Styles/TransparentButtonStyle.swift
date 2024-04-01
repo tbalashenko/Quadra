@@ -15,7 +15,7 @@ struct TransparentButtonStyle: ButtonStyle {
             .background {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(Color.white.opacity(0.6))
-                
+
             }
     }
 }

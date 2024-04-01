@@ -14,32 +14,32 @@ struct InfoView: View {
     @Binding var needUpdateView: Bool
     @State var hintText = ""
     @State var containsCardsToRepeat = false
-    
+
     var body: some View {
         GeometryReader { geometry in
             HStack {
                 Spacer()
-                VStack() {
+                VStack {
                     Spacer()
-                    
+
                     Button {
                         //
                     } label: {
                         Label("How to use the app", systemImage: "info.circle")
                     }
                     .buttonStyle(NeuButtonStyle(width: geometry.size.width / 2, height: 40))
-                    
+
                     Spacer()
                         .frame(height: 16)
-                    
+
                     Text(dataManager.getHint())
-                    
+
                     if containsCardsToRepeat {
                         Button {
                             dataManager.setReadyToRepeat()
                             needUpdateView = true
                         } label: {
-                            
+
                             Label("Start again", systemImage: "repeat.circle")
                         }
                         .buttonStyle(NeuButtonStyle(width: geometry.size.width / 2, height: 40))

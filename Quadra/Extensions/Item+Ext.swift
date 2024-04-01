@@ -22,7 +22,7 @@ extension Item {
     var needSetNewStatus: Bool {
         self.needMoveToThisWeek || self.needMoveToThisMonth || self.needMoveToArchive
     }
-    
+
     var getNewStatus: Status {
         if self.needMoveToThisWeek {
             return .thisWeek
@@ -31,13 +31,13 @@ extension Item {
         } else if self.needMoveToArchive {
             return .archive
         }
-        
+
         return status
     }
-    
+
     static var sampleData = [Item(image: UIImage(named: "test")?.pngData(),
                                   archiveTag: "#2024-2",
-                                  //audioNote: nil,
+                                  // audioNote: nil,
                                   phraseToRemember: "Connection interrupted: will attempt to reconnect",
                                   translation: "Соединение прервано: будет предпринята попытка восстановить",
                                   lastRepetition: Date(),
@@ -51,7 +51,7 @@ extension Item {
                                   status: .input),
                              Item(image: UIImage(named: "test2")?.pngData(),
                                   archiveTag: "#2024-1",
-                                  //audioNote: nil,
+                                  // audioNote: nil,
                                   phraseToRemember: "Message from debugger: killed",
                                   translation: "Сообщение от дебаггера: убито",
                                   lastRepetition: Date(),
@@ -60,7 +60,7 @@ extension Item {
                                   status: .input),
                              Item(image: UIImage(named: "test")?.pngData(),
                                   archiveTag: "#2024-1",
-                                  //audioNote: nil,
+                                  // audioNote: nil,
                                   phraseToRemember: "Message from debugger: killed",
                                   translation: "Сообщение от дебаггера: убито",
                                   lastRepetition: Date(),
@@ -69,7 +69,7 @@ extension Item {
                                   status: .input),
                              Item(image: UIImage(named: "test2")?.pngData(),
                                   archiveTag: "#2024-1",
-                                  //audioNote: nil,
+                                  // audioNote: nil,
                                   phraseToRemember: "Message from debugger: killed",
                                   translation: "Сообщение от дебаггера: убито",
                                   lastRepetition: Date(),
@@ -106,5 +106,3 @@ extension Item {
         self.status = status
     }
 }
-
-

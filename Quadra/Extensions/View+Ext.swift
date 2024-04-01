@@ -15,12 +15,11 @@ extension View {
     ) -> some View {
         return self
             .shadow(
-                color: .highlight, radius: radius, x: -offset,
-                y: -offset)
+                color: .highlight, radius: radius, x: -offset, y: -offset)
             .shadow(
                 color: .shadow, radius: radius, x: offset, y: offset)
     }
-    
+
     func southEastShadow(
         radius: CGFloat = 3,
         offset: CGFloat = 3

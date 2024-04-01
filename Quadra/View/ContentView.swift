@@ -18,7 +18,7 @@ struct ContentView: View {
     @State private var previousItems: [Item] = []
     @State var geometryProxy: GeometryProxy?
     @State var needUpdateView = false
-    
+
     var body: some View {
         GeometryReader { geometry in
             NavigationStack {
@@ -66,7 +66,7 @@ struct ContentView: View {
             }
         }
     }
-    
+
     func updateCardViews() {
         cardViews.removeAll()
         items
@@ -85,10 +85,10 @@ struct ContentView: View {
                 }
             }
     }
-    
+
     private func moveCard() {
         guard let removedCard = cardViews.first else { return }
-        
+
         let item = removedCard.item
         dataManager.incrementCounter(for: item)
         cardViews.removeFirst()

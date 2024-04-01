@@ -9,17 +9,17 @@ import SwiftUI
 
 extension Color {
     static let dustRose = Color(hex: "#a35b6e")
-    static let catawba = Color(hex: "#6c3946") //pale cherry
-    static let whiteCoffee = Color(hex: "e7d7d4")  //beige
+    static let catawba = Color(hex: "#6c3946") // pale cherry
+    static let whiteCoffee = Color(hex: "e7d7d4")  // beige
     static let morningBlue = Color(hex: "#8c9da4")
-    static let puce = Color(hex: "#c88ba2") //flower pink
+    static let puce = Color(hex: "#c88ba2") // flower pink
     static let offWhiteGray = Color(hex: "#F0F0F0") // light gray
-    
+
     struct Green {
-        static var isabelline = Color(hex: "#edf5ec") //very light green
-        static var gainsboro = Color(hex: "#d7e7d4") //light green
-        static var ashGray = Color(hex: "#afc7b3") //pastel light green
-        static var darkSeaGreen = Color(hex: "#96b4a0") //pastel green
+        static var isabelline = Color(hex: "#edf5ec") // very light green
+        static var gainsboro = Color(hex: "#d7e7d4") // light green
+        static var ashGray = Color(hex: "#afc7b3") // pastel light green
+        static var darkSeaGreen = Color(hex: "#96b4a0") // pastel green
     }
 }
 
@@ -28,7 +28,7 @@ extension Color {
         assert(red >= 0 && red <= 255, "Invalid red component")
         assert(green >= 0 && green <= 255, "Invalid green component")
         assert(blue >= 0 && blue <= 255, "Invalid blue component")
-        
+
         self.init(red: Double(red) / 255.0, green: Double(green) / 255.0, blue: Double(blue) / 255.0)
     }
 }
@@ -49,7 +49,7 @@ extension Color {
         // If unable to scan hex value, default to black
         self.init(red: 0, green: 0, blue: 0)
     }
-    
+
     func toHex() -> String {
         if let color = UIColor(self).cgColor.components {
             let red = Int(color[0] * 255.0)
@@ -59,7 +59,7 @@ extension Color {
         }
         return "#000000" // Return black if conversion fails
     }
-    
+
     var isDark: Bool {
         var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
         UIColor(self).getRed(&red, green: &green, blue: &blue, alpha: &alpha)

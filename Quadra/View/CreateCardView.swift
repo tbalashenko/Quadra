@@ -14,10 +14,10 @@ struct CreateCardView: View {
     @Environment(\.managedObjectContext) var viewContext
     @FetchRequest(sortDescriptors: [])  var sources: FetchedResults<Source>
     @State private var totalHeight: CGFloat = CGFloat.infinity
-    
+
     @State var filteredSources = [Source]()
     @State var photosPickerItem: PhotosPickerItem?
-    @State var image: Image? = nil
+    @State var image: Image?
     @State var phraseToRemember = ""
     @State var translation = ""
     @State var transcription = ""
@@ -26,7 +26,7 @@ struct CreateCardView: View {
     @State var sourceColor = Color.morningBlue
     @Binding var showCreateCardView: Bool
     @State private var selectedSourceIndex = 0
-    
+
     var body: some View {
         GeometryReader { geometry in
             ScrollView {
@@ -41,19 +41,18 @@ struct CreateCardView: View {
                                   text: $phraseToRemember,
                                   axis: .vertical)
                         .textFieldStyle(NeuTextFieldStyle())
-                        
+
                         TextField("Translation",
                                   text: $translation,
                                   axis: .vertical)
                         .textFieldStyle(NeuTextFieldStyle())
-                        
+
                         TextField("Transcription",
                                   text: $transcription,
                                   axis: .vertical)
                         .textFieldStyle(NeuTextFieldStyle())
                     }
-                    
-                    
+
                     GroupBox("Source") {
                         if !selectedSources.isEmpty {
                             Text("Selected sources:")
@@ -85,7 +84,7 @@ struct CreateCardView: View {
                                             .filter { !selectedSourceIDs.contains($0.id) }
                                     }
                                 }
-                            
+
                             Button(action: {
                                 if !newSourceText.isEmpty { saveSource() }
                             }, label: {
@@ -99,7 +98,7 @@ struct CreateCardView: View {
                                     .filter { !selectedSourceIDs.contains($0.id) }
                             }
                         }
-                        
+
                         TagCloudView(max: 10,
                                      items: filteredSources.sorted(),
                                      geometry: geometry,
@@ -133,10 +132,10 @@ struct CreateCardView: View {
             }
         }
     }
-    
+
     func save() {
         let image = image?.convert()
-        
+
         manager.createItem(phraseToRemember: phraseToRemember,
                            translation: translation,
                            transcription: transcription,
@@ -144,17 +143,17 @@ struct CreateCardView: View {
                            image: image)
         showCreateCardView = false
     }
-    
+
     func saveSource() {
         let source = Source(context: self.viewContext)
         source.id = UUID()
         source.color = sourceColor.toHex()
         source.title = newSourceText
-        
+
         selectedSources.insert(source)
         newSourceText = ""
         sourceColor = .morningBlue
-        
+
         do {
             try self.viewContext.save()
             print("source saved!")
@@ -162,7 +161,7 @@ struct CreateCardView: View {
             print("whoops \(error.localizedDescription)")
         }
     }
-    
+
     func setImage() {
         Task {
             if

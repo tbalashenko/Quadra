@@ -10,7 +10,7 @@ import SwiftUI
 struct NeuButtonStyle: ButtonStyle {
     let width: CGFloat
     let height: CGFloat
-    
+
     func makeBody(configuration: Self.Configuration)
     -> some View {
         configuration.label
@@ -27,6 +27,6 @@ struct NeuButtonStyle: ButtonStyle {
     }
 }
 
-//extension ButtonStyle where Self == NeuButtonStyle {
+// extension ButtonStyle where Self == NeuButtonStyle {
 //    static var neuButtonStyle: NeuButtonStyle { .init() }
-//}
+// }

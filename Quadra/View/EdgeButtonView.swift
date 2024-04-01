@@ -17,14 +17,14 @@ enum Edge {
 struct EdgeButtonView: View {
     var image: Image
     var edge: Edge
-    var action: (()->())?
-    
+    var action: (() -> Void)?
+
     var body: some View {
         VStack {
             if edge == .bottomLeft || edge == .bottomRight { Spacer() }
             HStack {
                 if edge == .topRight || edge == .bottomRight { Spacer() }
-                
+
                 Button {
                     action?()
                 } label: {
@@ -34,7 +34,7 @@ struct EdgeButtonView: View {
                 }
                 .buttonStyle(.transparentButtonStyle)
                 .padding()
-                
+
                 if edge == .topLeft || edge == .bottomLeft { Spacer() }
             }
             if edge == .topLeft || edge == .topRight { Spacer() }
@@ -45,7 +45,7 @@ struct EdgeButtonView: View {
 #Preview {
     ZStack {
         RoundedRectangle(cornerRadius: 8)
-        EdgeButtonView(image: Image(systemName: "plus"), 
+        EdgeButtonView(image: Image(systemName: "plus"),
                        edge: .bottomLeft) {
             print("+")
         }

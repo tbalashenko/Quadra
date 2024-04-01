@@ -9,7 +9,7 @@ import UIKit
 import SwiftUI
 
 extension Image {
-    @MainActor 
+    @MainActor
     func convert() -> UIImage? {
         let renderer = ImageRenderer(content: self)
         return renderer.uiImage

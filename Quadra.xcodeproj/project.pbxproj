@@ -44,7 +44,6 @@
 		A0751AD82BAC89F000CF252C /* Font+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0751AD72BAC89F000CF252C /* Font+Ext.swift */; };
 		A0751AE82BADBED500CF252C /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0751AE72BADBED500CF252C /* Date+Ext.swift */; };
 		A0AC3A022BA9AB4C006DA5DA /* Status+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AC3A012BA9AB4C006DA5DA /* Status+Ext.swift */; };
-		A0AC3A042BA9ACAE006DA5DA /* ArchiveTag+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AC3A032BA9ACAE006DA5DA /* ArchiveTag+Ext.swift */; };
 		A0FB58772BBA022600104EB4 /* SourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FB58762BBA022600104EB4 /* SourceManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -88,7 +87,6 @@
 		A0751AD72BAC89F000CF252C /* Font+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Ext.swift"; sourceTree = "<group>"; };
 		A0751AE72BADBED500CF252C /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
 		A0AC3A012BA9AB4C006DA5DA /* Status+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Status+Ext.swift"; sourceTree = "<group>"; };
-		A0AC3A032BA9ACAE006DA5DA /* ArchiveTag+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchiveTag+Ext.swift"; sourceTree = "<group>"; };
 		A0FB58762BBA022600104EB4 /* SourceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -148,7 +146,6 @@
 			children = (
 				A059AFD02BA8A5D600CAE6E8 /* AnyShape+Ext.swift */,
 				A023FEF72BAB47D300FAB13C /* AnyTransition+Ext.swift */,
-				A0AC3A032BA9ACAE006DA5DA /* ArchiveTag+Ext.swift */,
 				A01E18CD2BA7398200A03412 /* Color+Ext.swift */,
 				A0751AE72BADBED500CF252C /* Date+Ext.swift */,
 				A0751AD72BAC89F000CF252C /* Font+Ext.swift */,
@@ -224,7 +221,6 @@
 				A01E18942BA3211000A03412 /* Sources */,
 				A01E18952BA3211000A03412 /* Frameworks */,
 				A01E18962BA3211000A03412 /* Resources */,
-				A0B57E782BBB569B00E14FC5 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -280,33 +276,12 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		A0B57E782BBB569B00E14FC5 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		A01E18942BA3211000A03412 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				A01E18A52BA3211300A03412 /* CardManager.swift in Sources */,
-				A0AC3A042BA9ACAE006DA5DA /* ArchiveTag+Ext.swift in Sources */,
 				A01E18C82BA7179800A03412 /* View+Ext.swift in Sources */,
 				A0751AE82BADBED500CF252C /* Date+Ext.swift in Sources */,
 				A023FEEE2BAA216800FAB13C /* TagCloudView.swift in Sources */,
@@ -477,7 +452,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Quadra/Preview Content\"";
 				DEVELOPMENT_TEAM = 965K7TW82R;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Quadra/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -508,7 +483,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Quadra/Preview Content\"";
 				DEVELOPMENT_TEAM = 965K7TW82R;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Quadra/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

@@ -19,7 +19,7 @@ struct QuadraApp: App {
                     .tabItem { Image(systemName: "repeat") }.tag(0)
                     .environmentObject(dataManager)
                     .environment(\.managedObjectContext, dataManager.container.viewContext)
-                    
+
                 ListView()
                     .tabItem { Image(systemName: "list.bullet") }.tag(1)
                     .environmentObject(dataManager)

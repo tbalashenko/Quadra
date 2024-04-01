@@ -12,7 +12,7 @@ extension SwipeView {
         case inactive
         case pressing
         case dragging(translation: CGSize)
-        
+
         var translation: CGSize {
             switch self {
                 case .inactive, .pressing:
@@ -21,7 +21,7 @@ extension SwipeView {
                     return translation
             }
         }
-        
+
         var isDragging: Bool {
             switch self {
                 case .dragging:
@@ -30,7 +30,7 @@ extension SwipeView {
                     return false
             }
         }
-        
+
         var isPressing: Bool {
             switch self {
                 case .pressing, .dragging:

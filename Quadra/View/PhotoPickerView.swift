@@ -12,10 +12,10 @@ struct PhotoPickerView: View {
     var geometry: GeometryProxy
     @Binding var photosPickerItem: PhotosPickerItem?
     @Binding var image: Image?
-    var action: (()->())?
-    
+    var action: (() -> Void)?
+
     var body: some View {
-        ZStack() {
+        ZStack {
             if let image = image {
                 image
                     .resizable()
@@ -56,7 +56,6 @@ struct PhotoPickerView: View {
         .padding(.vertical)
     }
 }
-
 
 #Preview {
     GeometryReader { geometry in

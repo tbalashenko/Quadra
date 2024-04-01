@@ -13,15 +13,15 @@ struct TagView: View {
     var foregroundColor: Color {
         backgroundColor?.isDark ?? false ? .white : .black
     }
-    var action: (()->())?
-    
+    var action: (() -> Void)?
+
     private var randomColor: Color {
         let red = Double.random(in: 0...1)
         let green = Double.random(in: 0...1)
         let blue = Double.random(in: 0...1)
         return Color(red: red, green: green, blue: blue)
     }
-    
+
     var body: some View {
         Button(action: action ?? {}, label: {
             Text(text)

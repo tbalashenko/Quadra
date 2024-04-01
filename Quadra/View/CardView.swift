@@ -13,22 +13,22 @@ enum CardViewPresentationMode {
 
 struct CardView: View {
     @ObservedObject var item: Item
-    
+
     var geometry: GeometryProxy
     let id = UUID()
     let presentationMode: CardViewPresentationMode
-    
-    var deleteAction: (()->())?
-    var moveButtonAction: (()->())?
-    
-    var gridLayout: [GridItem] = [ GridItem(.adaptive(minimum: 100, maximum: 300)), 
+
+    var deleteAction: (() -> Void)?
+    var moveButtonAction: (() -> Void)?
+
+    var gridLayout: [GridItem] = [ GridItem(.adaptive(minimum: 100, maximum: 300)),
                                    GridItem(.adaptive(minimum: 100, maximum: 300)),
                                    GridItem(.adaptive(minimum: 100, maximum: 300)) ]
-    
+
     @State var showTranslation = false
     @State var showAdditionalInfo = false
     @State private var totalHeight = CGFloat.infinity
-    
+
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -43,14 +43,14 @@ struct CardView: View {
                             .clipped()
                             .northWestShadow()
                     }
-                    
+
                     if presentationMode == .swipe {
                         EdgeButtonView(image: Image(systemName: "info.circle.fill"),
                                        edge: .topRight,
                                        action: { showAdditionalInfo.toggle()
                         })
                     }
-                    
+
                     VStack {
                         Spacer()
                         HStack(spacing: 8) {
@@ -67,17 +67,17 @@ struct CardView: View {
                 }
                 .frame(width: geometry.size.width,
                        height: geometry.size.height * 1/2)
-                
+
                 Text(!showTranslation ? (item.phraseToRemember ) : item.translation ?? "refewf")
                     .font(.title2)
                     .bold()
                     .padding()
                     .onTapGesture { showTranslation.toggle() }
-                
+
                 if !showTranslation, let transcripton = item.transcription {
                     Text("[" + transcripton + "]")
                 }
-                
+
                 if showAdditionalInfo {
                     HStack {
                         VStack(alignment: .leading, spacing: 6) {
@@ -121,13 +121,13 @@ struct CardView: View {
             }
         }
     }
-    
+
     func styledText(_ boldPart: String, regularPart: String) -> Text {
         let boldText = Text(boldPart).bold()
         let regularText = Text(regularPart)
         return boldText + regularText
     }
-    
+
     private func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
@@ -136,11 +136,9 @@ struct CardView: View {
     }
 }
 
-
-
 extension CardView: Identifiable { }
 
-//#Preview {
+// #Preview {
 //    GeometryReader { geometry in
 //        CardView(item: Item(image: UIImage(named: "test")?.pngData(),
 //                            archiveTag: "#2024-2",
@@ -153,6 +151,4 @@ extension CardView: Identifiable { }
 //                            status: .input),
 //                 geometry: geometry, presentationMode: .view)
 //    }
-//}
-
-
+// }

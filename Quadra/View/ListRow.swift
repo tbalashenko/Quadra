@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ListRow: View {
     var item: Item
-    
+
     var body: some View {
         HStack {
             VStack {
@@ -42,7 +42,6 @@ struct ListRow: View {
         )
     }
 }
-
 
 #Preview {
     VStack {

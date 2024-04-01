@@ -12,15 +12,15 @@ struct SwipeView: View {
     @EnvironmentObject var dataManager: CardManager
     @Environment(\.managedObjectContext) var viewContext
     @Binding var cardViews: [CardView]
-    var swipeAction: (()->())?
-    
+    var swipeAction: (() -> Void)?
+
     @State private var removalTransition = AnyTransition.trailingBottom
     @State private var isDisappeared: Bool = true
     @GestureState private var dragState = DragState.inactive
     private let dragThreshold: CGFloat = 80.0
-    
+
     var body: some View {
-        GeometryReader { geometry in
+        GeometryReader { _ in
             VStack {
                 ZStack {
                     ForEach(cardViews.reversed()) { cardView in
@@ -32,7 +32,7 @@ struct SwipeView: View {
                             .transition(self.removalTransition)
                             .gesture(LongPressGesture(minimumDuration: 0.01)
                                 .sequenced(before: DragGesture())
-                                .updating(self.$dragState, body: { (value, state, transaction) in
+                                .updating(self.$dragState, body: { (value, state, _) in
                                     switch value {
                                         case .first(true):
                                             state = .pressing
@@ -49,12 +49,12 @@ struct SwipeView: View {
                                         if drag.translation.width < -self.dragThreshold {
                                             self.removalTransition = .leadingBottom
                                         }
-                                        
+
                                         if drag.translation.width > self.dragThreshold {
                                             self.removalTransition = .trailingBottom
                                         }
                                     })
-                                     
+
                                         .onEnded({ (value) in
                                             guard case .second(true, let drag?) = value else {
                                                 return
@@ -70,10 +70,10 @@ struct SwipeView: View {
             }
         }
     }
-    
+
     private func isTopCard(cardView: CardView) -> Bool {
         guard let index = cardViews.firstIndex(where: { $0.id == cardView.id }) else { return false }
-        
+
         return index == 0
     }
 }
