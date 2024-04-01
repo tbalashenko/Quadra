@@ -10,7 +10,8 @@ import SwiftUI
 
 extension AnyTransition {
     static var trailingBottom: AnyTransition {
-        AnyTransition.asymmetric(insertion: .identity, removal: AnyTransition.move(edge: .trailing).combined(with: .move(edge: .bottom))
+        AnyTransition.asymmetric(insertion: .identity,
+                                 removal: AnyTransition.move(edge: .trailing).combined(with: .move(edge: .bottom))
         )
     }
     

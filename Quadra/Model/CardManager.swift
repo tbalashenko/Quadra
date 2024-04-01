@@ -211,8 +211,10 @@ class CardManager: NSObject, ObservableObject {
 #warning("remove")
         //item.additionTime = Date()
         item.additionTime = Date().subtractingDays(60) ?? Date()
+        
+        item.archiveTag = (Date().subtractingDays(60) ?? Date()).prepareTag()
 
-        item.archiveTag = Date().prepareTag()
+//        item.archiveTag = Date().prepareTag()
         #warning("remove")
         item.needMoveToThisWeek = true
         
@@ -260,5 +262,20 @@ class CardManager: NSObject, ObservableObject {
         let readyToRepeatItems = checkReadyToRepeat(items: items)
         
         return !readyToRepeatItems.filter({ $0.isReadyToRepeat }).isEmpty
+    }
+    
+    func getArchiveTags() -> [String] {
+        let items = fetchItems()
+        
+        return Array(Set(items.map { $0.archiveTag }))
+    }
+    
+    func getMinMaxDate() -> (min: Date, max: Date) {
+        let items = fetchItems()
+        
+        let minDate = items.map({ $0.additionTime }).min() ?? Date()
+        let maxDate = items.map({ $0.additionTime }).max() ?? Date()
+        
+        return (minDate, maxDate)
     }
 }

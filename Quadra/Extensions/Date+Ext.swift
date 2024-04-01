@@ -9,11 +9,10 @@ import Foundation
 
 extension Date {
     func prepareTag() -> String {
-        let currentDate = Date()
         let calendar = Calendar.current
 
-        let year = calendar.component(.year, from: currentDate)
-        let month = calendar.component(.month, from: currentDate)
+        let year = calendar.component(.year, from: self)
+        let month = calendar.component(.month, from: self)
         let formattedMonth = String(format: "%02d", month)
         
         return "#\(year)-\(formattedMonth)"

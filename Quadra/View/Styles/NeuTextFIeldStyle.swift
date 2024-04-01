@@ -35,4 +35,3 @@ struct NeuTextFieldStyle: TextFieldStyle {
         Spacer()
     }
 }
-

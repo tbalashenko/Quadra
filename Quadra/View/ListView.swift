@@ -13,75 +13,75 @@ struct ListView: View {
     @FetchRequest(sortDescriptors: []) var sources: FetchedResults<Source>
     @FetchRequest(sortDescriptors: []) var items: FetchedResults<Item>
     @State private var previousItems: [Item] = []
-    @State var selectedStatuses = Status.allStatuses
+    @State var selectedStatuses: [Status] = []
     @State var fromDate: Date = Date()
     @State var toDate: Date = Date()
     @State var selectedSources: [Source] = []
+    @State var selectedArchiveTags: [String] = []
     @State var filteredItems: [Item] = []
     @State private var isFromDateInitialized = false
     @State var minDate = Date()
     
     var body: some View {
-        GeometryReader() { geometry in
+        GeometryReader { geometry in
             NavigationStack {
-                List {
-                    ForEach(filteredItems) { item in
-                        ListRow(item: item)
-                            .listRowSeparator(.hidden)
-                            .listRowBackground(Color.element)
-                            .background(
-                                NavigationLink("", destination: CardView(item: item,
-                                                                         geometry: geometry,
-                                                                         presentationMode: .view)
-                                                    .toolbar(.hidden, for: .tabBar)
-                                                    .padding(.horizontal, geometry.size.width/12)
-                                                    .padding(.vertical, geometry.size.width/12)
-                                                    .background(Color.element))
-                                .opacity(0)
-                            )
-                    }.onDelete(perform: delete)
-                }
-                .listStyle(.plain)
-                .background(Color.element)
-                .toolbar {
-                    ToolbarItem {
-                        NavigationLink(destination:
-                                        FilterView(selectedStatuses: $selectedStatuses,
-                                                   fromDate: $fromDate,
-                                                   toDate: $toDate,
-                                                   selectedSources: $selectedSources,
-                                                   minDate: $minDate)
-                                            .environmentObject(dataManager)
-                                            .environment(\.managedObjectContext, dataManager.container.viewContext)
-                                            .toolbar(.hidden, for: .tabBar)) {
-                            Label("Filter", systemImage: "line.3.horizontal.decrease.circle.fill")
-                        }
+                listViewContent(geometry: geometry)
+                    .onAppear {
+                        performChecks()
+                        updateFilteredItems()
                     }
-                }
-                .onAppear {
-                    if !isFromDateInitialized { setDate() }
-                    updateFilteredItems()
-                }
-                .onChange(of: selectedStatuses) { oldValue, newValue in
-                    updateFilteredItems()
-                }
-                .onChange(of: selectedSources) { oldValue, newValue in
-                    updateFilteredItems()
-                }
-                .onChange(of: fromDate) { oldValue, newValue in
-                    updateFilteredItems()
-                }
-                .onChange(of: toDate) { oldValue, newValue in
-                    updateFilteredItems()
-                }
             }
         }
     }
     
+    private func listViewContent(geometry: GeometryProxy) -> some View {
+        List {
+            ForEach(filteredItems) { item in
+                ListRow(item: item)
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.element)
+                    .background(
+                        NavigationLink("", destination: CardView(item: item,
+                                                                 geometry: geometry,
+                                                                 presentationMode: .view)
+                            .toolbar(.hidden, for: .tabBar)
+                            .padding(geometry.size.width/12)
+                            .background(Color.element))
+                        .opacity(0)
+                    )
+            }.onDelete(perform: delete)
+        }
+        .listStyle(.plain)
+        .background(Color.element)
+        .toolbar {
+            ToolbarItem {
+                NavigationLink(destination:
+                                FilterView(selectedStatuses: $selectedStatuses,
+                                           selectedArchiveTags: $selectedArchiveTags, 
+                                           fromDate: $fromDate,
+                                           toDate: $toDate,
+                                           selectedSources: $selectedSources,
+                                           minDate: $minDate,
+                                           archiveTags: dataManager.getArchiveTags())
+                                    .environmentObject(dataManager)
+                                    .environment(\.managedObjectContext, dataManager.container.viewContext)
+                                    .toolbar(.hidden, for: .tabBar)) {
+                                        Label("Filter", systemImage: "line.3.horizontal.decrease.circle.fill")
+                                    }
+            }
+        }
+    }
+    
+    func performChecks() {
+        if !isFromDateInitialized { setDate() }
+    }
+    
     func setDate() {
-        let minDate = items.map({ $0.additionTime }).min() ?? Date()
+        let (minDate, maxDate) = dataManager.getMinMaxDate()
+    
         fromDate = minDate
         self.minDate = minDate
+        toDate = maxDate
         isFromDateInitialized = true
     }
     
@@ -109,7 +109,15 @@ struct ListView: View {
                 
                 let dateRangeMatches = fromDateComparison != .orderedDescending && toDateComparison != .orderedAscending
                 
-                return statusMatches && sourceMatches && dateRangeMatches
+                let archiveTagMatches: Bool
+                
+                if selectedArchiveTags.isEmpty {
+                    archiveTagMatches = true
+                } else {
+                    archiveTagMatches = selectedArchiveTags.contains(item.archiveTag)
+                }
+                
+                return statusMatches && sourceMatches && dateRangeMatches && archiveTagMatches
             }
     }
     

@@ -7,9 +7,21 @@
 
 import SwiftUI
 
+protocol TagCloudViewItem {
+    var title: String { get set }
+    var color: String { get set }
+}
+
+struct TagCloudItem: TagCloudViewItem {
+    var title: String
+    var color: String
+}
+
+extension Source: TagCloudViewItem { }
+
 struct TagCloudView: View {
     var max: Int? = nil
-    var items: [Source]
+    var items: [TagCloudViewItem]
     let geometry: GeometryProxy
     @Binding var totalHeight: CGFloat
     var inactiveColor: Color?
@@ -37,7 +49,7 @@ struct TagCloudView: View {
                     }
                         .padding(4)
                         .alignmentGuide(.leading, computeValue: { tagSize in
-                            if (abs(width - tagSize.width) > geometry.size.width - 32)
+                            if (abs(width - tagSize.width) > geometry.size.width * 0.85)
                             {
                                 width = 0
                                 height -= tagSize.height
