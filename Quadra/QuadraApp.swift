@@ -27,7 +27,6 @@ struct QuadraApp: App {
             }
             .onAppear {
                 dataManager.performCheсks()
-                UIApplication.shared.addTapGestureRecognizer()
             }
         }
     }

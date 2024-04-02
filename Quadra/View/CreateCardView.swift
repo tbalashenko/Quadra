@@ -52,6 +52,7 @@ struct CreateCardView: View {
                                   axis: .vertical)
                         .textFieldStyle(NeuTextFieldStyle())
                     }
+                    .backgroundStyle(Color.element)
 
                     GroupBox("Source") {
                         if !selectedSources.isEmpty {
@@ -60,8 +61,7 @@ struct CreateCardView: View {
                             TagCloudView(items: selectedSources.sorted(),
                                          geometry: geometry,
                                          totalHeight: $totalHeight,
-                                         action: { selectedSources.remove(selectedSources.sorted()[$0])})
-                            .frame(width: geometry.size.width * 0.85)
+                                         action: { selectedSources.remove(selectedSources.sorted()[$0]) })
                             Text("Tap to remove")
                                 .font(.footnote)
                                 .foregroundStyle(Color.gray)
@@ -86,7 +86,10 @@ struct CreateCardView: View {
                                 }
 
                             Button(action: {
-                                if !newSourceText.isEmpty { saveSource() }
+                                if !newSourceText.isEmpty {
+                                    hideKeyboard()
+                                    saveSource()
+                                }
                             }, label: {
                                 Image(systemName: "plus")
                             })
@@ -103,9 +106,12 @@ struct CreateCardView: View {
                                      items: filteredSources.sorted(),
                                      geometry: geometry,
                                      totalHeight: $totalHeight,
-                                     action: { selectedSources.insert(filteredSources.sorted()[$0])})
-                        .frame(width: geometry.size.width * 0.85)
+                                     action: {
+                            selectedSources.insert(filteredSources.sorted()[$0])
+                            hideKeyboard()
+                        })
                     }
+                    .backgroundStyle(Color.element)
                     Spacer()
                 }
                 .padding()
