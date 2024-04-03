@@ -40,17 +40,17 @@ struct CreateCardView: View {
                         TextField("Phrase to remember*",
                                   text: $phraseToRemember,
                                   axis: .vertical)
-                        .textFieldStyle(NeuTextFieldStyle())
+                        .textFieldStyle(NeuTextFieldStyle(text: $phraseToRemember))
 
                         TextField("Translation",
                                   text: $translation,
                                   axis: .vertical)
-                        .textFieldStyle(NeuTextFieldStyle())
+                        .textFieldStyle(NeuTextFieldStyle(text: $translation))
 
                         TextField("Transcription",
                                   text: $transcription,
                                   axis: .vertical)
-                        .textFieldStyle(NeuTextFieldStyle())
+                        .textFieldStyle(NeuTextFieldStyle(text: $transcription))
                     }
                     .backgroundStyle(Color.element)
 
@@ -71,7 +71,7 @@ struct CreateCardView: View {
                                 .frame(width: 22, height: 22)
                                 .northWestShadow()
                             TextField("Add a new source", text: $newSourceText)
-                                .textFieldStyle(NeuTextFieldStyle())
+                                .textFieldStyle(NeuTextFieldStyle(text: $newSourceText))
                                 .padding(.horizontal)
                                 .onChange(of: newSourceText) { _, _ in
                                     let selectedSourceIDs = Set(selectedSources.map { $0.id })
@@ -150,11 +150,12 @@ struct CreateCardView: View {
         showCreateCardView = false
     }
 
+    #warning("to manager")
     func saveSource() {
         let source = Source(context: self.viewContext)
         source.id = UUID()
         source.color = sourceColor.toHex()
-        source.title = newSourceText
+        source.title = "#" + newSourceText
 
         selectedSources.insert(source)
         newSourceText = ""

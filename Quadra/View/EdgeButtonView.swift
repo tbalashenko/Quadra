@@ -33,7 +33,7 @@ struct EdgeButtonView: View {
                         .frame(width: 22, height: 22)
                 }
                 .buttonStyle(.transparentButtonStyle)
-                .padding()
+                .padding(4)
 
                 if edge == .topLeft || edge == .bottomLeft { Spacer() }
             }

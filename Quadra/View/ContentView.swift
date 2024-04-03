@@ -73,16 +73,13 @@ struct ContentView: View {
             .reversed()
             .filter { $0.isReadyToRepeat }
             .forEach { item in
-                if let geometryProxy = geometryProxy {
-                    let cardView = CardView(item: item,
-                                            geometry: geometryProxy,
-                                            presentationMode: .swipe,
-                                            moveButtonAction: {
-                        dataManager.setNewStatus(for: item)
-                        moveCard()
-                    })
-                    cardViews.append(cardView)
-                }
+                let cardView = CardView(item: item,
+                                        presentationMode: .swipe,
+                                        moveButtonAction: {
+                    dataManager.setNewStatus(for: item)
+                    moveCard()
+                })
+                cardViews.append(cardView)
             }
     }
 

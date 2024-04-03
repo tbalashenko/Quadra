@@ -13,7 +13,7 @@ extension Source {
                                                 in: CardManager().container.viewContext)
         self.init(entity: entity!, insertInto: CardManager().container.viewContext)
         self.id = id
-        self.title = title
+        self.title = "#" + title
         self.color = color.toHex()
     }
 }

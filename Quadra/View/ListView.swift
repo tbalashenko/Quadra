@@ -21,6 +21,8 @@ struct ListView: View {
     @State var filteredItems: [Item] = []
     @State private var isFromDateInitialized = false
     @State var minDate = Date()
+    @State private var isSearching = false
+    @State var searchText = ""
 
     var body: some View {
         GeometryReader { geometry in
@@ -30,6 +32,10 @@ struct ListView: View {
                         performChecks()
                         updateFilteredItems()
                     }
+                    .onChange(of: searchText) { oldValue, newValue in
+                        updateFilteredItems()
+                    }
+                    .searchable(text: $searchText, placement: .navigationBarDrawer)
             }
         }
     }
@@ -42,8 +48,8 @@ struct ListView: View {
                     .listRowBackground(Color.element)
                     .background(
                         NavigationLink("", destination: CardView(item: item,
-                                                                 geometry: geometry,
                                                                  presentationMode: .view)
+                            .toolbarTitleDisplayMode(.inline)
                             .toolbar(.hidden, for: .tabBar)
                             .padding(geometry.size.width/12)
                             .background(Color.element))
@@ -53,6 +59,9 @@ struct ListView: View {
         }
         .listStyle(.plain)
         .background(Color.element)
+        .navigationTitle("Your Phrases")
+        .toolbarBackground(.element, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem {
                 NavigationLink(destination:
@@ -88,6 +97,15 @@ struct ListView: View {
     func updateFilteredItems() {
         filteredItems = Array(items)
             .filter { item in
+                var textMatch: Bool = false
+                if searchText.isEmpty {
+                    textMatch = true
+                } else if item.phraseToRemember.lowercased().contains(searchText.lowercased()) {
+                    textMatch = true
+                } else if let translation = item.translation {
+                    return translation.lowercased().contains(searchText.lowercased())
+                }
+                
                 let statusMatches: Bool
                 if selectedStatuses == Status.allStatuses || selectedStatuses.isEmpty {
                     statusMatches = true
@@ -117,7 +135,7 @@ struct ListView: View {
                     archiveTagMatches = selectedArchiveTags.contains(item.archiveTag)
                 }
 
-                return statusMatches && sourceMatches && dateRangeMatches && archiveTagMatches
+                return textMatch && statusMatches && sourceMatches && dateRangeMatches && archiveTagMatches
             }
     }
 

@@ -11,11 +11,10 @@ struct TransparentButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .foregroundColor(.black)
-            .padding(10)
+            .padding(8)
             .background {
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(Color.white.opacity(0.6))
-
+                    .fill(Color.white.opacity(0.4))
             }
     }
 }

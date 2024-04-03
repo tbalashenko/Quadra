@@ -95,7 +95,6 @@ extension Item {
         self.init(entity: entity!, insertInto: CardManager().container.viewContext)
         self.id = UUID()
         self.archiveTag = archiveTag
-        //        self.audioNote = audioNote
         self.phraseToRemember = phraseToRemember
         self.translation = translation
         self.image = image
@@ -104,5 +103,12 @@ extension Item {
         self.transcription = transcription
         self.additionTime = additionTime
         self.status = status
+        self.isReadyToRepeat = true
+        self.needMoveToThisMonth = false
+        self.needMoveToThisWeek = false
+        self.needMoveToArchive = false
+        self.isArchived = false
+        self.lastTimeStatusChanged = Date()
+        self.repetitionCounter = 0
     }
 }

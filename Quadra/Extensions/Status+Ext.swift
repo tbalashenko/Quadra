@@ -20,10 +20,10 @@ public class Status: NSObject, NSCoding, NSSecureCoding {
 
     public static let allStatuses = [Status.input, Status.thisWeek, Status.thisMonth, Status.archive]
 
-    public static let input = Status(id: 0, title: "#input", color: Color.Green.isabelline)
-    public static let thisWeek = Status(id: 1, title: "#thisWeek", color: Color.Green.gainsboro)
-    public static let thisMonth = Status(id: 2, title: "#thisMonth", color: Color.Green.ashGray)
-    public static let archive = Status(id: 3, title: "#archive", color: Color.Green.darkSeaGreen)
+    public static let input = Status(id: 0, title: "#input", color: Color.Green.gainsboro)
+    public static let thisWeek = Status(id: 1, title: "#thisWeek", color: Color.yellowIris)
+    public static let thisMonth = Status(id: 2, title: "#thisMonth", color: Color.accentOrange)
+    public static let archive = Status(id: 3, title: "#archive", color: Color.greyish)
 
     private init(id: Int, title: String, color: Color) {
         self.id = id

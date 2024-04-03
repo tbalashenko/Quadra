@@ -44,9 +44,7 @@ struct SwipeView: View {
                                             return
                                         }
                                         if drag.translation.width < -self.dragThreshold || drag.translation.width > self.dragThreshold {
-                                            withAnimation(.easeIn(duration: 0.01)) {
-                                                swipeAction?()
-                                            }
+                                            swipeAction?()
                                         }
                                     }))
                     }

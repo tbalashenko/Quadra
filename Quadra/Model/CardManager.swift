@@ -211,6 +211,7 @@ class CardManager: NSObject, ObservableObject {
 
         item.phraseToRemember = phraseToRemember
         item.translation = translation
+        item.transcription = transcription
         item.status = Status.input
         item.image = image?.pngData()
         item.sources = NSSet(set: sources)

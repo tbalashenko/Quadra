@@ -24,34 +24,34 @@ struct FilterView: View {
     @State var filteredArchiveTags = [String]()
     @State private var geometryProxy: GeometryProxy?
     var archiveTags: [String]
-
+    
     var body: some View {
-            GeometryReader { geometry in
-                List {
-                    statusGroupBox
-                    creationDateGroupBox
-                    sourcesGroupBox
-                    archiveTagsGroupBox
-                }
-                .listStyle(.plain)
-                .background(Color.element)
-                .onAppear {
-                    setFilteredSources()
-                    setFilteredArchiveTags()
-                    geometryProxy = geometry
-                }
-                .onChange(of: selectedSources) {
-                    setFilteredSources()
-                }
-                .onChange(of: selectedArchiveTags) {
-                    setFilteredArchiveTags()
-                }
+        GeometryReader { geometry in
+            List {
+                statusGroupBox
+                creationDateGroupBox
+                sourcesGroupBox
+                archiveTagsGroupBox
+            }
+            .listStyle(.plain)
+            .background(Color.element)
+            .onAppear {
+                setFilteredSources()
+                setFilteredArchiveTags()
+                geometryProxy = geometry
+            }
+            .onChange(of: selectedSources) {
+                setFilteredSources()
+            }
+            .onChange(of: selectedArchiveTags) {
+                setFilteredArchiveTags()
             }
             .toolbar {
                 resetButton
             }
         }
-
+    }
+    
     private var statusGroupBox: some View {
         GroupBox("Status") {
             HStack(spacing: 8) {
@@ -63,10 +63,11 @@ struct FilterView: View {
                 }
             }
         }
+        .backgroundStyle(Color.element)
         .listRowSeparator(.hidden)
         .listRowBackground(Color.element)
     }
-
+    
     private var creationDateGroupBox: some View {
         GroupBox("Creation Date") {
             DatePicker("From",
@@ -78,10 +79,11 @@ struct FilterView: View {
                        displayedComponents: [.date])
             .datePickerStyle(.compact)
         }
+        .backgroundStyle(Color.element)
         .listRowSeparator(.hidden)
         .listRowBackground(Color.element)
     }
-
+    
     private var sourcesGroupBox: some View {
         Group {
             if !sources.isEmpty, let geometryProxy = geometryProxy {
@@ -92,7 +94,7 @@ struct FilterView: View {
                                  action: { selectedSources.remove(at: $0)
                     })
                     .padding(selectedSources.isEmpty ? 0 : 4)
-
+                    
                     TagCloudView(items: filteredSources,
                                  geometry: geometryProxy,
                                  totalHeight: $totalHeight,
@@ -100,6 +102,7 @@ struct FilterView: View {
                                  action: { selectedSources.append(filteredSources[$0]) })
                     .padding(filteredSources.isEmpty ? 0 : 4)
                 }
+                .backgroundStyle(Color.element)
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.element)
             } else {
@@ -107,13 +110,13 @@ struct FilterView: View {
             }
         }
     }
-
+    
     private var archiveTagsGroupBox: some View {
         Group {
             if !archiveTags.isEmpty, let geometryProxy = geometryProxy {
                 let selectedItems = selectedArchiveTags.map { TagCloudItem(title: $0, color: Color.puce.toHex()) }
                 let filteredItems = filteredArchiveTags.map { TagCloudItem(title: $0, color: Color.puce.toHex()) }
-
+                
                 GroupBox("Archive tags") {
                     TagCloudView(
                         items: selectedItems,
@@ -122,7 +125,7 @@ struct FilterView: View {
                         action: { selectedArchiveTags.remove(at: $0) }
                     )
                     .padding(selectedItems.isEmpty ? 0 : 4)
-
+                    
                     TagCloudView(
                         items: filteredItems,
                         geometry: geometryProxy,
@@ -132,6 +135,7 @@ struct FilterView: View {
                     )
                     .padding(filteredItems.isEmpty ? 0 : 4)
                 }
+                .backgroundStyle(Color.element)
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.element)
             } else {
@@ -139,7 +143,7 @@ struct FilterView: View {
             }
         }
     }
-
+    
     private var resetButton: some View {
         Button {
             selectedArchiveTags = []
@@ -151,7 +155,7 @@ struct FilterView: View {
             Text("Reset")
         }
     }
-
+    
     func toggleStatus(_ status: Status) {
         if selectedStatuses.contains(status) {
             selectedStatuses.removeAll { $0 == status }
@@ -159,7 +163,7 @@ struct FilterView: View {
             selectedStatuses.append(status)
         }
     }
-
+    
     func setFilteredSources() {
         if !selectedSources.isEmpty {
             filteredSources = sources.filter { source in
@@ -169,7 +173,7 @@ struct FilterView: View {
             filteredSources = Array(sources)
         }
     }
-
+    
     func setFilteredArchiveTags() {
         if selectedArchiveTags.isEmpty {
             filteredArchiveTags = archiveTags
