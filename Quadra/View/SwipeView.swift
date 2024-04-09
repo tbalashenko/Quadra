@@ -9,6 +9,7 @@ import CoreData
 import SwiftUI
 
 struct SwipeView: View {
+    @EnvironmentObject var settingsManager: SettingsManager
     @EnvironmentObject var dataManager: CardManager
     @Environment(\.managedObjectContext) var viewContext
     @Binding var cardViews: [CardView]
@@ -47,6 +48,7 @@ struct SwipeView: View {
                                             swipeAction?()
                                         }
                                     }))
+                            .environmentObject(settingsManager)
                     }
                 }
             }

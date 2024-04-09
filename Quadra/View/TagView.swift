@@ -13,14 +13,8 @@ struct TagView: View {
     var foregroundColor: Color {
         backgroundColor?.isDark ?? false ? .white : .black
     }
+    var withShadow: Bool = true
     var action: (() -> Void)?
-
-    private var randomColor: Color {
-        let red = Double.random(in: 0...1)
-        let green = Double.random(in: 0...1)
-        let blue = Double.random(in: 0...1)
-        return Color(red: red, green: green, blue: blue)
-    }
 
     var body: some View {
         Button(action: action ?? {}, label: {
@@ -28,11 +22,13 @@ struct TagView: View {
                 .font(.caption)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
-                .background(backgroundColor ?? randomColor)
+                .background(backgroundColor ?? Color.randomColor)
                 .foregroundColor(foregroundColor)
                 .cornerRadius(8)
         })
-        .northWestShadow()
+        .if(withShadow) { content in
+            content.northWestShadow()
+        }
     }
 }
 

@@ -10,6 +10,7 @@ import PhotosUI
 
 struct PhotoPickerView: View {
     var geometry: GeometryProxy
+    var ratio: CGFloat
     @Binding var photosPickerItem: PhotosPickerItem?
     @Binding var image: Image?
     var action: (() -> Void)?
@@ -21,7 +22,7 @@ struct PhotoPickerView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: geometry.size.width * 0.85,
-                           height: geometry.size.width * 0.85 * 9/16)
+                           height: geometry.size.width * 0.85 * ratio)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .northWestShadow()
             }
@@ -44,12 +45,12 @@ struct PhotoPickerView: View {
         .background(
             RoundedRectangle(cornerRadius: 8)
                 .frame(width: geometry.size.width * 0.85,
-                       height: geometry.size.width * 0.85 * 9/16)
+                       height: geometry.size.width * 0.85 * ratio)
                 .foregroundStyle(.element)
                 .northWestShadow()
         )
         .frame(width: geometry.size.width * 0.85,
-               height: geometry.size.width * 0.85 * 9/16)
+               height: geometry.size.width * 0.85 * ratio)
         .onChange(of: photosPickerItem) {
             action?()
         }
@@ -57,10 +58,10 @@ struct PhotoPickerView: View {
     }
 }
 
-#Preview {
-    GeometryReader { geometry in
-        PhotoPickerView(geometry: geometry,
-                        photosPickerItem: .constant(nil),
-                        image: .constant(nil))
-    }
-}
+//#Preview {
+//    GeometryReader { geometry in
+//        PhotoPickerView(geometry: geometry,
+//                        photosPickerItem: .constant(nil),
+//                        image: .constant(nil))
+//    }
+//}

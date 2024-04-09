@@ -12,7 +12,7 @@ struct ListRow: View {
     
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
-            formatedText(for: item)
+            Text(item.phraseToRemember)
                 .padding()
             Spacer()
             if let data = item.image,
@@ -31,19 +31,6 @@ struct ListRow: View {
             .northWestShadow()
         )
     }
-    
-    func formatedText(for item: Item) -> Text {
-        guard let firstLetter = item.phraseToRemember.first else {
-            return Text(item.phraseToRemember)
-        }
-        
-        let restOfPhrase = String(item.phraseToRemember.dropFirst())
-        
-        return Text(String(firstLetter))
-            .bold()
-            .foregroundColor(Color(hex: item.status.color))
-            + Text(restOfPhrase)
-    }
 }
 
 #Preview {
@@ -51,4 +38,12 @@ struct ListRow: View {
         ListRow(item: Item.sampleData.first!)
         ListRow(item: Item.sampleData.last!)
     }
+}
+
+struct ContentLengthPreference: PreferenceKey {
+   static var defaultValue: CGFloat { 0 }
+   
+   static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+      value = nextValue()
+   }
 }

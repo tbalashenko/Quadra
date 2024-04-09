@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ListView: View {
     @EnvironmentObject var dataManager: CardManager
+    @EnvironmentObject var settingsManager: SettingsManager
     @Environment(\.managedObjectContext) var viewContext
     @FetchRequest(sortDescriptors: []) var sources: FetchedResults<Source>
     @FetchRequest(sortDescriptors: []) var items: FetchedResults<Item>
@@ -23,7 +24,8 @@ struct ListView: View {
     @State var minDate = Date()
     @State private var isSearching = false
     @State var searchText = ""
-
+    @State var isLoading = true
+    
     var body: some View {
         GeometryReader { geometry in
             NavigationStack {
@@ -39,23 +41,30 @@ struct ListView: View {
             }
         }
     }
-
+    
     private func listViewContent(geometry: GeometryProxy) -> some View {
-        List {
-            ForEach(filteredItems) { item in
-                ListRow(item: item)
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.element)
-                    .background(
-                        NavigationLink("", destination: CardView(item: item,
-                                                                 presentationMode: .view)
-                            .toolbarTitleDisplayMode(.inline)
-                            .toolbar(.hidden, for: .tabBar)
-                            .padding(geometry.size.width/12)
-                            .background(Color.element))
-                        .opacity(0)
-                    )
-            }.onDelete(perform: delete)
+        let groupedItems = groupItems(filteredItems)
+        
+        return List {
+            if isLoading {
+                Section(header: Text(Status.input.title)) {
+                    ForEach(0..<10) { _ in
+                        SkeletonListRowView()
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.element)
+                    }
+                }
+            } else {
+                ForEach(Array(groupedItems), id: \.key) { section in
+                    let (status, items) = section
+                    Section(header: Text(status)) {
+                        ForEach(items, id: \.id) { item in
+                            listRowContent(item: item, geometry: geometry)
+                        }
+                        .onDelete(perform: delete)
+                    }
+                }
+            }
         }
         .listStyle(.plain)
         .background(Color.element)
@@ -64,37 +73,57 @@ struct ListView: View {
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem {
-                NavigationLink(destination:
-                                FilterView(selectedStatuses: $selectedStatuses,
-                                           selectedArchiveTags: $selectedArchiveTags,
-                                           fromDate: $fromDate,
-                                           toDate: $toDate,
-                                           selectedSources: $selectedSources,
-                                           minDate: $minDate,
-                                           archiveTags: dataManager.getArchiveTags())
-                                    .environmentObject(dataManager)
-                                    .environment(\.managedObjectContext, dataManager.container.viewContext)
-                                    .toolbar(.hidden, for: .tabBar)) {
-                                        Label("Filter", systemImage: "line.3.horizontal.decrease.circle.fill")
-                                    }
+                NavigationLink(destination: FilterView(selectedStatuses: $selectedStatuses,
+                                                       selectedArchiveTags: $selectedArchiveTags,
+                                                       fromDate: $fromDate, toDate: $toDate,
+                                                       selectedSources: $selectedSources,
+                                                       minDate: $minDate,
+                                                       archiveTags: dataManager.getArchiveTags())
+                    .environmentObject(dataManager)
+                    .environment(\.managedObjectContext, dataManager.container.viewContext)
+                    .toolbar(.hidden, for: .tabBar)) {
+                        Label("Filter", systemImage: "line.3.horizontal.decrease.circle.fill")
+                    }
             }
         }
     }
-
-    func performChecks() {
+    
+    private func groupItems(_ items: [Item]) -> [String: [Item]] {
+        let sortedItems = items.sorted { $0.status.id < $1.status.id }
+        return Dictionary(grouping: sortedItems, by: { $0.status.title })
+    }
+    
+    private func listRowContent(item: Item, geometry: GeometryProxy) -> some View {
+        ListRow(item: item)
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.element)
+            .background(
+                NavigationLink("", destination: CardView(item: item, cardViewPresentationMode: .view)
+                    .environmentObject(settingsManager)
+                    .toolbarTitleDisplayMode(.inline)
+                    .toolbar(.hidden, for: .tabBar)
+                    .padding(geometry.size.width/12)
+                    .background(Color.element))
+                .opacity(0)
+            )
+    }
+    
+    private func performChecks() {
         if !isFromDateInitialized { setDate() }
     }
-
-    func setDate() {
+    
+    private func setDate() {
         let (minDate, maxDate) = dataManager.getMinMaxDate()
-
+        
         fromDate = minDate
         self.minDate = minDate
         toDate = maxDate
         isFromDateInitialized = true
     }
-
-    func updateFilteredItems() {
+    
+    private func updateFilteredItems() {
+        isLoading = true
+        
         filteredItems = Array(items)
             .filter { item in
                 var textMatch: Bool = false
@@ -112,7 +141,7 @@ struct ListView: View {
                 } else {
                     statusMatches = selectedStatuses.map { $0.id }.contains(item.status.id)
                 }
-
+                
                 var sourceMatches: Bool = false
                 if selectedSources.isEmpty {
                     sourceMatches = true
@@ -121,24 +150,28 @@ struct ListView: View {
                         sourceMatches = sources.contains(where: { selectedSources.contains($0) })
                     }
                 }
-
+                
                 let fromDateComparison = Calendar.current.compare(fromDate, to: item.additionTime, toGranularity: .day)
                 let toDateComparison = Calendar.current.compare(toDate, to: item.additionTime, toGranularity: .day)
-
+                
                 let dateRangeMatches = fromDateComparison != .orderedDescending && toDateComparison != .orderedAscending
-
+                
                 let archiveTagMatches: Bool
-
+                
                 if selectedArchiveTags.isEmpty {
                     archiveTagMatches = true
                 } else {
                     archiveTagMatches = selectedArchiveTags.contains(item.archiveTag)
                 }
-
+                
                 return textMatch && statusMatches && sourceMatches && dateRangeMatches && archiveTagMatches
             }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+            isLoading = false
+        }
     }
-
+    
     private func delete(at offsets: IndexSet) {
         for index in offsets {
             dataManager.deleteItem(filteredItems[index])

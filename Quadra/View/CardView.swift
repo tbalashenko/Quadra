@@ -12,126 +12,193 @@ enum CardViewPresentationMode {
 }
 
 struct CardView: View {
-    @ObservedObject var item: Item
     let id = UUID()
-    let presentationMode: CardViewPresentationMode
+    
+    @EnvironmentObject var settingsManager: SettingsManager
+    @ObservedObject var item: Item
+    
+    let cardViewPresentationMode: CardViewPresentationMode
     var deleteAction: (() -> Void)?
     var moveButtonAction: (() -> Void)?
-    var gridLayout: [GridItem] = [ GridItem(.adaptive(minimum: 100, maximum: 300)),
-                                   GridItem(.adaptive(minimum: 100, maximum: 300)),
-                                   GridItem(.adaptive(minimum: 100, maximum: 300)) ]
-    @State var showTranslation = false
-    @State var showAdditionalInfo = false
+    
+    let gridLayout: [GridItem] = [
+        GridItem(.adaptive(minimum: 100, maximum: 300)),
+        GridItem(.adaptive(minimum: 100, maximum: 300)),
+        GridItem(.adaptive(minimum: 100, maximum: 300))
+    ]
+    
+    @State private var showTranslation = false
+    @State private var showAdditionalInfo = false
     @State private var totalHeight = CGFloat.infinity
+    @State private var showFullImage: Bool = false
     
     var body: some View {
         GeometryReader { geometry in
             ScrollView(.vertical) {
                 imageView(geometry: geometry)
                 phraseView()
-                tagCloudView(geometry: geometry)
-                additionalInfoView()
+                additionalInfoView(geometry: geometry)
             }
             .background(.element)
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .northWestShadow()
             .onAppear {
-                if presentationMode == .view {
+                if cardViewPresentationMode == .view {
                     showAdditionalInfo = true
                 }
             }
         }
     }
     
+    @ViewBuilder
     private func imageView(geometry: GeometryProxy) -> some View {
-        return Group {
-            if let data = item.image,
-               let uiImage = UIImage(data: data) {
-                ZStack {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: geometry.size.width,
-                               height: geometry.size.width * 9/16)
-                        .clipped()
-                        .northWestShadow()
-                    
-                    if presentationMode == .swipe {
-                        EdgeButtonView(image: Image(systemName: "info.circle.fill"),
-                                       edge: .topRight,
-                                       action: { showAdditionalInfo.toggle()
-                        })
-                    }
-                    
-                    moveToButton()
-                }
-                
-            } else {
-                HStack {
-                    moveToButton()
-                    Spacer()
-                    if presentationMode == .swipe {
-                        EdgeButtonView(image: Image(systemName: "info.circle.fill"),
-                                       edge: .topRight,
-                                       action: { showAdditionalInfo.toggle()
-                        })
-                    }
-                }
-            }
+        if let imageData = item.image,
+            let uiImage = UIImage(data: imageData) {
+            imageViewWithImage(uiImage, geometry: geometry)
+        } else {
+            imageViewWithoutImage()
         }
-        .frame(width: geometry.size.width,
-               height: geometry.size.width * 9/16)
     }
     
-    private func moveToButton() -> some View {
-        Group {
-            if item.needSetNewStatus, !item.isArchived, presentationMode == .swipe {
-                VStack {
-                    HStack {
-                        Button {
-                            moveButtonAction?()
-                        } label: {
-                            HStack {
-                                Text("→")
-                                    .bold()
-                                TagView(text: item.getNewStatus.title,
-                                        backgroundColor: Color(hex: item.getNewStatus.color)) {
-                                    moveButtonAction?()
-                                }
-                            }
-                        }
-                        .padding(4)
-                        .buttonStyle(TransparentButtonStyle())
-                        Spacer()
-                    }
-                    Spacer()
-                }
+    private func imageViewWithImage(_ uiImage: UIImage, geometry: GeometryProxy) -> some View {
+        Button(action: {
+            showFullImage.toggle()
+        }) {
+            ZStack {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: geometry.size.width, 
+                           height: geometry.size.width * settingsManager.aspectRatio.ratio)
+                    .clipped()
+                    .northWestShadow()
+                infoButtonIfNeeded()
+                moveToButton()
             }
+        }
+        .frame(width: geometry.size.width, 
+               height: geometry.size.width * settingsManager.aspectRatio.ratio)
+        .fullScreenCover(isPresented: $showFullImage) {
+            FullImageView(image: uiImage)
+        }
+    }
+    
+    private func imageViewWithoutImage() -> some View {
+        HStack {
+            moveToButton()
+            Spacer()
+            infoButtonIfNeeded()
+        }
+    }
+    
+    @ViewBuilder
+    private func infoButtonIfNeeded() -> some View {
+        if cardViewPresentationMode == .swipe {
+            EdgeButtonView(image: Image(systemName: "info.circle.fill"), edge: .topRight) {
+                showAdditionalInfo.toggle()
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func moveToButton() -> some View {
+        if item.needSetNewStatus,
+           !item.isArchived,
+           cardViewPresentationMode == .swipe {
+            moveButtonView()
+        }
+    }
+    
+    private func moveButtonView() -> some View {
+        VStack {
+            HStack {
+                Button(action: {
+                    moveButtonAction?()
+                }) {
+                    HStack {
+                        Text("→").bold()
+                        TagView(text: item.getNewStatus.title, 
+                                backgroundColor: Color(hex: item.getNewStatus.color),
+                                withShadow: false) {
+                            moveButtonAction?()
+                        }
+                    }
+                }
+                .padding(4)
+                .buttonStyle(TransparentButtonStyle())
+                Spacer()
+            }
+            Spacer()
         }
     }
     
     private func phraseView() -> some View {
-        return Group {
-            VStack(alignment: .center) {
-                Text(!showTranslation ? (item.phraseToRemember ) : item.translation ?? "")
-                    .font(.title2)
-                    .bold()
-                    .padding()
-                    .onTapGesture {
-                        if let translation = item.translation, !translation.isEmpty {
-                            showTranslation.toggle()
-                        }
-                    }
-                if !showTranslation, let transcripton = item.transcription {
-                    Text("[" + transcripton + "]")
-                }
+        VStack(alignment: .center) {
+            if !showTranslation {
+                phraseToRememberView()
+            } else if let translation = item.translation {
+                translationView(translation: translation)
             }
+        }
+    }
+    
+    private func translationView(translation: String) -> some View {
+        Text(translation)
+            .font(.title2)
+            .bold()
+            .padding()
+            .onTapGesture {
+                toggleTranslationVisibility()
+            }
+    }
+    
+    private func phraseToRememberView() -> some View {
+        HStack(spacing: 12) {
+            TextToSpeechPlayView(text: item.phraseToRemember,
+                                 buttonSize: .small)
+            .environmentObject(settingsManager)
+            Text(item.phraseToRemember)
+                .font(.title2)
+                .bold()
+                .onTapGesture {
+                    toggleTranslationVisibility()
+                }
+        }
+        .padding()
+    }
+    
+    private func toggleTranslationVisibility() {
+        if let translation = item.translation, !translation.isEmpty {
+            showTranslation.toggle()
+        }
+    }
+    
+    @ViewBuilder
+    private func additionalInfoView(geometry: GeometryProxy) -> some View {
+        if showAdditionalInfo {
+            additionalInfoContentView(geometry: geometry)
+        }
+    }
+    
+    private func additionalInfoContentView(geometry: GeometryProxy) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            transcriptionView()
+            tagCloudView(geometry: geometry)
+            repetitionInfoView()
+        }
+        .padding()
+    }
+    
+    @ViewBuilder
+    private func transcriptionView() -> some View {
+        if let transcripton = item.transcription, 
+            !transcripton.isEmpty {
+            Text("[" + transcripton + "]")
         }
     }
     
     private func tagCloudView(geometry: GeometryProxy) -> some View {
         var items = [TagCloudViewItem]()
-        
         if item.status.id == 3 {
             items.append(TagCloudItem(title: item.archiveTag, color: Color.puce.toHex()))
         }
@@ -141,27 +208,15 @@ struct CardView: View {
         if let sources = item.sources?.allObjects as? [Source] {
             items.append(contentsOf: sources)
         }
-        
-        return Group {
-            TagCloudView(items: items, geometry: geometry, totalHeight: $totalHeight)
-        }
+        return TagCloudView(items: items, geometry: geometry, totalHeight: $totalHeight)
     }
-        
-    private func additionalInfoView() -> some View {
-        Group {
-            if showAdditionalInfo {
-                HStack {
-                    VStack(alignment: .leading, spacing: 6) {
-                        
-                        styledText("Added: ", regularPart: formatDate(item.additionTime))
-                        styledText("Number of repetitions: ", regularPart: String(item.repetitionCounter))
-                        if let lastRepetition = item.lastRepetition {
-                            styledText("Last repetition: ", regularPart: formatDate(lastRepetition))
-                        }
-                    }
-                    Spacer()
-                }
-                .padding()
+    
+    private func repetitionInfoView() -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            styledText("Added: ", regularPart: item.additionTime.formatDate())
+            styledText("Number of repetitions: ", regularPart: String(item.repetitionCounter))
+            if let lastRepetition = item.lastRepetition {
+                styledText("Last repetition: ", regularPart: lastRepetition.formatDate())
             }
         }
     }
@@ -171,19 +226,12 @@ struct CardView: View {
         let regularText = Text(regularPart)
         return boldText + regularText
     }
-    
-    private func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
-    }
 }
-    
-extension CardView: Identifiable { }
 
 #Preview {
     GeometryReader { geometry in
-        CardView(item: Item(image: nil, archiveTag: "Test", phraseToRemember: "Test", translation: "Test1", lastRepetition: Date(), sources: [Source.source1], transcription: nil, additionTime: Date(), status: .archive), presentationMode: .view)
+        CardView(item: Item(image: nil, archiveTag: "Test", phraseToRemember: "Test", translation: "Test1", lastRepetition: Date(), sources: [Source.source1], transcription: nil, additionTime: Date(), status: .archive), cardViewPresentationMode: .view)
     }
 }
+
+

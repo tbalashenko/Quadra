@@ -11,6 +11,7 @@ import CoreData
 
 struct CreateCardView: View {
     @EnvironmentObject var manager: CardManager
+    @EnvironmentObject var settingsManager: SettingsManager
     @Environment(\.managedObjectContext) var viewContext
     @FetchRequest(sortDescriptors: [])  var sources: FetchedResults<Source>
     @State private var totalHeight: CGFloat = CGFloat.infinity
@@ -32,6 +33,7 @@ struct CreateCardView: View {
             ScrollView {
                 VStack(alignment: .center, spacing: 8) {
                     PhotoPickerView(geometry: geometry,
+                                    ratio: settingsManager.aspectRatio.ratio,
                                     photosPickerItem: $photosPickerItem,
                                     image: $image) {
                         setImage()

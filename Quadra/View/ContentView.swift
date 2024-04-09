@@ -10,37 +10,41 @@ import CoreData
 
 struct ContentView: View {
     @EnvironmentObject var dataManager: CardManager
+    @EnvironmentObject var settingsManager: SettingsManager
     @Environment(\.managedObjectContext) var viewContext
     @FetchRequest(sortDescriptors: []) var items: FetchedResults<Item>
-    @State var showCreateCardView = false
+    @State private var showCreateCardView = false
+    @State var isLoading: Bool = true
     @State var cardViews: [CardView] = []
-    @State private var isDisappeared: Bool = true
-    @State private var previousItems: [Item] = []
-    @State var geometryProxy: GeometryProxy?
-    @State var needUpdateView = false
-
+    @State var needUpdateView: Bool = false
+    
     var body: some View {
         GeometryReader { geometry in
             NavigationStack {
                 VStack {
-                    if cardViews.isEmpty {
-                        InfoView(needUpdateView: $needUpdateView)
-                    } else {
-                        SwipeView(cardViews: $cardViews) { moveCard() }
+                    if isLoading {
+                        SkeletonCardView(aspectRatio: settingsManager.aspectRatio)
                             .padding(geometry.size.width/11)
-                            .environmentObject(dataManager)
-                            .environment(\.managedObjectContext, dataManager.container.viewContext)
+                    } else {
+                        if cardViews.isEmpty {
+                            InfoView(needUpdateView: $needUpdateView)
+                        } else {
+                            SwipeView(cardViews: $cardViews) { moveCard() }
+                                .environmentObject(dataManager)
+                                .environmentObject(settingsManager)
+                                .environment(\.managedObjectContext, viewContext)
+                                .padding(geometry.size.width/11)
+                        }
                     }
                     Spacer()
                 }
                 .background(Color.element)
                 .onAppear {
-                    geometryProxy = geometry
-                    isDisappeared = false
-                    updateCardViews()
+                    DispatchQueue.main.async {
+                        updateCardViews()
+                    }
                 }
                 .onDisappear {
-                    isDisappeared = true
                     cardViews.removeAll()
                 }
                 .onChange(of: needUpdateView) { _, _ in
@@ -58,40 +62,44 @@ struct ContentView: View {
                         }
                     }
                 }
-                .sheet(isPresented: $showCreateCardView, onDismiss: updateCardViews) {
+                .sheet(isPresented: $showCreateCardView, onDismiss:  updateCardViews ) {
                     NavigationStack {
                         CreateCardView(showCreateCardView: $showCreateCardView)
+                            .environmentObject(settingsManager)
                     }
                 }
             }
         }
     }
-
+    
+    func moveCard() {
+        guard let removedCard = cardViews.first else { return }
+        
+        let item = removedCard.item
+        dataManager.incrementCounter(for: item)
+        cardViews.removeFirst()
+    }
+    
     func updateCardViews() {
+        isLoading = true
         cardViews.removeAll()
+        
         items
             .reversed()
             .filter { $0.isReadyToRepeat }
             .forEach { item in
                 let cardView = CardView(item: item,
-                                        presentationMode: .swipe,
+                                        cardViewPresentationMode: .swipe,
                                         moveButtonAction: {
-                    dataManager.setNewStatus(for: item)
-                    moveCard()
+                    self.dataManager.setNewStatus(for: item)
+                    self.moveCard()
                 })
+                
                 cardViews.append(cardView)
             }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1))  {
+            isLoading = false
+        }
     }
-
-    private func moveCard() {
-        guard let removedCard = cardViews.first else { return }
-
-        let item = removedCard.item
-        dataManager.incrementCounter(for: item)
-        cardViews.removeFirst()
-    }
-}
-
-#Preview {
-    ContentView()
 }

@@ -17,7 +17,13 @@ extension Color {
     static let yellowIris = Color(hex: "#EEE78E")
     static let accentOrange = Color(hex: "#FBB15B")
     static let greyish = Color(hex: "#B2B9BB")
-    
+    static let rebeccaPurple = Color(hex: "#663399")
+    static let slateGray = Color(hex: "#708090")
+    static let pastelTeal = Color(hex: "#63B7B7")
+    static let spanishGray = Color(hex: "#949596")
+    static let lightGray = Color(hex: "#D4D4D5")
+    static let brightGray = Color(hex: "#EEEEEE")
+    static let silverSand = Color(hex: "#C2C2C2")
 
     struct Green {
         static var isabelline = Color(hex: "#edf5ec") // very light green
@@ -69,5 +75,12 @@ extension Color {
         UIColor(self).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         let lum = 0.2126 * red + 0.7152 * green + 0.0722 * blue
         return lum < 0.5
+    }
+    
+    static var randomColor: Color {
+        let red = Double.random(in: 0...1)
+        let green = Double.random(in: 0...1)
+        let blue = Double.random(in: 0...1)
+        return Color(red: red, green: green, blue: blue)
     }
 }

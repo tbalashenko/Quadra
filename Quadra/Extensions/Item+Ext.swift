@@ -99,7 +99,7 @@ extension Item {
         self.translation = translation
         self.image = image
         self.lastRepetition = lastRepetition
-        self.sources = NSSet(array: sources)
+        //self.sources = NSSet(array: sources)
         self.transcription = transcription
         self.additionTime = additionTime
         self.status = status
