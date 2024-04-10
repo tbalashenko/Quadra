@@ -56,7 +56,7 @@ struct CardView: View {
             let uiImage = UIImage(data: imageData) {
             imageViewWithImage(uiImage, geometry: geometry)
         } else {
-            imageViewWithoutImage()
+            imageViewWithoutImage(geometry: geometry)
         }
     }
     
@@ -76,19 +76,21 @@ struct CardView: View {
                 moveToButton()
             }
         }
-        .frame(width: geometry.size.width, 
+        .frame(width: geometry.size.width,
                height: geometry.size.width * settingsManager.aspectRatio.ratio)
         .fullScreenCover(isPresented: $showFullImage) {
             FullImageView(image: uiImage)
         }
     }
     
-    private func imageViewWithoutImage() -> some View {
+    private func imageViewWithoutImage(geometry: GeometryProxy) -> some View {
         HStack {
             moveToButton()
             Spacer()
             infoButtonIfNeeded()
         }
+        .frame(width: geometry.size.width,
+               height: geometry.size.width * settingsManager.aspectRatio.ratio)
     }
     
     @ViewBuilder

@@ -10,8 +10,9 @@ import SwiftUI
 
 extension Image {
     @MainActor
-    func convert() -> UIImage? {
+    func convert(scale: ImageScale) -> UIImage? {
         let renderer = ImageRenderer(content: self)
+        renderer.scale = scale.rawValue
         return renderer.uiImage
     }
 }

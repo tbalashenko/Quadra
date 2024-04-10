@@ -37,32 +37,28 @@ struct ListView: View {
                     .onChange(of: searchText) { oldValue, newValue in
                         updateFilteredItems()
                     }
+                    .onReceive(dataManager.$items) { newItems in
+                        if newItems != previousItems {
+                            previousItems = newItems
+                        }
+                    }
                     .searchable(text: $searchText, placement: .navigationBarDrawer)
             }
         }
     }
     
+    @ViewBuilder
     private func listViewContent(geometry: GeometryProxy) -> some View {
         let groupedItems = groupItems(filteredItems)
         
-        return List {
-            if isLoading {
-                Section(header: Text(Status.input.title)) {
-                    ForEach(0..<10) { _ in
-                        SkeletonListRowView()
-                            .listRowSeparator(.hidden)
-                            .listRowBackground(Color.element)
+        List {
+            ForEach(Array(groupedItems), id: \.key) { section in
+                let (status, items) = section
+                Section(header: Text(status)) {
+                    ForEach(items, id: \.id) { item in
+                        listRowContent(item: item, geometry: geometry)
                     }
-                }
-            } else {
-                ForEach(Array(groupedItems), id: \.key) { section in
-                    let (status, items) = section
-                    Section(header: Text(status)) {
-                        ForEach(items, id: \.id) { item in
-                            listRowContent(item: item, geometry: geometry)
-                        }
-                        .onDelete(perform: delete)
-                    }
+                    .onDelete(perform: delete)
                 }
             }
         }
@@ -73,12 +69,14 @@ struct ListView: View {
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem {
-                NavigationLink(destination: FilterView(selectedStatuses: $selectedStatuses,
-                                                       selectedArchiveTags: $selectedArchiveTags,
-                                                       fromDate: $fromDate, toDate: $toDate,
-                                                       selectedSources: $selectedSources,
-                                                       minDate: $minDate,
-                                                       archiveTags: dataManager.getArchiveTags())
+                NavigationLink(
+                    destination: FilterView(
+                        selectedStatuses: $selectedStatuses,
+                        selectedArchiveTags: $selectedArchiveTags,
+                        fromDate: $fromDate, toDate: $toDate,
+                        selectedSources: $selectedSources,
+                        minDate: $minDate,
+                        archiveTags: dataManager.getArchiveTags())
                     .environmentObject(dataManager)
                     .environment(\.managedObjectContext, dataManager.container.viewContext)
                     .toolbar(.hidden, for: .tabBar)) {
@@ -89,8 +87,7 @@ struct ListView: View {
     }
     
     private func groupItems(_ items: [Item]) -> [String: [Item]] {
-        let sortedItems = items.sorted { $0.status.id < $1.status.id }
-        return Dictionary(grouping: sortedItems, by: { $0.status.title })
+        Dictionary(grouping: items, by: { $0.status.title })
     }
     
     private func listRowContent(item: Item, geometry: GeometryProxy) -> some View {
@@ -122,9 +119,10 @@ struct ListView: View {
     }
     
     private func updateFilteredItems() {
-        isLoading = true
-        
-        filteredItems = Array(items)
+        filteredItems = dataManager.fetchItems()
+            .filter { item in
+                !item.isFault && !item.isDeleted
+            }
             .filter { item in
                 var textMatch: Bool = false
                 if searchText.isEmpty {
@@ -166,16 +164,13 @@ struct ListView: View {
                 
                 return textMatch && statusMatches && sourceMatches && dateRangeMatches && archiveTagMatches
             }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-            isLoading = false
-        }
     }
     
     private func delete(at offsets: IndexSet) {
         for index in offsets {
             dataManager.deleteItem(filteredItems[index])
         }
+        
         updateFilteredItems()
     }
 }

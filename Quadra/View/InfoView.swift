@@ -12,8 +12,6 @@ struct InfoView: View {
     @Environment(\.managedObjectContext) var viewContext
     @FetchRequest(sortDescriptors: []) var items: FetchedResults<Item>
     @Binding var needUpdateView: Bool
-    @State var hintText = ""
-    @State var containsCardsToRepeat = false
 
     var body: some View {
         GeometryReader { geometry in
@@ -34,7 +32,7 @@ struct InfoView: View {
 
                     Text(dataManager.getHint())
 
-                    if containsCardsToRepeat {
+                    if dataManager.containsCardsToRepeat() {
                         Button {
                             dataManager.setReadyToRepeat()
                             needUpdateView = true
@@ -47,10 +45,6 @@ struct InfoView: View {
                     Spacer()
                 }
                 Spacer()
-            }
-            .onAppear {
-                hintText = dataManager.getHint()
-                containsCardsToRepeat = dataManager.containsCardsToRepeat()
             }
         }
     }

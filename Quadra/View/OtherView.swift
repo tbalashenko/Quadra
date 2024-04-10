@@ -16,10 +16,14 @@ struct OtherView: View {
                 NavigationLink("Settings") {
                     SettingsView(
                         selectedVoice: settingsManager.voice,
-                        selectedRatio: settingsManager.aspectRatio)
+                        selectedRatio: settingsManager.aspectRatio,
+                        selectedImageScale: settingsManager.imageScale, 
+                        showConfetti: settingsManager.showConfetti)
                     .environmentObject(settingsManager)
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(Color.element)
             .navigationTitle("Other")
         }
     }

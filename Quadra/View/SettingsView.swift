@@ -12,6 +12,8 @@ struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
     @State var selectedVoice: Voice
     @State var selectedRatio: AspectRatio
+    @State var selectedImageScale: ImageScale
+    @State var showConfetti: Bool
     
     var body: some View {
         NavigationStack {
@@ -41,8 +43,25 @@ struct SettingsView: View {
                         }
                     }
                     .pickerStyle(.menu)
+                    
+                    Picker("Preferable Image Quality", selection: $selectedImageScale) {
+                        ForEach(ImageScale.allCases, id: \.self) { scale in
+                            Text(scale.value)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    
+                    Text("Choosing better quality may increase file sizes, consuming more storage space. Lower quality may compromise image readability.")
+                        .foregroundColor(.secondary)
+                        .font(.footnote)
                 }
+                Section("Animation") {
+                    Toggle("Show confetti", isOn: $showConfetti)
+                }
+                
             }
+            .scrollContentBackground(.hidden)
+            .background(Color.element)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
@@ -55,12 +74,18 @@ struct SettingsView: View {
             .onAppear() {
                 selectedVoice = settingsManager.voice
                 selectedRatio = settingsManager.aspectRatio
+                selectedImageScale = settingsManager.imageScale
+                showConfetti = settingsManager.showConfetti
             }
         }
     }
     
     func save() {
-        settingsManager.save(voice: selectedVoice, aspectRatio: selectedRatio)
+        settingsManager.save(
+            voice: selectedVoice,
+            aspectRatio: selectedRatio,
+            imageScale: selectedImageScale,
+            showConfetti: showConfetti)
         dismiss()
     }
 }

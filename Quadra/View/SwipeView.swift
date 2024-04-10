@@ -9,9 +9,6 @@ import CoreData
 import SwiftUI
 
 struct SwipeView: View {
-    @EnvironmentObject var settingsManager: SettingsManager
-    @EnvironmentObject var dataManager: CardManager
-    @Environment(\.managedObjectContext) var viewContext
     @Binding var cardViews: [CardView]
     var swipeAction: (() -> Void)?
     
@@ -41,14 +38,12 @@ struct SwipeView: View {
                                     }
                                 })
                                     .onEnded({ (value) in
-                                        guard case .second(true, let drag?) = value else {
-                                            return
-                                        }
+                                        guard case .second(true, let drag?) = value else { return }
+                                        
                                         if drag.translation.width < -self.dragThreshold || drag.translation.width > self.dragThreshold {
                                             swipeAction?()
                                         }
                                     }))
-                            .environmentObject(settingsManager)
                     }
                 }
             }

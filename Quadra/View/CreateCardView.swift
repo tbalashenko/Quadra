@@ -142,13 +142,15 @@ struct CreateCardView: View {
     }
 
     func save() {
-        let image = image?.convert()
-
-        manager.createItem(phraseToRemember: phraseToRemember,
-                           translation: translation,
-                           transcription: transcription,
-                           sources: selectedSources,
-                           image: image)
+        let image = image?.convert(scale: settingsManager.imageScale)
+        
+        manager.createItem(
+            phraseToRemember: phraseToRemember,
+            translation: translation,
+            transcription: transcription,
+            sources: selectedSources,
+            image: image)
+        
         showCreateCardView = false
     }
 

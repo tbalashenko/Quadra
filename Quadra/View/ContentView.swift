@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import SpriteKit
 
 struct ContentView: View {
     @EnvironmentObject var dataManager: CardManager
@@ -17,35 +18,43 @@ struct ContentView: View {
     @State var isLoading: Bool = true
     @State var cardViews: [CardView] = []
     @State var needUpdateView: Bool = false
+    @State var showConfetti: Bool = false
     
     var body: some View {
         GeometryReader { geometry in
             NavigationStack {
-                VStack {
-                    if isLoading {
-                        SkeletonCardView(aspectRatio: settingsManager.aspectRatio)
-                            .padding(geometry.size.width/11)
-                    } else {
-                        if cardViews.isEmpty {
-                            InfoView(needUpdateView: $needUpdateView)
-                        } else {
-                            SwipeView(cardViews: $cardViews) { moveCard() }
-                                .environmentObject(dataManager)
-                                .environmentObject(settingsManager)
-                                .environment(\.managedObjectContext, viewContext)
-                                .padding(geometry.size.width/11)
-                        }
+                ZStack {
+                    if settingsManager.showConfetti, showConfetti {
+                        ConfettiView(isShown: $showConfetti, timeInS: 4)
+                            .ignoresSafeArea()
                     }
-                    Spacer()
+                    VStack {
+                        if isLoading {
+                            SkeletonCardView(aspectRatio: settingsManager.aspectRatio)
+                                .padding(geometry.size.width/11)
+                        } else {
+                            if cardViews.isEmpty {
+                                InfoView(needUpdateView: $needUpdateView)
+                            } else {
+                                SwipeView(cardViews: $cardViews) { moveCard() }
+                                    .environmentObject(dataManager)
+                                    .environmentObject(settingsManager)
+                                    .environment(\.managedObjectContext, viewContext)
+                                    .padding(geometry.size.width/11)
+                            }
+                        }
+                        Spacer()
+                    }
                 }
                 .background(Color.element)
                 .onAppear {
-                    DispatchQueue.main.async {
+                    withAnimation {
                         updateCardViews()
                     }
                 }
                 .onDisappear {
                     cardViews.removeAll()
+                    showConfetti = false
                 }
                 .onChange(of: needUpdateView) { _, _ in
                     if needUpdateView {
@@ -78,10 +87,18 @@ struct ContentView: View {
         let item = removedCard.item
         dataManager.incrementCounter(for: item)
         cardViews.removeFirst()
+        
+        if cardViews.isEmpty {
+            withAnimation {
+                showConfetti = true
+            }
+        }
     }
     
     func updateCardViews() {
-        isLoading = true
+        withAnimation {
+            isLoading = true
+        }
         cardViews.removeAll()
         
         items
@@ -98,7 +115,7 @@ struct ContentView: View {
                 cardViews.append(cardView)
             }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1))  {
+        withAnimation {
             isLoading = false
         }
     }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class SettingsManager: ObservableObject {
+final class SettingsManager: ObservableObject {
     public var voice: Voice {
         let identifier = UserDefaultsManager.stringForKey(UserDefaultsKeys.textToSpeechVoiceIdentifier) ?? Voice.englishUs0.identifier
         return Voice(identifier: identifier)
@@ -18,12 +18,21 @@ class SettingsManager: ObservableObject {
         return AspectRatio(rawValue: rawValue) ?? .sixteenToNine
     }
     
-    init() {
-        
+    public var imageScale: ImageScale {
+        let rawValue = UserDefaultsManager.doubleForKey(UserDefaultsKeys.imageScale) ?? ImageScale.percent100.rawValue
+        return ImageScale(rawValue: rawValue) ?? .percent100
     }
     
-    public func save(voice: Voice, aspectRatio: AspectRatio) {
+    public var showConfetti: Bool {
+        UserDefaultsManager.boolForKey(UserDefaultsKeys.showConfetti) ?? true
+    }
+    
+    init() { }
+    
+    public func save(voice: Voice, aspectRatio: AspectRatio, imageScale: ImageScale, showConfetti: Bool) {
         UserDefaultsManager.saveObject(voice.identifier, forKey: UserDefaultsKeys.textToSpeechVoiceIdentifier)
         UserDefaultsManager.saveObject(aspectRatio.rawValue, forKey: UserDefaultsKeys.aspectRatio)
+        UserDefaultsManager.saveObject(imageScale.rawValue, forKey: UserDefaultsKeys.imageScale)
+        UserDefaultsManager.saveObject(showConfetti, forKey: UserDefaultsKeys.showConfetti)
     }
 }

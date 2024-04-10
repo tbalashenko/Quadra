@@ -26,6 +26,14 @@ public struct UserDefaultsManager {
         return UserDefaults.standard.integer(forKey: defaultName)
     }
     
+    public static func doubleForKey(_ defaultName: String) -> Double? {
+        return UserDefaults.standard.object(forKey: defaultName) as? Double
+    }
+    
+    public static func boolForKey(_ defaultName: String) -> Bool? {
+        return UserDefaults.standard.object(forKey: defaultName) as? Bool
+    }
+    
     public static func stringForKey(_ defaultName: String) -> String? {
         return UserDefaults.standard.string(forKey: defaultName)
     }
@@ -41,4 +49,6 @@ public struct UserDefaultsManager {
 struct UserDefaultsKeys {
     static let aspectRatio = "aspectRatio"
     static let textToSpeechVoiceIdentifier = "textToSpeechVoiceIdentifier"
+    static let imageScale = "imageScale"
+    static let showConfetti = "showConfetti"
 }
