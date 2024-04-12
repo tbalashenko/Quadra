@@ -10,7 +10,7 @@ import CoreData
 import SpriteKit
 
 struct ContentView: View {
-    @EnvironmentObject var dataManager: CardManager
+    @EnvironmentObject var cardManager: CardManager
     @EnvironmentObject var settingsManager: SettingsManager
     @Environment(\.managedObjectContext) var viewContext
     @FetchRequest(sortDescriptors: []) var items: FetchedResults<Item>
@@ -37,7 +37,7 @@ struct ContentView: View {
                                 InfoView(needUpdateView: $needUpdateView)
                             } else {
                                 SwipeView(cardViews: $cardViews) { moveCard() }
-                                    .environmentObject(dataManager)
+                                    .environmentObject(cardManager)
                                     .environmentObject(settingsManager)
                                     .environment(\.managedObjectContext, viewContext)
                                     .padding(geometry.size.width/11)
@@ -85,7 +85,7 @@ struct ContentView: View {
         guard let removedCard = cardViews.first else { return }
         
         let item = removedCard.item
-        dataManager.incrementCounter(for: item)
+        cardManager.incrementCounter(for: item)
         cardViews.removeFirst()
         
         if cardViews.isEmpty {
@@ -108,7 +108,7 @@ struct ContentView: View {
                 let cardView = CardView(item: item,
                                         cardViewPresentationMode: .swipe,
                                         moveButtonAction: {
-                    self.dataManager.setNewStatus(for: item)
+                    self.cardManager.setNewStatus(for: item)
                     self.moveCard()
                 })
                 

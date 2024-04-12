@@ -2,7 +2,7 @@
 //  Item+CoreDataProperties.swift
 //  Quadra
 //
-//  Created by Tatyana Balashenko on 11/04/2024.
+//  Created by Tatyana Balashenko on 12/04/2024.
 //
 //
 
@@ -18,7 +18,7 @@ extension Item {
 
     @NSManaged public var additionTime: Date
     @NSManaged public var archiveTag: String
-    @NSManaged public var id: UUID?
+    @NSManaged public var id: UUID
     @NSManaged public var image: Data?
     @NSManaged public var isArchived: Bool
     @NSManaged public var isReadyToRepeat: Bool

@@ -9,15 +9,6 @@ import Foundation
 import CoreData
 import SwiftUI
 
-extension ItemSource {
-    static var source1 = ItemSource(title: "XCode", color: .catawba)
-    static var source2 = ItemSource(title: "PE", color: .whiteCoffee)
-    static var source3 = ItemSource(title: "SATS", color: .dustRose)
-    static var source4 = ItemSource(title: "XCode334", color: .catawba)
-    static var source5 = ItemSource(title: "PEfw", color: .whiteCoffee)
-    static var source6 = ItemSource(title: "SATSwfewf", color: .puce)
-}
-
 extension Item {
     var needSetNewStatus: Bool {
         self.needMoveToThisWeek || self.needMoveToThisMonth || self.needMoveToArchive

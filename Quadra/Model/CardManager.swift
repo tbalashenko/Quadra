@@ -227,8 +227,6 @@ class CardManager: NSObject, ObservableObject {
         item.transcription = transcription
         item.status = Status.input
         item.image = image?.pngData()
-        item.sources = NSSet(set: sources)
-        sources.forEach { item.addToSources($0) }
         item.id = UUID()
 #warning("remove")
         // item.additionTime = Date()
@@ -239,6 +237,11 @@ class CardManager: NSObject, ObservableObject {
         //        item.archiveTag = Date().prepareTag()
 #warning("remove")
         item.needMoveToThisWeek = true
+        
+        sources.forEach {
+            item.addToSources($0)
+            $0.addToItems(item)
+        }
         
         saveChanges()
     }
@@ -257,6 +260,28 @@ class CardManager: NSObject, ObservableObject {
     func deleteItem(_ item: Item) {
         
         container.viewContext.delete(item)
+        
+        saveChanges()
+    }
+    
+    func deleteSource(_ source: ItemSource) {
+        items = fetchItems()
+        
+        container.viewContext.delete(source)
+        
+        saveChanges()
+    }
+    
+    func editSource(_ source: ItemSource, newColor: String? = nil, newTitle: String? = nil) {
+        sources = fetchSources()
+        
+        if let newColor = newColor {
+            sources.first(where: { $0.id == source.id })?.color = newColor
+        }
+        
+        if let newTitle = newTitle {
+            sources.first(where: { $0.id == source.id })?.title = newTitle
+        }
         
         saveChanges()
     }

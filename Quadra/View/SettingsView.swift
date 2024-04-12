@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject var settingsManager: SettingsManager
+    @EnvironmentObject var cardManager: CardManager
+    @Environment(\.managedObjectContext) var viewContext
     @Environment(\.dismiss) var dismiss
     @State var selectedVoice: Voice
     @State var selectedRatio: AspectRatio
@@ -21,6 +23,7 @@ struct SettingsView: View {
                 languageAndVoiceSection()
                 imagesSection()
                 animationSection()
+                sourcesSection()
             }
             .scrollContentBackground(.hidden)
             .background(Color.element)
@@ -88,6 +91,16 @@ struct SettingsView: View {
     func animationSection() -> some View {
         Section("Animation") {
             Toggle("Show confetti", isOn: $showConfetti)
+        }
+    }
+    
+    func sourcesSection() -> some View {
+        Section("Sources") {
+            NavigationLink("Manage Sources") {
+                SourcesView()
+                    .environmentObject(cardManager)
+                    .environment(\.managedObjectContext, viewContext)
+            }
         }
     }
     

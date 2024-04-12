@@ -9,6 +9,8 @@ import SwiftUI
 
 struct OtherView: View {
     @EnvironmentObject var settingsManager: SettingsManager
+    @EnvironmentObject var cardManager: CardManager
+    @Environment(\.managedObjectContext) var viewContext
     
     var body: some View {
         NavigationStack {
@@ -20,6 +22,8 @@ struct OtherView: View {
                         selectedImageScale: settingsManager.imageScale, 
                         showConfetti: settingsManager.showConfetti)
                     .environmentObject(settingsManager)
+                    .environmentObject(cardManager)
+                    .environment(\.managedObjectContext, viewContext)
                 }
             }
             .scrollContentBackground(.hidden)

@@ -78,7 +78,7 @@ struct ListView: View {
                         minDate: $minDate,
                         archiveTags: dataManager.getArchiveTags())
                     .environmentObject(dataManager)
-                    .environment(\.managedObjectContext, dataManager.container.viewContext)
+                    .environment(\.managedObjectContext, viewContext)
                     .toolbar(.hidden, for: .tabBar)) {
                         Label("Filter", systemImage: "line.3.horizontal.decrease.circle.fill")
                     }
