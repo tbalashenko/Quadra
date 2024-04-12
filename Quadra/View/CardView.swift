@@ -183,12 +183,11 @@ struct CardView: View {
     }
     
     private func additionalInfoContentView(geometry: GeometryProxy) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
+        Group {
             transcriptionView()
             tagCloudView(geometry: geometry)
             repetitionInfoView()
         }
-        .padding()
     }
     
     @ViewBuilder
@@ -207,10 +206,14 @@ struct CardView: View {
         
         items.append(TagCloudItem(title: item.status.title, color: item.status.color))
         
-        if let sources = item.sources?.allObjects as? [Source] {
+        if let sources = item.sources?.allObjects as? [ItemSource] {
             items.append(contentsOf: sources)
         }
-        return TagCloudView(items: items, geometry: geometry, totalHeight: $totalHeight)
+        return TagCloudView(
+            items: items,
+            geometry: geometry,
+            totalHeight: $totalHeight)
+        .padding(.vertical)
     }
     
     private func repetitionInfoView() -> some View {
@@ -232,7 +235,7 @@ struct CardView: View {
 
 #Preview {
     GeometryReader { geometry in
-        CardView(item: Item(image: nil, archiveTag: "Test", phraseToRemember: "Test", translation: "Test1", lastRepetition: Date(), sources: [Source.source1], transcription: nil, additionTime: Date(), status: .archive), cardViewPresentationMode: .view)
+        CardView(item: Item(image: nil, archiveTag: "Test", phraseToRemember: "Test", translation: "Test1", lastRepetition: Date(), sources: [ItemSource.source1], transcription: nil, additionTime: Date(), status: .archive), cardViewPresentationMode: .view)
     }
 }
 

@@ -11,13 +11,13 @@ struct ListView: View {
     @EnvironmentObject var dataManager: CardManager
     @EnvironmentObject var settingsManager: SettingsManager
     @Environment(\.managedObjectContext) var viewContext
-    @FetchRequest(sortDescriptors: []) var sources: FetchedResults<Source>
+    @FetchRequest(sortDescriptors: []) var sources: FetchedResults<ItemSource>
     @FetchRequest(sortDescriptors: []) var items: FetchedResults<Item>
     @State private var previousItems: [Item] = []
     @State var selectedStatuses: [Status] = []
     @State var fromDate: Date = Date()
     @State var toDate: Date = Date()
-    @State var selectedSources: [Source] = []
+    @State var selectedSources: [ItemSource] = []
     @State var selectedArchiveTags: [String] = []
     @State var filteredItems: [Item] = []
     @State private var isFromDateInitialized = false
@@ -144,7 +144,7 @@ struct ListView: View {
                 if selectedSources.isEmpty {
                     sourceMatches = true
                 } else {
-                    if let sources = item.sources?.allObjects as? [Source] {
+                    if let sources = item.sources?.allObjects as? [ItemSource] {
                         sourceMatches = sources.contains(where: { selectedSources.contains($0) })
                     }
                 }

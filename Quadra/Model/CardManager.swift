@@ -10,6 +10,7 @@ import CoreData
 
 class CardManager: NSObject, ObservableObject {
     @Published var items: [Item] = [Item]()
+    @Published var sources: [ItemSource] = [ItemSource]()
     
     let container: NSPersistentContainer = NSPersistentContainer(name: "Quadra")
     
@@ -37,6 +38,16 @@ class CardManager: NSObject, ObservableObject {
             return try container.viewContext.fetch(fetchRequest)
         } catch {
             print("Error fetching items: \(error)")
+            return []
+        }
+    }
+    
+    func fetchSources() -> [ItemSource] {
+        do {
+            let fetchRequest: NSFetchRequest<ItemSource> = ItemSource.fetchRequest()
+            return try container.viewContext.fetch(fetchRequest)
+        } catch {
+            print("Error fetching sources: \(error)")
             return []
         }
     }
@@ -206,7 +217,7 @@ class CardManager: NSObject, ObservableObject {
     func createItem(phraseToRemember: String,
                     translation: String?,
                     transcription: String?,
-                    sources: Set<Source>,
+                    sources: Set<ItemSource>,
                     image: UIImage?) {
         
         let item = Item(context: self.container.viewContext)
@@ -217,6 +228,7 @@ class CardManager: NSObject, ObservableObject {
         item.status = Status.input
         item.image = image?.pngData()
         item.sources = NSSet(set: sources)
+        sources.forEach { item.addToSources($0) }
         item.id = UUID()
 #warning("remove")
         // item.additionTime = Date()
@@ -229,6 +241,17 @@ class CardManager: NSObject, ObservableObject {
         item.needMoveToThisWeek = true
         
         saveChanges()
+    }
+    
+    func saveSource(color: String, title: String) -> ItemSource {
+        let source = ItemSource(context: container.viewContext)
+        source.id = UUID()
+        source.color = color
+        source.title = title
+        
+        saveChanges()
+        
+        return source
     }
     
     func deleteItem(_ item: Item) {
@@ -246,6 +269,7 @@ class CardManager: NSObject, ObservableObject {
         }
         
         items = fetchItems()
+        sources = fetchSources()
     }
     
     func getHint() -> String {

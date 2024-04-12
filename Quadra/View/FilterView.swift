@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FilterView: View {
-    @FetchRequest(sortDescriptors: []) var sources: FetchedResults<Source>
+    @FetchRequest(sortDescriptors: []) var sources: FetchedResults<ItemSource>
     @EnvironmentObject var dataManager: CardManager
     @Environment(\.managedObjectContext) var viewContext
     @Environment(\.dismiss) var dismiss
@@ -16,11 +16,11 @@ struct FilterView: View {
     @Binding var selectedArchiveTags: [String]
     @Binding var fromDate: Date
     @Binding var toDate: Date
-    @Binding var selectedSources: [Source]
+    @Binding var selectedSources: [ItemSource]
     @Binding var minDate: Date
     @State private var totalHeight = CGFloat.infinity
-    @State private var modifiedSources: [Source] = []
-    @State var filteredSources = [Source]()
+    @State private var modifiedSources: [ItemSource] = []
+    @State var filteredSources = [ItemSource]()
     @State var filteredArchiveTags = [String]()
     @State private var geometryProxy: GeometryProxy?
     var archiveTags: [String]

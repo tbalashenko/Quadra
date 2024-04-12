@@ -7,9 +7,9 @@
 import CoreData
 import SwiftUI
 
-extension Source {
+extension ItemSource {
     convenience init(id: UUID = UUID(), title: String, color: Color) {
-        let entity = NSEntityDescription.entity(forEntityName: "Source",
+        let entity = NSEntityDescription.entity(forEntityName: "ItemSource",
                                                 in: CardManager().container.viewContext)
         self.init(entity: entity!, insertInto: CardManager().container.viewContext)
         self.id = id
@@ -18,8 +18,8 @@ extension Source {
     }
 }
 
-extension Source: Comparable {
-    public static func < (lhs: Source, rhs: Source) -> Bool {
+extension ItemSource: Comparable {
+    public static func < (lhs: ItemSource, rhs: ItemSource) -> Bool {
         return lhs.id < rhs.id
     }
 }

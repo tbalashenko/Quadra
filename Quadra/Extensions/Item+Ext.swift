@@ -9,13 +9,13 @@ import Foundation
 import CoreData
 import SwiftUI
 
-extension Source {
-    static var source1 = Source(title: "XCode", color: .catawba)
-    static var source2 = Source(title: "PE", color: .whiteCoffee)
-    static var source3 = Source(title: "SATS", color: .dustRose)
-    static var source4 = Source(title: "XCode334", color: .catawba)
-    static var source5 = Source(title: "PEfw", color: .whiteCoffee)
-    static var source6 = Source(title: "SATSwfewf", color: .puce)
+extension ItemSource {
+    static var source1 = ItemSource(title: "XCode", color: .catawba)
+    static var source2 = ItemSource(title: "PE", color: .whiteCoffee)
+    static var source3 = ItemSource(title: "SATS", color: .dustRose)
+    static var source4 = ItemSource(title: "XCode334", color: .catawba)
+    static var source5 = ItemSource(title: "PEfw", color: .whiteCoffee)
+    static var source6 = ItemSource(title: "SATSwfewf", color: .puce)
 }
 
 extension Item {
@@ -41,12 +41,12 @@ extension Item {
                                   phraseToRemember: "Connection interrupted: will attempt to reconnect",
                                   translation: "Соединение прервано: будет предпринята попытка восстановить",
                                   lastRepetition: Date(),
-                                  sources: [Source.source1,
-                                           Source.source2,
-                                           Source.source3,
-                                           Source.source4,
-                                           Source.source5,
-                                           Source.source6],
+                                  sources: [ItemSource.source1,
+                                            ItemSource.source2,
+                                            ItemSource.source3,
+                                            ItemSource.source4,
+                                            ItemSource.source5,
+                                            ItemSource.source6],
                                   transcription: "ejfiwje",
                                   status: .input),
                              Item(image: UIImage(named: "test2")?.pngData(),
@@ -55,7 +55,7 @@ extension Item {
                                   phraseToRemember: "Message from debugger: killed",
                                   translation: "Сообщение от дебаггера: убито",
                                   lastRepetition: Date(),
-                                  sources: [Source.source1],
+                                  sources: [ItemSource.source1],
                                   transcription: "IUHIUHI",
                                   status: .input),
                              Item(image: UIImage(named: "test")?.pngData(),
@@ -64,7 +64,7 @@ extension Item {
                                   phraseToRemember: "Message from debugger: killed",
                                   translation: "Сообщение от дебаггера: убито",
                                   lastRepetition: Date(),
-                                  sources: [Source.source2],
+                                  sources: [ItemSource.source2],
                                   transcription: "IUHIUHI",
                                   status: .input),
                              Item(image: UIImage(named: "test2")?.pngData(),
@@ -73,9 +73,9 @@ extension Item {
                                   phraseToRemember: "Message from debugger: killed",
                                   translation: "Сообщение от дебаггера: убито",
                                   lastRepetition: Date(),
-                                  sources: [Source.source1,
-                                           Source.source2,
-                                           Source.source3],
+                                  sources: [ItemSource.source1,
+                                            ItemSource.source2,
+                                            ItemSource.source3],
                                   transcription: "IUHIUHI",
                                   status: .input)]
 }
@@ -86,7 +86,7 @@ extension Item {
                      phraseToRemember: String,
                      translation: String,
                      lastRepetition: Date,
-                     sources: [Source],
+                     sources: [ItemSource],
                      transcription: String?,
                      additionTime: Date = Date(),
                      status: Status) {

@@ -9,59 +9,64 @@ import SwiftUI
 import PhotosUI
 
 struct PhotoPickerView: View {
-    var geometry: GeometryProxy
     var ratio: CGFloat
-    @Binding var photosPickerItem: PhotosPickerItem?
+    @State var photosPickerItem: PhotosPickerItem?
     @Binding var image: Image?
-    var action: (() -> Void)?
-
+    
     var body: some View {
-        ZStack {
-            if let image = image {
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: geometry.size.width * 0.85,
-                           height: geometry.size.width * 0.85 * ratio)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .northWestShadow()
-            }
-            PhotosPicker(selection: $photosPickerItem,
-                         matching: .images) {
-                Label("Select Photo", systemImage: "photo")
-                    .foregroundStyle(.black)
-                    .padding(10)
-                    .background {
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(.white.opacity(0.6))
+        GeometryReader { geometry in
+            ZStack(alignment: .center) {
+                if let image = image {
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .frame(
+                            width: geometry.size.width,
+                            height: geometry.size.height)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
+                PhotosPicker(
+                    selection: $photosPickerItem,
+                    matching: .images) {
+                        Label("Select Photo", systemImage: "photo")
+                            .foregroundStyle(.black)
+                            .padding(10)
+                            .background {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(.white.opacity(0.6))
+                            }
                     }
+                if photosPickerItem != nil {
+                    EdgeButtonView(
+                        image: Image(systemName: "trash"),
+                        edge: .topRight) {
+                            self.photosPickerItem = nil
+                        }
+                }
             }
-            if photosPickerItem != nil {
-                EdgeButtonView(image: Image(systemName: "trash"),
-                               edge: .topRight,
-                               action: { photosPickerItem = nil })
+            .frame(
+                width: geometry.size.width,
+                height: geometry.size.height)
+            .onChange(of: photosPickerItem) {
+                setImage()
             }
         }
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                .frame(width: geometry.size.width * 0.85,
-                       height: geometry.size.width * 0.85 * ratio)
-                .foregroundStyle(.element)
-                .northWestShadow()
-        )
-        .frame(width: geometry.size.width * 0.85,
-               height: geometry.size.width * 0.85 * ratio)
-        .onChange(of: photosPickerItem) {
-            action?()
+    }
+    
+    func setImage() {
+        Task {
+            guard
+                let data = try? await photosPickerItem?.loadTransferable(type: Data.self),
+                let uiImage = UIImage(data: data)
+            else { image = nil; return }
+            
+            image = Image(uiImage: uiImage)
         }
-        .padding(.vertical)
     }
 }
 
-//#Preview {
-//    GeometryReader { geometry in
-//        PhotoPickerView(geometry: geometry,
-//                        photosPickerItem: .constant(nil),
-//                        image: .constant(nil))
-//    }
-//}
+#Preview {
+        PhotoPickerView(
+            ratio: AspectRatio.sixteenToNine.ratio,
+            image: .constant(nil))
+}

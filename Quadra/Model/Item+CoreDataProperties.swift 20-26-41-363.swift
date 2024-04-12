@@ -2,12 +2,13 @@
 //  Item+CoreDataProperties.swift
 //  Quadra
 //
-//  Created by Tatyana Balashenko on 19/03/2024.
+//  Created by Tatyana Balashenko on 11/04/2024.
 //
 //
 
 import Foundation
 import CoreData
+
 
 extension Item {
 
@@ -16,32 +17,33 @@ extension Item {
     }
 
     @NSManaged public var additionTime: Date
-    @NSManaged public var id: UUID
+    @NSManaged public var archiveTag: String
+    @NSManaged public var id: UUID?
     @NSManaged public var image: Data?
+    @NSManaged public var isArchived: Bool
+    @NSManaged public var isReadyToRepeat: Bool
     @NSManaged public var lastRepetition: Date?
+    @NSManaged public var lastTimeStatusChanged: Date?
+    @NSManaged public var needMoveToArchive: Bool
+    @NSManaged public var needMoveToThisMonth: Bool
+    @NSManaged public var needMoveToThisWeek: Bool
     @NSManaged public var phraseToRemember: String
-    @NSManaged public var translation: String?
-    @NSManaged public var transcription: String?
     @NSManaged public var repetitionCounter: Int64
     @NSManaged public var status: Status
+    @NSManaged public var transcription: String?
+    @NSManaged public var translation: String?
     @NSManaged public var sources: NSSet?
-    @NSManaged public var archiveTag: String
-    @NSManaged public var isArchived: Bool
-    @NSManaged public var needMoveToThisWeek: Bool
-    @NSManaged public var needMoveToThisMonth: Bool
-    @NSManaged public var needMoveToArchive: Bool
-    @NSManaged public var lastTimeStatusChanged: Date?
-    @NSManaged public var isReadyToRepeat: Bool
+
 }
 
 // MARK: Generated accessors for sources
 extension Item {
 
     @objc(addSourcesObject:)
-    @NSManaged public func addToSources(_ value: Source)
+    @NSManaged public func addToSources(_ value: ItemSource)
 
     @objc(removeSourcesObject:)
-    @NSManaged public func removeFromSources(_ value: Source)
+    @NSManaged public func removeFromSources(_ value: ItemSource)
 
     @objc(addSources:)
     @NSManaged public func addToSources(_ values: NSSet)
@@ -51,6 +53,6 @@ extension Item {
 
 }
 
-extension Item: Identifiable {
+extension Item : Identifiable {
 
 }

@@ -17,12 +17,11 @@
         <attribute name="status" attributeType="Transformable" valueTransformerName="StatusTransformer" customClassName=".Status"/>
         <attribute name="transcription" optional="YES" attributeType="String"/>
         <attribute name="translation" attributeType="String"/>
-        <relationship name="sources" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Source" inverseName="items" inverseEntity="Source"/>
+        <relationship name="sources" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ItemSource"/>
     </entity>
-    <entity name="Source" representedClassName="Source" syncable="YES">
+    <entity name="ItemSource" representedClassName="ItemSource" syncable="YES">
         <attribute name="color" attributeType="String"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String"/>
-        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="sources" inverseEntity="Item"/>
     </entity>
 </model>

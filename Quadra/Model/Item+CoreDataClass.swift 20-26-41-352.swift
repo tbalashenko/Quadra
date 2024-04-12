@@ -2,7 +2,7 @@
 //  Item+CoreDataClass.swift
 //  Quadra
 //
-//  Created by Tatyana Balashenko on 19/03/2024.
+//  Created by Tatyana Balashenko on 11/04/2024.
 //
 //
 
