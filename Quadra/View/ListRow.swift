@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ListRow: View {
-    var item: Item
+    @ObservedObject var item: Item
     
     var body: some View {
         HStack(alignment: .top, spacing: 8) {

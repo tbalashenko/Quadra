@@ -95,8 +95,8 @@ struct SettingsView: View {
     }
     
     func sourcesSection() -> some View {
-        Section("Sources") {
-            NavigationLink("Manage Sources") {
+        Section("Manage Sources") {
+            NavigationLink("Sources") {
                 SourcesView()
                     .environmentObject(cardManager)
                     .environment(\.managedObjectContext, viewContext)

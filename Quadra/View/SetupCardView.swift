@@ -9,13 +9,20 @@ import SwiftUI
 import PhotosUI
 import CoreData
 
-struct CreateCardView: View {
+enum SetupCardViewMode {
+    case create, edit
+}
+
+struct SetupCardView: View {
     @EnvironmentObject var manager: CardManager
     @EnvironmentObject var settingsManager: SettingsManager
     @Environment(\.managedObjectContext) var viewContext
     @FetchRequest(sortDescriptors: [])  var sources: FetchedResults<ItemSource>
-    @State private var totalHeight: CGFloat = CGFloat.infinity
     
+    var setupCardViewMode: SetupCardViewMode
+    var item: Item?
+    
+    @State private var totalHeight: CGFloat = CGFloat.infinity
     @State var filteredSources = [ItemSource]()
     @State var image: Image?
     @State var phraseToRemember = ""
@@ -24,7 +31,7 @@ struct CreateCardView: View {
     @State var selectedSources = Set<ItemSource>()
     @State var newSourceText = ""
     @State var sourceColor = Color.morningBlue
-    @Binding var showCreateCardView: Bool
+    @Binding var showSetupCardView: Bool
     @State private var selectedSourceIndex = 0
     
     var body: some View {
@@ -37,18 +44,19 @@ struct CreateCardView: View {
                 .listRowInsets(EdgeInsets())
                 
                 phraseSection()
-                    .listRowInsets(EdgeInsets())
-                    .listRowBackground(Color.element)
-                
                 sourcesSection(geometry: geometry)
-                    .listRowInsets(EdgeInsets())
-                    .listRowBackground(Color.element)
             }
             .scrollContentBackground(.hidden)
             .background(Color.element)
             .northWestShadow()
-            .onAppear { filteredSources = Array(sources) }
-            .navigationTitle("Add a new card")
+            .onAppear {
+                filteredSources = Array(sources)
+                
+                guard let item = item else { return }
+                
+                setup(from: item)
+            }
+            .navigationTitle(setupCardViewMode == .create ? "Add a new card" : "Edit your card")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -59,7 +67,7 @@ struct CreateCardView: View {
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
-                        showCreateCardView = false
+                        showSetupCardView = false
                     }
                 }
             }
@@ -89,6 +97,9 @@ struct CreateCardView: View {
             .textFieldStyle(NeuTextFieldStyle(text: $transcription))
             .listRowSeparator(.hidden)
         }
+        .listRowInsets(EdgeInsets())
+        .listRowBackground(Color.element)
+        .listRowSeparator(.hidden)
     }
     
     private func sourcesSection(geometry: GeometryProxy) -> some View {
@@ -151,19 +162,57 @@ struct CreateCardView: View {
                     hideKeyboard()
                 })
         }
+        .listRowInsets(EdgeInsets())
+        .listRowBackground(Color.element)
+        .listRowSeparator(.hidden)
+    }
+    
+    private func setup(from item: Item) {
+        if let imageData = item.image,
+           let uiImage = UIImage(data: imageData) {
+            image = Image(uiImage: uiImage)
+        }
+        phraseToRemember = item.phraseToRemember
+        if let translation = item.translation {
+            self.translation = translation
+        }
+        if let transcription = item.transcription {
+            self.transcription = transcription
+        }
+        
+        if let sources = item.sources?.allObjects as? [ItemSource] {
+            selectedSources = Set(sources)
+        }
+
+        let selectedSourceIDs = Set(selectedSources.map { $0.id })
+        filteredSources = Array(sources)
+            .filter { !selectedSourceIDs.contains($0.id) }
     }
     
     func save() {
         let image = image?.convert(scale: settingsManager.imageScale)
         
-        manager.createItem(
-            phraseToRemember: phraseToRemember,
-            translation: translation,
-            transcription: transcription,
-            sources: selectedSources,
-            image: image)
+        switch setupCardViewMode {
+            case .create:
+                manager.createItem(
+                    phraseToRemember: phraseToRemember,
+                    translation: translation,
+                    transcription: transcription,
+                    sources: selectedSources,
+                    image: image)
+            case .edit:
+                guard let item = item else { return }
+                
+                manager.editItem(
+                    item: item,
+                    phraseToRemember: phraseToRemember,
+                    translation: translation,
+                    transcription: transcription,
+                    sources: selectedSources,
+                    image: image)
+        }
         
-        showCreateCardView = false
+        showSetupCardView = false
     }
     
     func saveSource() {
@@ -178,5 +227,5 @@ struct CreateCardView: View {
 }
 
 //#Preview {
-//    CreateCardView(showCreateCardView: .constant(true))
+//    CreateCardView(showSetupCardView: .constant(true))
 //}

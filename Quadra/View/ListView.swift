@@ -90,6 +90,7 @@ struct ListView: View {
         Dictionary(grouping: items, by: { $0.status.title })
     }
     
+    @ViewBuilder
     private func listRowContent(item: Item, geometry: GeometryProxy) -> some View {
         ListRow(item: item)
             .listRowSeparator(.hidden)
@@ -119,7 +120,7 @@ struct ListView: View {
     }
     
     private func updateFilteredItems() {
-        filteredItems = dataManager.fetchItems()
+        filteredItems = items
             .filter { item in
                 !item.isFault && !item.isDeleted
             }

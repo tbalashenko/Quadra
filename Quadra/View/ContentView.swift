@@ -14,7 +14,7 @@ struct ContentView: View {
     @EnvironmentObject var settingsManager: SettingsManager
     @Environment(\.managedObjectContext) var viewContext
     @FetchRequest(sortDescriptors: []) var items: FetchedResults<Item>
-    @State private var showCreateCardView = false
+    @State private var showSetupCardView = false
     @State var isLoading: Bool = true
     @State var cardViews: [CardView] = []
     @State var needUpdateView: Bool = false
@@ -65,16 +65,18 @@ struct ContentView: View {
                 .toolbar {
                     ToolbarItem {
                         Button(action: {
-                            showCreateCardView = true
+                            showSetupCardView = true
                         }) {
                             Label("Add Item", systemImage: "plus")
                         }
                     }
                 }
-                .sheet(isPresented: $showCreateCardView, onDismiss:  updateCardViews ) {
+                .sheet(isPresented: $showSetupCardView, onDismiss:  updateCardViews ) {
                     NavigationStack {
-                        CreateCardView(showCreateCardView: $showCreateCardView)
-                            .environmentObject(settingsManager)
+                        SetupCardView(
+                            setupCardViewMode: .create,
+                            showSetupCardView: $showSetupCardView)
+                        .environmentObject(settingsManager)
                     }
                 }
             }
@@ -105,12 +107,13 @@ struct ContentView: View {
             .reversed()
             .filter { $0.isReadyToRepeat }
             .forEach { item in
-                let cardView = CardView(item: item,
-                                        cardViewPresentationMode: .swipe,
-                                        moveButtonAction: {
-                    self.cardManager.setNewStatus(for: item)
-                    self.moveCard()
-                })
+                let cardView = CardView(
+                    item: item,
+                    cardViewPresentationMode: .swipe,
+                    moveButtonAction: {
+                        self.cardManager.setNewStatus(for: item)
+                        self.moveCard()
+                    })
                 
                 cardViews.append(cardView)
             }

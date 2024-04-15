@@ -31,6 +31,7 @@ struct CardView: View {
     @State private var showAdditionalInfo = false
     @State private var totalHeight = CGFloat.infinity
     @State private var showFullImage: Bool = false
+    @State private var showSetupCardView: Bool = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -42,6 +43,27 @@ struct CardView: View {
             .background(.element)
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .northWestShadow()
+            .toolbar {
+                if cardViewPresentationMode == .view {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            showSetupCardView = true
+                        } label: {
+                            Image(systemName: "pencil")
+                        }
+                    }
+                }
+            }
+            .sheet(isPresented: $showSetupCardView ) {
+                NavigationStack {
+                    SetupCardView(
+                        setupCardViewMode: .edit, 
+                        item: item,
+                        showSetupCardView: $showSetupCardView
+                    )
+                    .environmentObject(settingsManager)
+                }
+            }
             .onAppear {
                 if cardViewPresentationMode == .view {
                     showAdditionalInfo = true
@@ -53,7 +75,7 @@ struct CardView: View {
     @ViewBuilder
     private func imageView(geometry: GeometryProxy) -> some View {
         if let imageData = item.image,
-            let uiImage = UIImage(data: imageData) {
+           let uiImage = UIImage(data: imageData) {
             imageViewWithImage(uiImage, geometry: geometry)
         } else {
             imageViewWithoutImage(geometry: geometry)

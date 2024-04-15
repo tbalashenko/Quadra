@@ -214,37 +214,61 @@ class CardManager: NSObject, ObservableObject {
         saveChanges()
     }
     
-    func createItem(phraseToRemember: String,
-                    translation: String?,
-                    transcription: String?,
-                    sources: Set<ItemSource>,
-                    image: UIImage?) {
-        
-        let item = Item(context: self.container.viewContext)
-        
-        item.phraseToRemember = phraseToRemember
-        item.translation = translation
-        item.transcription = transcription
-        item.status = Status.input
-        item.image = image?.pngData()
-        item.id = UUID()
+    func createItem(
+        phraseToRemember: String,
+        translation: String?,
+        transcription: String?,
+        sources: Set<ItemSource>,
+        image: UIImage?) {
+            let item = Item(context: self.container.viewContext)
+            
+            item.phraseToRemember = phraseToRemember
+            item.translation = translation
+            item.transcription = transcription
+            item.status = Status.input
+            item.image = image?.pngData()
+            item.id = UUID()
 #warning("remove")
-        // item.additionTime = Date()
-        item.additionTime = Date().subtractingDays(60) ?? Date()
-        
-        item.archiveTag = (Date().subtractingDays(60) ?? Date()).prepareTag()
-        
-        //        item.archiveTag = Date().prepareTag()
+            // item.additionTime = Date()
+            item.additionTime = Date().subtractingDays(60) ?? Date()
+            
+            item.archiveTag = (Date().subtractingDays(60) ?? Date()).prepareTag()
+            
+            //        item.archiveTag = Date().prepareTag()
 #warning("remove")
-        item.needMoveToThisWeek = true
-        
-        sources.forEach {
-            item.addToSources($0)
-            $0.addToItems(item)
+            item.needMoveToThisWeek = true
+            
+            sources.forEach {
+                item.addToSources($0)
+                $0.addToItems(item)
+            }
+            
+            saveChanges()
         }
-        
-        saveChanges()
-    }
+    
+    func editItem(
+        item: Item, phraseToRemember: String,
+        translation: String?,
+        transcription: String?,
+        sources: Set<ItemSource>,
+        image: UIImage?) {
+            items = fetchItems()
+            
+            guard let item = items.first(where: { $0.id  == item.id }) else { return }
+            
+            item.phraseToRemember = phraseToRemember
+            item.translation = translation
+            item.transcription = transcription
+            item.image = image?.pngData()
+            
+            item.sources = nil
+            sources.forEach {
+                item.addToSources($0)
+                $0.addToItems(item)
+            }
+            
+            saveChanges()
+        }
     
     func saveSource(color: String, title: String) -> ItemSource {
         let source = ItemSource(context: container.viewContext)
@@ -258,7 +282,6 @@ class CardManager: NSObject, ObservableObject {
     }
     
     func deleteItem(_ item: Item) {
-        
         container.viewContext.delete(item)
         
         saveChanges()
@@ -280,7 +303,7 @@ class CardManager: NSObject, ObservableObject {
         }
         
         if let newTitle = newTitle {
-            sources.first(where: { $0.id == source.id })?.title = newTitle
+            sources.first(where: { $0.id == source.id })?.title = newTitle.first == "#" ? newTitle : "#" + newTitle
         }
         
         saveChanges()
