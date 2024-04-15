@@ -31,7 +31,7 @@ struct ListView: View {
             NavigationStack {
                 listViewContent(geometry: geometry)
                     .onAppear {
-                        performChecks()
+                        setDate()
                         updateFilteredItems()
                     }
                     .onChange(of: searchText) { oldValue, newValue in
@@ -106,17 +106,15 @@ struct ListView: View {
             )
     }
     
-    private func performChecks() {
-        if !isFromDateInitialized { setDate() }
-    }
-    
     private func setDate() {
-        let (minDate, maxDate) = dataManager.getMinMaxDate()
-        
-        fromDate = minDate
-        self.minDate = minDate
-        toDate = maxDate
-        isFromDateInitialized = true
+        if !isFromDateInitialized {
+            let (minDate, maxDate) = dataManager.getMinMaxDate()
+            
+            fromDate = minDate
+            self.minDate = minDate
+            toDate = maxDate
+            isFromDateInitialized = true
+        }
     }
     
     private func updateFilteredItems() {

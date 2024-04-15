@@ -19,10 +19,10 @@ struct NeuTextFieldStyle: TextFieldStyle {
                         text = ""
                     } label: {
                         Image(systemName: "multiply.circle.fill")
+                            .resizable()
                             .foregroundColor(.secondary)
-                            
                     }
-                    .southEastShadow()
+                    .buttonStyle(NeuButtonStyle(width: 22, height: 22))
                 }
                 .padding(.horizontal, 4)
                 .zIndex(1)

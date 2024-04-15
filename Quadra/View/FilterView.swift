@@ -22,23 +22,22 @@ struct FilterView: View {
     @State private var modifiedSources: [ItemSource] = []
     @State var filteredSources = [ItemSource]()
     @State var filteredArchiveTags = [String]()
-    @State private var geometryProxy: GeometryProxy?
     var archiveTags: [String]
     
     var body: some View {
         GeometryReader { geometry in
-            List {
-                statusGroupBox
-                creationDateGroupBox
-                sourcesGroupBox
-                archiveTagsGroupBox
+            Form {
+                statusSection()
+                creationDateSection()
+                sourceSection(geometry: geometry)
+                archiveTagsSection(geometry: geometry)
             }
-            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
             .background(Color.element)
+            .navigationTitle("Filter")
             .onAppear {
                 setFilteredSources()
                 setFilteredArchiveTags()
-                geometryProxy = geometry
             }
             .onChange(of: selectedSources) {
                 setFilteredSources()
@@ -52,23 +51,21 @@ struct FilterView: View {
         }
     }
     
-    private var statusGroupBox: some View {
+    private func statusSection() -> some View {
         GroupBox("Status") {
             HStack(spacing: 8) {
                 ForEach(Status.allStatuses, id: \.self) { status in
                     TagView(text: status.title,
-                            backgroundColor: selectedStatuses.contains(status) ? Color(hex: status.color) : Color.offWhiteGray) {
+                            backgroundColor: selectedStatuses.contains(status) ? Color(hex: status.color) : .offWhiteGray) {
                         toggleStatus(status)
                     }
                 }
             }
         }
-        .backgroundStyle(Color.element)
-        .listRowSeparator(.hidden)
-        .listRowBackground(Color.element)
+        .styleFormSection()
     }
     
-    private var creationDateGroupBox: some View {
+    private func creationDateSection() -> some View {
         GroupBox("Creation Date") {
             DatePicker("From",
                        selection: $fromDate,
@@ -79,68 +76,60 @@ struct FilterView: View {
                        displayedComponents: [.date])
             .datePickerStyle(.compact)
         }
-        .backgroundStyle(Color.element)
-        .listRowSeparator(.hidden)
-        .listRowBackground(Color.element)
+        .styleFormSection()
     }
     
-    private var sourcesGroupBox: some View {
-        Group {
-            if !sources.isEmpty, let geometryProxy = geometryProxy {
-                GroupBox("Sources") {
+    @ViewBuilder
+    private func sourceSection(geometry: GeometryProxy) -> some View {
+        if !sources.isEmpty {
+            GroupBox("Sources") {
+                if !selectedSources.isEmpty {
                     TagCloudView(items: selectedSources,
-                                 geometry: geometryProxy,
+                                 geometry: geometry,
                                  totalHeight: $totalHeight,
                                  action: { selectedSources.remove(at: $0)
                     })
-                    .padding(selectedSources.isEmpty ? 0 : 4)
-                    
+                }
+                
+                if !filteredSources.isEmpty {
                     TagCloudView(items: filteredSources,
-                                 geometry: geometryProxy,
+                                 geometry: geometry,
                                  totalHeight: $totalHeight,
                                  inactiveColor: Color.offWhiteGray,
                                  action: { selectedSources.append(filteredSources[$0]) })
-                    .padding(filteredSources.isEmpty ? 0 : 4)
                 }
-                .backgroundStyle(Color.element)
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.element)
-            } else {
-                EmptyView()
             }
+            .styleFormSection()
         }
     }
     
-    private var archiveTagsGroupBox: some View {
-        Group {
-            if !archiveTags.isEmpty, let geometryProxy = geometryProxy {
-                let selectedItems = selectedArchiveTags.map { TagCloudItem(title: $0, color: Color.puce.toHex()) }
-                let filteredItems = filteredArchiveTags.map { TagCloudItem(title: $0, color: Color.puce.toHex()) }
-                
-                GroupBox("Archive tags") {
+    @ViewBuilder
+    private func archiveTagsSection(geometry: GeometryProxy) -> some View {
+        if !archiveTags.isEmpty {
+            let selectedItems = selectedArchiveTags.map { TagCloudItem(title: $0, color: Color.puce.toHex()) }
+            let filteredItems = filteredArchiveTags.map { TagCloudItem(title: $0, color: Color.puce.toHex()) }
+            
+            GroupBox("Archive tags") {
+                if !selectedItems.isEmpty {
                     TagCloudView(
                         items: selectedItems,
-                        geometry: geometryProxy,
+                        geometry: geometry,
                         totalHeight: $totalHeight,
                         action: { selectedArchiveTags.remove(at: $0) }
                     )
-                    .padding(selectedItems.isEmpty ? 0 : 4)
-                    
+                }
+                
+                if !filteredItems.isEmpty {
                     TagCloudView(
                         items: filteredItems,
-                        geometry: geometryProxy,
+                        geometry: geometry,
                         totalHeight: $totalHeight,
                         inactiveColor: Color.offWhiteGray,
                         action: { selectedArchiveTags.append(filteredArchiveTags[$0]) }
                     )
-                    .padding(filteredItems.isEmpty ? 0 : 4)
                 }
-                .backgroundStyle(Color.element)
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.element)
-            } else {
-                EmptyView()
             }
+            .styleFormSection()
         }
     }
     

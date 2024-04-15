@@ -138,10 +138,6 @@
 		A01E188F2BA3211000A03412 = {
 			isa = PBXGroup;
 			children = (
-				A0F940682BC966A900424690 /* Item+CoreDataClass.swift */,
-				A0F940692BC966A900424690 /* Item+CoreDataProperties.swift */,
-				A0F9406A2BC966A900424690 /* ItemSource+CoreDataClass.swift */,
-				A0F9406B2BC966A900424690 /* ItemSource+CoreDataProperties.swift */,
 				A01E189A2BA3211000A03412 /* Quadra */,
 				A01E18992BA3211000A03412 /* Products */,
 			);
@@ -205,6 +201,10 @@
 				A01E18A42BA3211300A03412 /* CardManager.swift */,
 				A01E18C52BA36B3000A03412 /* ColorScheme.swift */,
 				A09581722BC5ADD400CAA566 /* ImageScale.swift */,
+				A0F940682BC966A900424690 /* Item+CoreDataClass.swift */,
+				A0F940692BC966A900424690 /* Item+CoreDataProperties.swift */,
+				A0F9406A2BC966A900424690 /* ItemSource+CoreDataClass.swift */,
+				A0F9406B2BC966A900424690 /* ItemSource+CoreDataProperties.swift */,
 				A0983B412BC559A0009A3CCB /* SettingsManager.swift */,
 				A05EFA1B2BBD7D2D000460A3 /* UserDefaultsManager.swift */,
 				A05EFA1F2BBD80E9000460A3 /* Voice.swift */,

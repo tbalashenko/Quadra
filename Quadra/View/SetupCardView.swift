@@ -41,14 +41,14 @@ struct SetupCardView: View {
                     ratio: settingsManager.aspectRatio.ratio,
                     image: $image)
                 .frame(height: geometry.size.width * settingsManager.aspectRatio.ratio)
-                .listRowInsets(EdgeInsets())
+                .padding(.horizontal)
+                .styleFormSection()
                 
                 phraseSection()
                 sourcesSection(geometry: geometry)
             }
             .scrollContentBackground(.hidden)
             .background(Color.element)
-            .northWestShadow()
             .onAppear {
                 filteredSources = Array(sources)
                 
@@ -81,25 +81,20 @@ struct SetupCardView: View {
                 text: $phraseToRemember,
                 axis: .vertical)
             .textFieldStyle(NeuTextFieldStyle(text: $phraseToRemember))
-            .listRowSeparator(.hidden)
             
             TextField(
                 "Translation",
                 text: $translation,
                 axis: .vertical)
             .textFieldStyle(NeuTextFieldStyle(text: $translation))
-            .listRowSeparator(.hidden)
             
             TextField(
                 "Transcription",
                 text: $transcription,
                 axis: .vertical)
             .textFieldStyle(NeuTextFieldStyle(text: $transcription))
-            .listRowSeparator(.hidden)
         }
-        .listRowInsets(EdgeInsets())
-        .listRowBackground(Color.element)
-        .listRowSeparator(.hidden)
+        .styleFormSection()
     }
     
     private func sourcesSection(geometry: GeometryProxy) -> some View {
@@ -162,9 +157,7 @@ struct SetupCardView: View {
                     hideKeyboard()
                 })
         }
-        .listRowInsets(EdgeInsets())
-        .listRowBackground(Color.element)
-        .listRowSeparator(.hidden)
+        .styleFormSection()
     }
     
     private func setup(from item: Item) {

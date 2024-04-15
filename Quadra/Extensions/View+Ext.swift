@@ -46,6 +46,14 @@ extension View {
     func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
+    
+    func styleFormSection() -> some View {
+        self
+            .backgroundStyle(Color.element)
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets())
+            .listRowBackground(Color.element)
+    }
 }
 
 extension View {
