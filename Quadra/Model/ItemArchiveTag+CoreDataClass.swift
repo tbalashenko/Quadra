@@ -1,5 +1,5 @@
 //
-//  Item+CoreDataClass.swift
+//  ItemArchiveTag+CoreDataClass.swift
 //  Quadra
 //
 //  Created by Tatyana Balashenko on 16/04/2024.
@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-@objc(Item)
-public class Item: NSManagedObject {
+@objc(ItemArchiveTag)
+public class ItemArchiveTag: NSManagedObject {
 
 }

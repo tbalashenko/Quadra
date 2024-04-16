@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct InfoView: View {
-    @EnvironmentObject var dataManager: CardManager
+    @EnvironmentObject var dataController: DataController
     @Environment(\.managedObjectContext) var viewContext
     @FetchRequest(sortDescriptors: []) var items: FetchedResults<Item>
     @Binding var needUpdateView: Bool
@@ -30,14 +30,12 @@ struct InfoView: View {
                     Spacer()
                         .frame(height: 16)
 
-                    Text(dataManager.getHint())
+                    Text(getHint())
 
-                    if dataManager.containsCardsToRepeat() {
+                    if !items.filter({ $0.isReadyToRepeat }).isEmpty {
                         Button {
-                            dataManager.setReadyToRepeat()
                             needUpdateView = true
                         } label: {
-
                             Label("Start again", systemImage: "repeat.circle")
                         }
                         .buttonStyle(NeuButtonStyle(width: geometry.size.width / 2, height: 40))
@@ -46,7 +44,23 @@ struct InfoView: View {
                 }
                 Spacer()
             }
+            .onAppear {
+                items.forEach { $0.setReadyToRepeat() }
+                try? viewContext.save()
+            }
         }
+    }
+    
+    func getHint() -> String {
+        let readyToRepeatItems = items.filter { $0.isReadyToRepeat }
+        
+        if items.isEmpty {
+            return "Add your first card"
+        } else if readyToRepeatItems.isEmpty {
+            return "That's it for today, but you can add new cards"
+        }
+        
+        return ""
     }
 }
 

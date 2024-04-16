@@ -14,10 +14,11 @@ enum SetupCardViewMode {
 }
 
 struct SetupCardView: View {
-    @EnvironmentObject var manager: CardManager
+    @EnvironmentObject var dataController: DataController
     @EnvironmentObject var settingsManager: SettingsManager
     @Environment(\.managedObjectContext) var viewContext
-    @FetchRequest(sortDescriptors: [])  var sources: FetchedResults<ItemSource>
+    @FetchRequest(sortDescriptors: []) var sources: FetchedResults<ItemSource>
+    @FetchRequest(sortDescriptors: []) var archiveTags: FetchedResults<ItemArchiveTag>
     
     var setupCardViewMode: SetupCardViewMode
     var item: Item?
@@ -187,31 +188,59 @@ struct SetupCardView: View {
         
         switch setupCardViewMode {
             case .create:
-                manager.createItem(
-                    phraseToRemember: phraseToRemember,
-                    translation: translation,
-                    transcription: transcription,
-                    sources: selectedSources,
-                    image: image)
+                let item = Item(context: viewContext)
+                
+                item.phraseToRemember = phraseToRemember
+                item.translation = translation
+                item.transcription = transcription
+                item.status = Status.input
+                item.image = image?.pngData()
+                item.id = UUID()
+                item.additionTime = Date()
+                
+                if let tag = archiveTags.first(where: { $0.title == Date().prepareTag() }) {
+                    tag.addToItems(item)
+                } else {
+                    let tag = ItemArchiveTag(context: viewContext)
+                    tag.id = UUID()
+                    tag.color = ItemArchiveTag.getColor()
+                    tag.title = Date().prepareTag()
+                    tag.items = NSSet(array: [item])
+                }
+                
+                sources.forEach {
+                    item.addToSources($0)
+                    $0.addToItems(item)
+                }
+                
+                try? viewContext.save()
             case .edit:
                 guard let item = item else { return }
                 
-                manager.editItem(
-                    item: item,
-                    phraseToRemember: phraseToRemember,
-                    translation: translation,
-                    transcription: transcription,
-                    sources: selectedSources,
-                    image: image)
+                item.phraseToRemember = phraseToRemember
+                item.translation = translation
+                item.transcription = transcription
+                item.image = image?.pngData()
+                
+                item.sources = nil
+                selectedSources.forEach {
+                    item.addToSources($0)
+                    $0.addToItems(item)
+                }
+                
+                try? viewContext.save()
         }
         
         showSetupCardView = false
     }
     
     func saveSource() {
-        let color = sourceColor.toHex()
-        let title = "#" + newSourceText
-        let source = manager.saveSource(color: color, title: title)
+        let source = ItemSource(context: viewContext)
+        source.id = UUID()
+        source.color = sourceColor.toHex()
+        source.title = "#" + newSourceText
+        
+        try? viewContext.save()
         
         selectedSources.insert(source)
         newSourceText = ""

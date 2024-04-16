@@ -33,12 +33,12 @@ struct ListRow: View {
     }
 }
 
-#Preview {
-    VStack {
-        ListRow(item: Item.sampleData.first!)
-        ListRow(item: Item.sampleData.last!)
-    }
-}
+//#Preview {
+//    VStack {
+//        ListRow(item: Item.sampleData.first!)
+//        ListRow(item: Item.sampleData.last!)
+//    }
+//}
 
 struct ContentLengthPreference: PreferenceKey {
    static var defaultValue: CGFloat { 0 }

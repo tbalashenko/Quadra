@@ -17,19 +17,34 @@ extension Color {
     static let yellowIris = Color(hex: "#EEE78E")
     static let accentOrange = Color(hex: "#FBB15B")
     static let greyish = Color(hex: "#B2B9BB")
-    static let rebeccaPurple = Color(hex: "#663399")
-    static let slateGray = Color(hex: "#708090")
-    static let pastelTeal = Color(hex: "#63B7B7")
+    static let rebeccaPurple = Color(hex: "#663399") // -
+    static let slateGray = Color(hex: "#708090") // -
+    static let pastelTeal = Color(hex: "#63B7B7") // -
     static let spanishGray = Color(hex: "#949596")
     static let lightGray = Color(hex: "#D4D4D5")
-    static let brightGray = Color(hex: "#EEEEEE")
-    static let silverSand = Color(hex: "#C2C2C2")
+    static let brightGray = Color(hex: "#EEEEEE") // -
+    static let silverSand = Color(hex: "#C2C2C2") // -
 
     struct Green {
         static var isabelline = Color(hex: "#edf5ec") // very light green
         static var gainsboro = Color(hex: "#d7e7d4") // light green
         static var ashGray = Color(hex: "#afc7b3") // pastel light green
         static var darkSeaGreen = Color(hex: "#96b4a0") // pastel green
+    }
+    
+    struct Month {
+        static var january = Color(hex: "#98A1C5")
+        static var february = Color(hex: "#BCBFBE")
+        static var march = Color(hex: "#B2D669")
+        static var april = Color(hex: "#E9A4A1")
+        static var may = Color(hex: "#CBD3C8")
+        static var june = Color(hex: "#AF5091")
+        static var july = Color(hex: "#6E8287")
+        static var august = Color(hex: "#CA7D4D")
+        static var september = Color(hex: "#D5A556")
+        static var october = Color(hex: "#AC5E39")
+        static var november = Color(hex: "#323B3E")
+        static var december = Color(hex: "#671A0C")
     }
 }
 

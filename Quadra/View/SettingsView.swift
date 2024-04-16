@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject var settingsManager: SettingsManager
-    @EnvironmentObject var cardManager: CardManager
+    @EnvironmentObject var dataController: DataController
     @Environment(\.managedObjectContext) var viewContext
     @Environment(\.dismiss) var dismiss
     @State var selectedVoice: Voice
@@ -98,7 +98,7 @@ struct SettingsView: View {
         Section("Manage Sources") {
             NavigationLink("Sources") {
                 SourcesView()
-                    .environmentObject(cardManager)
+                    .environmentObject(dataController)
                     .environment(\.managedObjectContext, viewContext)
             }
         }

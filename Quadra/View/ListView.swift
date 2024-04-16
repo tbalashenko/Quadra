@@ -8,19 +8,20 @@
 import SwiftUI
 
 struct ListView: View {
-    @EnvironmentObject var dataManager: CardManager
+    @EnvironmentObject var dataController: DataController
     @EnvironmentObject var settingsManager: SettingsManager
     @Environment(\.managedObjectContext) var viewContext
     @FetchRequest(sortDescriptors: []) var sources: FetchedResults<ItemSource>
     @FetchRequest(sortDescriptors: []) var items: FetchedResults<Item>
-    @State private var previousItems: [Item] = []
+    @FetchRequest(sortDescriptors: []) var archiveTags: FetchedResults<ItemArchiveTag>
+    
     @State var selectedStatuses: [Status] = []
     @State var fromDate: Date = Date()
     @State var toDate: Date = Date()
     @State var selectedSources: [ItemSource] = []
-    @State var selectedArchiveTags: [String] = []
+    @State var selectedArchiveTags: [ItemArchiveTag] = []
     @State var filteredItems: [Item] = []
-    @State private var isFromDateInitialized = false
+    @State private var isDateSetFromFilter = false
     @State var minDate = Date()
     @State private var isSearching = false
     @State var searchText = ""
@@ -34,13 +35,11 @@ struct ListView: View {
                         setDate()
                         updateFilteredItems()
                     }
-                    .onChange(of: searchText) { oldValue, newValue in
+                    .onChange(of: searchText) { _, _ in
                         updateFilteredItems()
                     }
-                    .onReceive(dataManager.$items) { newItems in
-                        if newItems != previousItems {
-                            previousItems = newItems
-                        }
+                    .onDisappear {
+                        filteredItems = []
                     }
                     .searchable(text: $searchText, placement: .navigationBarDrawer)
             }
@@ -49,7 +48,7 @@ struct ListView: View {
     
     @ViewBuilder
     private func listViewContent(geometry: GeometryProxy) -> some View {
-        let groupedItems = groupItems(filteredItems)
+        let groupedItems = Dictionary(grouping: filteredItems, by: { $0.status.title })
         
         List {
             ForEach(Array(groupedItems), id: \.key) { section in
@@ -73,21 +72,19 @@ struct ListView: View {
                     destination: FilterView(
                         selectedStatuses: $selectedStatuses,
                         selectedArchiveTags: $selectedArchiveTags,
-                        fromDate: $fromDate, toDate: $toDate,
+                        fromDate: $fromDate, 
+                        toDate: $toDate,
+                        isDateSetFromFilter: $isDateSetFromFilter,
                         selectedSources: $selectedSources,
                         minDate: $minDate,
-                        archiveTags: dataManager.getArchiveTags())
-                    .environmentObject(dataManager)
+                        archiveTags: Array(archiveTags))
+                    .environmentObject(dataController)
                     .environment(\.managedObjectContext, viewContext)
                     .toolbar(.hidden, for: .tabBar)) {
                         Label("Filter", systemImage: "line.3.horizontal.decrease.circle.fill")
                     }
             }
         }
-    }
-    
-    private func groupItems(_ items: [Item]) -> [String: [Item]] {
-        Dictionary(grouping: items, by: { $0.status.title })
     }
     
     @ViewBuilder
@@ -107,13 +104,13 @@ struct ListView: View {
     }
     
     private func setDate() {
-        if !isFromDateInitialized {
-            let (minDate, maxDate) = dataManager.getMinMaxDate()
+        if !isDateSetFromFilter {
+            let minDate = items.map({ $0.additionTime }).min() ?? Date()
+            let maxDate = items.map({ $0.additionTime }).max() ?? Date()
             
             fromDate = minDate
             self.minDate = minDate
             toDate = maxDate
-            isFromDateInitialized = true
         }
     }
     
@@ -148,10 +145,13 @@ struct ListView: View {
                     }
                 }
                 
-                let fromDateComparison = Calendar.current.compare(fromDate, to: item.additionTime, toGranularity: .day)
-                let toDateComparison = Calendar.current.compare(toDate, to: item.additionTime, toGranularity: .day)
+                var dateRangeMatches = true
                 
-                let dateRangeMatches = fromDateComparison != .orderedDescending && toDateComparison != .orderedAscending
+                if isDateSetFromFilter {
+                    let fromDateComparison = Calendar.current.compare(fromDate, to: item.additionTime, toGranularity: .day)
+                    let toDateComparison = Calendar.current.compare(toDate, to: item.additionTime, toGranularity: .day)
+                    dateRangeMatches = fromDateComparison != .orderedDescending && toDateComparison != .orderedAscending
+                }
                 
                 let archiveTagMatches: Bool
                 
@@ -167,10 +167,9 @@ struct ListView: View {
     
     private func delete(at offsets: IndexSet) {
         for index in offsets {
-            dataManager.deleteItem(filteredItems[index])
+            viewContext.delete(filteredItems[index])
         }
-        
-        updateFilteredItems()
+        try? viewContext.save()
     }
 }
 

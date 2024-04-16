@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct QuadraApp: App {
-    @StateObject private var cardManager = CardManager()
+    @StateObject private var dataController = DataController()
     @StateObject private var settingsManager = SettingsManager()
     @State private var selectedTab = 0
 
@@ -18,22 +18,19 @@ struct QuadraApp: App {
             TabView(selection: $selectedTab) {
                 ContentView()
                     .tabItem { Image(systemName: "repeat") }.tag(0)
-                    .environmentObject(cardManager)
+                    .environmentObject(dataController)
                     .environmentObject(settingsManager)
-                    .environment(\.managedObjectContext, cardManager.container.viewContext)
+                    .environment(\.managedObjectContext, dataController.container.viewContext)
                 ListView()
                     .tabItem { Image(systemName: "list.bullet") }.tag(1)
-                    .environmentObject(cardManager)
+                    .environmentObject(dataController)
                     .environmentObject(settingsManager)
-                    .environment(\.managedObjectContext, cardManager.container.viewContext)
+                    .environment(\.managedObjectContext, dataController.container.viewContext)
                 OtherView()
                     .tabItem { Image(systemName: "gearshape") }.tag(2)
+                    .environmentObject(dataController)
                     .environmentObject(settingsManager)
-                    .environmentObject(cardManager)
-                    .environment(\.managedObjectContext, cardManager.container.viewContext)
-            }
-            .onAppear {
-                cardManager.performCheсks()
+                    .environment(\.managedObjectContext, dataController.container.viewContext)
             }
         }
     }

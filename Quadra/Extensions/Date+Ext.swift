@@ -8,6 +8,10 @@
 import Foundation
 
 extension Date {
+    enum Month: Int {
+        case january = 1, february, march, april, may, june, july, august, september, october, november, december
+    }
+    
     func prepareTag() -> String {
         let calendar = Calendar.current
 
@@ -93,5 +97,11 @@ extension Date {
         formatter.dateStyle = dateStyle
         formatter.timeStyle = timeStyle
         return formatter.string(from: self)
+    }
+    
+    func currentMonth() -> Month {
+        let calendar = Calendar.current
+        let monthNumber = calendar.component(.month, from: self)
+        return Month(rawValue: monthNumber) ?? .january
     }
 }

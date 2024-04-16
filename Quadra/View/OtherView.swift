@@ -9,7 +9,7 @@ import SwiftUI
 
 struct OtherView: View {
     @EnvironmentObject var settingsManager: SettingsManager
-    @EnvironmentObject var cardManager: CardManager
+    @EnvironmentObject var dataController: DataController
     @Environment(\.managedObjectContext) var viewContext
     
     var body: some View {
@@ -22,7 +22,7 @@ struct OtherView: View {
                         selectedImageScale: settingsManager.imageScale, 
                         showConfetti: settingsManager.showConfetti)
                     .environmentObject(settingsManager)
-                    .environmentObject(cardManager)
+                    .environmentObject(dataController)
                     .environment(\.managedObjectContext, viewContext)
                 }
             }

@@ -223,7 +223,7 @@ struct CardView: View {
     private func tagCloudView(geometry: GeometryProxy) -> some View {
         var items = [TagCloudViewItem]()
         if item.status.id == 3 {
-            items.append(TagCloudItem(title: item.archiveTag, color: Color.puce.toHex()))
+            items.append(TagCloudItem(title: item.archiveTag.title, color: item.archiveTag.color))
         }
         
         items.append(TagCloudItem(title: item.status.title, color: item.status.color))
@@ -255,10 +255,10 @@ struct CardView: View {
     }
 }
 
-#Preview {
-    GeometryReader { geometry in
-        CardView(item: Item(image: nil, archiveTag: "Test", phraseToRemember: "Test", translation: "Test1", lastRepetition: Date(), sources: [ItemSource.source1], transcription: nil, additionTime: Date(), status: .archive), cardViewPresentationMode: .view)
-    }
-}
+//#Preview {
+//    GeometryReader { geometry in
+//        CardView()
+//    }
+//}
 
 

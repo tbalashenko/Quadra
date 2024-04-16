@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SourcesView: View {
-    @EnvironmentObject var cardManager: CardManager
+    @EnvironmentObject var dataController: DataController
     @Environment(\.managedObjectContext) var viewContext
     @FetchRequest(sortDescriptors: []) var sources: FetchedResults<ItemSource>
         
@@ -16,7 +16,7 @@ struct SourcesView: View {
         List {
             ForEach(sources, id: \.id) { source in
                 SourceListRowView(source: source)
-                    .environmentObject(cardManager)
+                    .environmentObject(dataController)
                     .environment(\.managedObjectContext, viewContext)
             }
             .onDelete(perform: deleteSources)
@@ -32,7 +32,9 @@ struct SourcesView: View {
             offsets
                 .map { sources[$0] }
                 .forEach { source in
-                    cardManager.deleteSource(source)
+                    viewContext.delete(source)
+                    
+                    try? viewContext.save()
                 }
         }
     }

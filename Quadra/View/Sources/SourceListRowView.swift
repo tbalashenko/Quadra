@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SourceListRowView: View {
     @ObservedObject var source: ItemSource
-    @EnvironmentObject var cardManager: CardManager
+    @EnvironmentObject var dataController: DataController
     @Environment(\.managedObjectContext) var viewContext
     @State var isEditing = false
     @State var title = ""
@@ -18,7 +18,10 @@ struct SourceListRowView: View {
         HStack(spacing: 24) {
             ColorPicker("", selection: Binding<Color>(
                 get: { Color(hex: source.color) },
-                set: { cardManager.editSource(source, newColor: $0.toHex()) }
+                set: {
+                    source.color = $0.toHex()
+                    try? viewContext.save()
+                }
             ))
             .frame(width: 22, height: 22)
             .northWestShadow()
@@ -31,7 +34,8 @@ struct SourceListRowView: View {
                     Spacer()
                     
                     Button {
-                        cardManager.editSource(source, newTitle: title)
+                        source.title = title
+                        try? viewContext.save()
                         isEditing = false
                     } label: {
                         Image(systemName: "checkmark.circle.fill")

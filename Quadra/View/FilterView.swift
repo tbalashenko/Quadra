@@ -9,20 +9,21 @@ import SwiftUI
 
 struct FilterView: View {
     @FetchRequest(sortDescriptors: []) var sources: FetchedResults<ItemSource>
-    @EnvironmentObject var dataManager: CardManager
+    @EnvironmentObject var dataController: DataController
     @Environment(\.managedObjectContext) var viewContext
     @Environment(\.dismiss) var dismiss
     @Binding var selectedStatuses: [Status]
-    @Binding var selectedArchiveTags: [String]
+    @Binding var selectedArchiveTags: [ItemArchiveTag]
     @Binding var fromDate: Date
     @Binding var toDate: Date
+    @Binding var isDateSetFromFilter: Bool
     @Binding var selectedSources: [ItemSource]
     @Binding var minDate: Date
     @State private var totalHeight = CGFloat.infinity
     @State private var modifiedSources: [ItemSource] = []
     @State var filteredSources = [ItemSource]()
-    @State var filteredArchiveTags = [String]()
-    var archiveTags: [String]
+    @State var filteredArchiveTags = [ItemArchiveTag]()
+    var archiveTags: [ItemArchiveTag]
     
     var body: some View {
         GeometryReader { geometry in
@@ -44,6 +45,12 @@ struct FilterView: View {
             }
             .onChange(of: selectedArchiveTags) {
                 setFilteredArchiveTags()
+            }
+            .onChange(of: fromDate) { _, _ in
+                isDateSetFromFilter = true
+            }
+            .onChange(of: toDate) { _, _ in
+                isDateSetFromFilter = true
             }
             .toolbar {
                 resetButton
@@ -106,8 +113,8 @@ struct FilterView: View {
     @ViewBuilder
     private func archiveTagsSection(geometry: GeometryProxy) -> some View {
         if !archiveTags.isEmpty {
-            let selectedItems = selectedArchiveTags.map { TagCloudItem(title: $0, color: Color.puce.toHex()) }
-            let filteredItems = filteredArchiveTags.map { TagCloudItem(title: $0, color: Color.puce.toHex()) }
+            let selectedItems = selectedArchiveTags.map { TagCloudItem(title: $0.title, color: $0.color) }
+            let filteredItems = filteredArchiveTags.map { TagCloudItem(title: $0.title, color: Color.offWhiteGray.toHex()) }
             
             GroupBox("Archive tags") {
                 if !selectedItems.isEmpty {
@@ -140,6 +147,7 @@ struct FilterView: View {
             selectedStatuses = []
             fromDate = minDate
             toDate = Date()
+            isDateSetFromFilter = false
         } label: {
             Text("Reset")
         }
