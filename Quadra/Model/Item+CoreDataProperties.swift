@@ -27,7 +27,7 @@ extension Item {
     @NSManaged public var needMoveToThisMonth: Bool
     @NSManaged public var needMoveToThisWeek: Bool
     @NSManaged public var phraseToRemember: String
-    @NSManaged public var repetitionCounter: Int64
+    @NSManaged public var repetitionCounter: Int
     @NSManaged public var status: Status
     @NSManaged public var transcription: String?
     @NSManaged public var translation: String?

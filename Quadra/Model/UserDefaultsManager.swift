@@ -18,10 +18,6 @@ public struct UserDefaultsManager {
         UserDefaults.standard.synchronize()
     }
     
-    public static func boolForKey(_ defaultName: String) -> Bool {
-        return UserDefaults.standard.bool(forKey: defaultName)
-    }
-    
     public static func integerForKey(_ defaultName: String) -> Int {
         return UserDefaults.standard.integer(forKey: defaultName)
     }
@@ -51,4 +47,5 @@ struct UserDefaultsKeys {
     static let textToSpeechVoiceIdentifier = "textToSpeechVoiceIdentifier"
     static let imageScale = "imageScale"
     static let showConfetti = "showConfetti"
+    static let showChartTab = "showChartTab"
 }

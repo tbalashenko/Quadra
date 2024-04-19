@@ -15,7 +15,7 @@
         <attribute name="repetitionCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="status" attributeType="Transformable" valueTransformerName="StatusTransformer" customClassName=".Status"/>
         <attribute name="transcription" optional="YES" attributeType="String"/>
-        <attribute name="translation" attributeType="String"/>
+        <attribute name="translation" optional="YES" attributeType="String"/>
         <relationship name="archiveTag" maxCount="1" deletionRule="Nullify" destinationEntity="ItemArchiveTag" inverseName="items" inverseEntity="ItemArchiveTag"/>
         <relationship name="sources" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ItemSource" inverseName="items" inverseEntity="ItemSource"/>
     </entity>
@@ -30,5 +30,12 @@
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="sources" inverseEntity="Item"/>
+    </entity>
+    <entity name="StatData" representedClassName="StatData" syncable="YES">
+        <attribute name="addedItemsCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="deletedItemsCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="repeatedItemsCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="totalNumberOfCards" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
 </model>

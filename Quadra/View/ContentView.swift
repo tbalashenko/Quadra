@@ -14,6 +14,7 @@ struct ContentView: View {
     @EnvironmentObject var settingsManager: SettingsManager
     @Environment(\.managedObjectContext) var viewContext
     @FetchRequest(sortDescriptors: []) var items: FetchedResults<Item>
+    @FetchRequest(sortDescriptors: []) var statData: FetchedResults<StatData>
     
     @State private var showSetupCardView = false
     @State var isLoading: Bool = true
@@ -88,8 +89,9 @@ struct ContentView: View {
         guard let removedCard = cardViews.first else { return }
         
         let item = removedCard.item
-        
         item.incrementCounter()
+        saveStatData()
+        
         try? viewContext.save()
         
         cardViews.removeFirst()
@@ -125,6 +127,18 @@ struct ContentView: View {
         
         withAnimation {
             isLoading = false
+        }
+    }
+    
+    func saveStatData() {
+        let currentDate = Date().formattedForStats()
+        if let statData = statData.first(where: { $0.date == currentDate }) {
+            statData.repeatedItemsCounter += 1
+        } else {
+            let statData = StatData(context: viewContext)
+            statData.date = currentDate ?? Date()
+            statData.repeatedItemsCounter += 1
+            statData.totalNumberOfCards = items.count
         }
     }
 }

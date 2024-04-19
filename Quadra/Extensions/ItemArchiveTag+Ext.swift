@@ -9,8 +9,8 @@ import Foundation
 import SwiftUI
 
 extension ItemArchiveTag {
-    static func getColor() -> String {
-        switch Date().currentMonth() {
+    static func getColor(for date: Date) -> String {
+        switch date.currentMonth() {
         case .january:
             return Color.Month.january.toHex()
         case .february:

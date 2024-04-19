@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @EnvironmentObject var settingsManager: SettingsManager
-    @EnvironmentObject var dataController: DataController
-    @Environment(\.managedObjectContext) var viewContext
-    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject private var settingsManager: SettingsManager
+    @EnvironmentObject private var dataController: DataController
+    @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.dismiss) private var dismiss
     @State var selectedVoice: Voice
     @State var selectedRatio: AspectRatio
     @State var selectedImageScale: ImageScale

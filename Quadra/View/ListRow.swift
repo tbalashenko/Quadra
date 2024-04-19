@@ -23,7 +23,6 @@ struct ListRow: View {
                     .frame(width: 88, height: 88)
                     .background(Color.element)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .northWestShadow()
             }
         }
         .background(Color.element

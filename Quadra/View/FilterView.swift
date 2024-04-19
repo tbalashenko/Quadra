@@ -27,12 +27,13 @@ struct FilterView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            Form {
+            List {
                 statusSection()
                 creationDateSection()
                 sourceSection(geometry: geometry)
                 archiveTagsSection(geometry: geometry)
             }
+            .listStyle(.plain)
             .scrollContentBackground(.hidden)
             .background(Color.element)
             .navigationTitle("Filter")
@@ -69,7 +70,7 @@ struct FilterView: View {
                 }
             }
         }
-        .styleFormSection()
+        .styleListSection()
     }
     
     private func creationDateSection() -> some View {
@@ -83,7 +84,7 @@ struct FilterView: View {
                        displayedComponents: [.date])
             .datePickerStyle(.compact)
         }
-        .styleFormSection()
+        .styleListSection()
     }
     
     @ViewBuilder
@@ -106,7 +107,7 @@ struct FilterView: View {
                                  action: { selectedSources.append(filteredSources[$0]) })
                 }
             }
-            .styleFormSection()
+            .styleListSection()
         }
     }
     
@@ -136,7 +137,7 @@ struct FilterView: View {
                     )
                 }
             }
-            .styleFormSection()
+            .styleListSection()
         }
     }
     

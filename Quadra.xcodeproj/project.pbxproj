@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A01BCECD2BD0655C00C35EA6 /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01BCECC2BD0655C00C35EA6 /* Period.swift */; };
 		A01D2A742BB4C4CA00AE1790 /* ListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01D2A732BB4C4CA00AE1790 /* ListRow.swift */; };
 		A01D2A762BB4C78800AE1790 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01D2A752BB4C78800AE1790 /* FilterView.swift */; };
 		A01D2A7A2BB9D6DD00AE1790 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01D2A792BB9D6DD00AE1790 /* InfoView.swift */; };
@@ -61,6 +62,11 @@
 		A0AC3A022BA9AB4C006DA5DA /* Status+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AC3A012BA9AB4C006DA5DA /* Status+Ext.swift */; };
 		A0C3E25B2BBECF47006ADC91 /* SkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C3E25A2BBECF47006ADC91 /* SkeletonView.swift */; };
 		A0D0910D2BCF149E00D8AED3 /* ItemArchiveTag+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D0910C2BCF149E00D8AED3 /* ItemArchiveTag+Ext.swift */; };
+		A0D091102BCFEAD600D8AED3 /* StatData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D0910E2BCFEAD600D8AED3 /* StatData+CoreDataClass.swift */; };
+		A0D091112BCFEAD600D8AED3 /* StatData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D0910F2BCFEAD600D8AED3 /* StatData+CoreDataProperties.swift */; };
+		A0D091132BCFEB4A00D8AED3 /* StatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D091122BCFEB4A00D8AED3 /* StatView.swift */; };
+		A0D091152BCFEEDC00D8AED3 /* Spirals.sks in Resources */ = {isa = PBXBuildFile; fileRef = A0D091142BCFEEDC00D8AED3 /* Spirals.sks */; };
+		A0D49F472BD29DC10083D0A5 /* ChartLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D49F462BD29DC10083D0A5 /* ChartLine.swift */; };
 		A0F940632BC95C0B00424690 /* SourcesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F940622BC95C0B00424690 /* SourcesView.swift */; };
 		A0F9406E2BC966A900424690 /* ItemSource+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F9406A2BC966A900424690 /* ItemSource+CoreDataClass.swift */; };
 		A0F9406F2BC966A900424690 /* ItemSource+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F9406B2BC966A900424690 /* ItemSource+CoreDataProperties.swift */; };
@@ -68,6 +74,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A01BCECC2BD0655C00C35EA6 /* Period.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Period.swift; sourceTree = "<group>"; };
 		A01D2A732BB4C4CA00AE1790 /* ListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRow.swift; sourceTree = "<group>"; };
 		A01D2A752BB4C78800AE1790 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		A01D2A792BB9D6DD00AE1790 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
@@ -124,6 +131,11 @@
 		A0AC3A012BA9AB4C006DA5DA /* Status+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Status+Ext.swift"; sourceTree = "<group>"; };
 		A0C3E25A2BBECF47006ADC91 /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
 		A0D0910C2BCF149E00D8AED3 /* ItemArchiveTag+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ItemArchiveTag+Ext.swift"; sourceTree = "<group>"; };
+		A0D0910E2BCFEAD600D8AED3 /* StatData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StatData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		A0D0910F2BCFEAD600D8AED3 /* StatData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StatData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		A0D091122BCFEB4A00D8AED3 /* StatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatView.swift; sourceTree = "<group>"; };
+		A0D091142BCFEEDC00D8AED3 /* Spirals.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Spirals.sks; sourceTree = "<group>"; };
+		A0D49F462BD29DC10083D0A5 /* ChartLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartLine.swift; sourceTree = "<group>"; };
 		A0F940622BC95C0B00424690 /* SourcesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourcesView.swift; sourceTree = "<group>"; };
 		A0F9406A2BC966A900424690 /* ItemSource+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ItemSource+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A0F9406B2BC966A900424690 /* ItemSource+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ItemSource+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -205,6 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				A0983B442BC55A3E009A3CCB /* AspectRatio.swift */,
+				A0D49F462BD29DC10083D0A5 /* ChartLine.swift */,
 				A01E18C52BA36B3000A03412 /* ColorScheme.swift */,
 				A01E18A42BA3211300A03412 /* DataController.swift */,
 				A09581722BC5ADD400CAA566 /* ImageScale.swift */,
@@ -214,7 +227,10 @@
 				A06FA5472BCF111400FF97ED /* ItemArchiveTag+CoreDataProperties.swift */,
 				A0F9406A2BC966A900424690 /* ItemSource+CoreDataClass.swift */,
 				A0F9406B2BC966A900424690 /* ItemSource+CoreDataProperties.swift */,
+				A01BCECC2BD0655C00C35EA6 /* Period.swift */,
 				A0983B412BC559A0009A3CCB /* SettingsManager.swift */,
+				A0D0910E2BCFEAD600D8AED3 /* StatData+CoreDataClass.swift */,
+				A0D0910F2BCFEAD600D8AED3 /* StatData+CoreDataProperties.swift */,
 				A05EFA1B2BBD7D2D000460A3 /* UserDefaultsManager.swift */,
 				A05EFA1F2BBD80E9000460A3 /* Voice.swift */,
 			);
@@ -239,6 +255,7 @@
 				A01E18EC2BA78DD000A03412 /* SetupCardView.swift */,
 				A07B38AF2BC046C200943F0E /* Skeleton */,
 				A0F940722BC9D89800424690 /* Sources */,
+				A0D091122BCFEB4A00D8AED3 /* StatView.swift */,
 				A07518F32BAC72A900CF252C /* Styles */,
 				A01E18C32BA33A2700A03412 /* SwipeView.swift */,
 				A023FEED2BAA216800FAB13C /* TagCloudView.swift */,
@@ -253,6 +270,7 @@
 			children = (
 				A0539ACE2BC5D64300158D05 /* Assets.xcassets */,
 				A0539AD32BC5D6B500158D05 /* Confetti.sks */,
+				A0D091142BCFEEDC00D8AED3 /* Spirals.sks */,
 			);
 			path = Animation;
 			sourceTree = "<group>";
@@ -381,6 +399,7 @@
 				A0539AD02BC5D64300158D05 /* Assets.xcassets in Resources */,
 				A01E18A02BA3211300A03412 /* Assets.xcassets in Resources */,
 				A0539AD42BC5D6B500158D05 /* Confetti.sks in Resources */,
+				A0D091152BCFEEDC00D8AED3 /* Spirals.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,6 +437,7 @@
 				A01E18CA2BA71C4700A03412 /* TransparentButtonStyle.swift in Sources */,
 				A0983B402BC45AFE009A3CCB /* SkeletonListRowView.swift in Sources */,
 				A0C3E25B2BBECF47006ADC91 /* SkeletonView.swift in Sources */,
+				A0D49F472BD29DC10083D0A5 /* ChartLine.swift in Sources */,
 				A01E18CC2BA72BAB00A03412 /* CardView.swift in Sources */,
 				A023FEFA2BAB480400FAB13C /* SwipeView+Ext.swift in Sources */,
 				A06749E02BC723AF00150D68 /* ParticleScene.swift in Sources */,
@@ -428,7 +448,9 @@
 				A01E18D02BA7415500A03412 /* Source+Ext.swift in Sources */,
 				A059AFD32BA8BD2500CAE6E8 /* Image+Ext.swift in Sources */,
 				A01E189E2BA3211000A03412 /* ContentView.swift in Sources */,
+				A0D091102BCFEAD600D8AED3 /* StatData+CoreDataClass.swift in Sources */,
 				A01E18CE2BA7398200A03412 /* Color+Ext.swift in Sources */,
+				A0D091112BCFEAD600D8AED3 /* StatData+CoreDataProperties.swift in Sources */,
 				A0539AD62BC6AC1200158D05 /* ConfettiView.swift in Sources */,
 				A0983B452BC55A3E009A3CCB /* AspectRatio.swift in Sources */,
 				A023FEF62BAB12E500FAB13C /* PhotoPickerView.swift in Sources */,
@@ -437,6 +459,7 @@
 				A0AC3A022BA9AB4C006DA5DA /* Status+Ext.swift in Sources */,
 				A06FA54A2BCF111400FF97ED /* ItemArchiveTag+CoreDataClass.swift in Sources */,
 				A09581732BC5ADD400CAA566 /* ImageScale.swift in Sources */,
+				A0D091132BCFEB4A00D8AED3 /* StatView.swift in Sources */,
 				A01E18C62BA36B3000A03412 /* ColorScheme.swift in Sources */,
 				A05EFA202BBD80E9000460A3 /* Voice.swift in Sources */,
 				A01D2A7A2BB9D6DD00AE1790 /* InfoView.swift in Sources */,
@@ -444,6 +467,7 @@
 				A01E189C2BA3211000A03412 /* QuadraApp.swift in Sources */,
 				A0751AD82BAC89F000CF252C /* Font+Ext.swift in Sources */,
 				A059AFD12BA8A5D600CAE6E8 /* AnyShape+Ext.swift in Sources */,
+				A01BCECD2BD0655C00C35EA6 /* Period.swift in Sources */,
 				A01E18C22BA334F600A03412 /* Item+Ext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

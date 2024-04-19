@@ -17,8 +17,10 @@ struct SetupCardView: View {
     @EnvironmentObject var dataController: DataController
     @EnvironmentObject var settingsManager: SettingsManager
     @Environment(\.managedObjectContext) var viewContext
+    @FetchRequest(sortDescriptors: []) var items: FetchedResults<Item>
     @FetchRequest(sortDescriptors: []) var sources: FetchedResults<ItemSource>
     @FetchRequest(sortDescriptors: []) var archiveTags: FetchedResults<ItemArchiveTag>
+    @FetchRequest(sortDescriptors: []) var statData: FetchedResults<StatData>
     
     var setupCardViewMode: SetupCardViewMode
     var item: Item?
@@ -37,17 +39,18 @@ struct SetupCardView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            Form {
+            List {
                 PhotoPickerView(
                     ratio: settingsManager.aspectRatio.ratio,
                     image: $image)
                 .frame(height: geometry.size.width * settingsManager.aspectRatio.ratio)
                 .padding(.horizontal)
-                .styleFormSection()
+                .styleListSection()
                 
                 phraseSection()
                 sourcesSection(geometry: geometry)
             }
+            .listStyle(.plain)
             .scrollContentBackground(.hidden)
             .background(Color.element)
             .onAppear {
@@ -95,7 +98,7 @@ struct SetupCardView: View {
                 axis: .vertical)
             .textFieldStyle(NeuTextFieldStyle(text: $transcription))
         }
-        .styleFormSection()
+        .styleListSection()
     }
     
     private func sourcesSection(geometry: GeometryProxy) -> some View {
@@ -158,7 +161,7 @@ struct SetupCardView: View {
                     hideKeyboard()
                 })
         }
-        .styleFormSection()
+        .styleListSection()
     }
     
     private func setup(from item: Item) {
@@ -198,22 +201,9 @@ struct SetupCardView: View {
                 item.id = UUID()
                 item.additionTime = Date()
                 
-                if let tag = archiveTags.first(where: { $0.title == Date().prepareTag() }) {
-                    tag.addToItems(item)
-                } else {
-                    let tag = ItemArchiveTag(context: viewContext)
-                    tag.id = UUID()
-                    tag.color = ItemArchiveTag.getColor()
-                    tag.title = Date().prepareTag()
-                    tag.items = NSSet(array: [item])
-                }
-                
-                sources.forEach {
-                    item.addToSources($0)
-                    $0.addToItems(item)
-                }
-                
-                try? viewContext.save()
+                saveArchiveTag(to: item)
+                saveSources(to: item)
+                saveStatData()
             case .edit:
                 guard let item = item else { return }
                 
@@ -223,15 +213,20 @@ struct SetupCardView: View {
                 item.image = image?.pngData()
                 
                 item.sources = nil
-                selectedSources.forEach {
-                    item.addToSources($0)
-                    $0.addToItems(item)
-                }
                 
-                try? viewContext.save()
+                saveSources(to: item)
         }
         
+        try? viewContext.save()
+        
         showSetupCardView = false
+    }
+    
+    func saveSources(to item: Item) {
+        sources.forEach {
+            item.addToSources($0)
+            $0.addToItems(item)
+        }
     }
     
     func saveSource() {
@@ -245,6 +240,32 @@ struct SetupCardView: View {
         selectedSources.insert(source)
         newSourceText = ""
         sourceColor = .morningBlue
+    }
+    
+    func saveArchiveTag(to item: Item) {
+        if let tag = archiveTags.first(where: { $0.title == Date().prepareTag() }) {
+            tag.addToItems(item)
+        } else {
+            let tag = ItemArchiveTag(context: viewContext)
+            tag.id = UUID()
+            tag.color = ItemArchiveTag.getColor(for: Date())
+            tag.title = Date().prepareTag()
+            tag.items = NSSet(array: [item])
+        }
+    }
+    
+    func saveStatData() {
+        let currentDate = Date().formattedForStats()
+        
+        if let statData = statData.first(where: { $0.date == currentDate }) {
+            statData.addedItemsCounter += 1
+            statData.totalNumberOfCards = items.count + 1
+        } else {
+            let statData = StatData(context: viewContext)
+            statData.date = currentDate ?? Date()
+            statData.addedItemsCounter += 1
+            statData.totalNumberOfCards = items.count + 1
+        }
     }
 }
 

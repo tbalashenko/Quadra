@@ -14,6 +14,7 @@ struct ListView: View {
     @FetchRequest(sortDescriptors: []) var sources: FetchedResults<ItemSource>
     @FetchRequest(sortDescriptors: []) var items: FetchedResults<Item>
     @FetchRequest(sortDescriptors: []) var archiveTags: FetchedResults<ItemArchiveTag>
+    @FetchRequest(sortDescriptors: []) var statData: FetchedResults<StatData>
     
     @State var selectedStatuses: [Status] = []
     @State var fromDate: Date = Date()
@@ -168,8 +169,24 @@ struct ListView: View {
     private func delete(at offsets: IndexSet) {
         for index in offsets {
             viewContext.delete(filteredItems[index])
+            filteredItems.remove(at: index)
+            saveStatData()
+            try? viewContext.save()
         }
-        try? viewContext.save()
+    }
+    
+    func saveStatData() {
+        let currentDate = Date().formattedForStats()
+        
+        if let statData = statData.first(where: { $0.date == currentDate }) {
+            statData.totalNumberOfCards = items.count
+            statData.deletedItemsCounter += 1
+        } else {
+            let statData = StatData(context: viewContext)
+            statData.date = currentDate ?? Date()
+            statData.totalNumberOfCards = items.count
+            statData.deletedItemsCounter += 1
+        }
     }
 }
 

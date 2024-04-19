@@ -17,18 +17,20 @@ struct TagView: View {
     var action: (() -> Void)?
 
     var body: some View {
-        Button(action: action ?? {}, label: {
-            Text(text)
-                .font(.caption)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
-                .background(backgroundColor ?? Color.randomColor)
-                .foregroundColor(foregroundColor)
-                .cornerRadius(8)
-        })
-        .if(withShadow) { content in
-            content.northWestShadow()
-        }
+        Button(
+            action: action ?? {},
+            label: {
+                Text(text)
+                    .font(.caption)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(backgroundColor ?? Color.randomColor)
+                    .foregroundColor(foregroundColor)
+                    .cornerRadius(8)
+                    .if(withShadow) { content in
+                        content.northWestShadow()
+                    }
+            })
     }
 }
 

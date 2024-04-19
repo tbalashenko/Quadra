@@ -29,7 +29,12 @@ final class SettingsManager: ObservableObject {
     
     init() { }
     
-    public func save(voice: Voice, aspectRatio: AspectRatio, imageScale: ImageScale, showConfetti: Bool) {
+    public func save(
+        voice: Voice,
+        aspectRatio: AspectRatio,
+        imageScale: ImageScale,
+        showConfetti: Bool
+    ) {
         UserDefaultsManager.saveObject(voice.identifier, forKey: UserDefaultsKeys.textToSpeechVoiceIdentifier)
         UserDefaultsManager.saveObject(aspectRatio.rawValue, forKey: UserDefaultsKeys.aspectRatio)
         UserDefaultsManager.saveObject(imageScale.rawValue, forKey: UserDefaultsKeys.imageScale)

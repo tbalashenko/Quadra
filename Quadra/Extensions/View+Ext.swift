@@ -47,11 +47,10 @@ extension View {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     
-    func styleFormSection() -> some View {
+    func styleListSection() -> some View {
         self
             .backgroundStyle(Color.element)
             .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets())
             .listRowBackground(Color.element)
     }
 }
