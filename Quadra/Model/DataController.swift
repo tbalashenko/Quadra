@@ -12,6 +12,9 @@ class DataController: ObservableObject {
     let container = NSPersistentContainer(name: "Quadra")
     
     init() {
+        let name = NSValueTransformerName(rawValue: String(describing: AttributedStringTransformer.self))
+        ValueTransformer.setValueTransformer(AttributedStringTransformer(), forName: name)
+        
         ValueTransformer.setValueTransformer(StatusTransformer(), forName: NSValueTransformerName("StatusTransformer"))
         guard let persistentStoreDescriptions = container.persistentStoreDescriptions.first else {
             fatalError("\(#function): Failed to retrieve a persistent store description.")

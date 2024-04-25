@@ -161,12 +161,12 @@ struct CardView: View {
             if !showTranslation {
                 phraseToRememberView()
             } else if let translation = item.translation {
-                translationView(translation: translation)
+                translationView(translation: AttributedString(translation))
             }
         }
     }
     
-    private func translationView(translation: String) -> some View {
+    private func translationView(translation: AttributedString) -> some View {
         Text(translation)
             .font(.title2)
             .bold()
@@ -178,10 +178,11 @@ struct CardView: View {
     
     private func phraseToRememberView() -> some View {
         HStack(spacing: 12) {
-            TextToSpeechPlayView(text: item.phraseToRemember,
-                                 buttonSize: .small)
+            TextToSpeechPlayView(
+                text: item.phraseToRemember.string,
+                buttonSize: .small)
             .environmentObject(settingsManager)
-            Text(item.phraseToRemember)
+            Text(AttributedString(item.phraseToRemember))
                 .font(.title2)
                 .bold()
                 .onTapGesture {
@@ -192,7 +193,7 @@ struct CardView: View {
     }
     
     private func toggleTranslationVisibility() {
-        if let translation = item.translation, !translation.isEmpty {
+        if let translation = item.translation, !translation.string.isEmpty {
             showTranslation.toggle()
         }
     }

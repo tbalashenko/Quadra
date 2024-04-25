@@ -124,10 +124,10 @@ struct ListView: View {
                 var textMatch: Bool = false
                 if searchText.isEmpty {
                     textMatch = true
-                } else if item.phraseToRemember.lowercased().contains(searchText.lowercased()) {
+                } else if item.phraseToRemember.string.lowercased().contains(searchText.lowercased()) {
                     textMatch = true
                 } else if let translation = item.translation {
-                    return translation.lowercased().contains(searchText.lowercased())
+                    return translation.string.lowercased().contains(searchText.lowercased())
                 }
                 
                 let statusMatches: Bool

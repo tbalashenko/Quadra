@@ -26,11 +26,11 @@ extension Item {
     @NSManaged public var needMoveToArchive: Bool
     @NSManaged public var needMoveToThisMonth: Bool
     @NSManaged public var needMoveToThisWeek: Bool
-    @NSManaged public var phraseToRemember: String
+    @NSManaged public var phraseToRemember: NSAttributedString
     @NSManaged public var repetitionCounter: Int
     @NSManaged public var status: Status
     @NSManaged public var transcription: String?
-    @NSManaged public var translation: String?
+    @NSManaged public var translation: NSAttributedString?
     @NSManaged public var sources: NSSet?
     @NSManaged public var archiveTag: ItemArchiveTag
 

@@ -7,18 +7,29 @@
 
 import SwiftUI
 
+
 struct NeuButtonStyle: ButtonStyle {
-    let width: CGFloat
-    let height: CGFloat
+    enum NeuButtonStyleForm {
+        case capsule
+        case roundedRectangle
+    }
+    
+    var width: CGFloat = 22
+    var height: CGFloat = 22
+    var color = Color.element
+    
+    var form: NeuButtonStyleForm = .capsule
 
     func makeBody(configuration: Self.Configuration)
     -> some View {
+        let shape = form == .capsule ? AnyShape(Capsule()) : AnyShape(RoundedRectangle(cornerRadius: 8))
+        
         configuration.label
             .frame(width: width, height: height)
             .scaleEffect(configuration.isPressed ? 0.98 : 1)
             .background(
-                Capsule()
-                    .fill(Color.element)
+                shape
+                    .fill(color)
                     .northWestShadow(
                         radius: configuration.isPressed ? 1 : 2,
                         offset: configuration.isPressed ? 1 : 2)
@@ -26,7 +37,3 @@ struct NeuButtonStyle: ButtonStyle {
             )
     }
 }
-
-// extension ButtonStyle where Self == NeuButtonStyle {
-//    static var neuButtonStyle: NeuButtonStyle { .init() }
-// }

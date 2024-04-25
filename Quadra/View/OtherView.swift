@@ -20,7 +20,8 @@ struct OtherView: View {
                         selectedVoice: settingsManager.voice,
                         selectedRatio: settingsManager.aspectRatio,
                         selectedImageScale: settingsManager.imageScale, 
-                        showConfetti: settingsManager.showConfetti)
+                        showConfetti: settingsManager.showConfetti,
+                        highlighterPalette: settingsManager.highliterPalette)
                     .environmentObject(settingsManager)
                     .environmentObject(dataController)
                     .environment(\.managedObjectContext, viewContext)

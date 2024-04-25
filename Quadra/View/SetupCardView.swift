@@ -9,11 +9,11 @@ import SwiftUI
 import PhotosUI
 import CoreData
 
-enum SetupCardViewMode {
-    case create, edit
-}
-
 struct SetupCardView: View {
+    enum SetupCardViewMode {
+        case create, edit
+    }
+    
     @EnvironmentObject var dataController: DataController
     @EnvironmentObject var settingsManager: SettingsManager
     @Environment(\.managedObjectContext) var viewContext
@@ -28,8 +28,8 @@ struct SetupCardView: View {
     @State private var totalHeight: CGFloat = CGFloat.infinity
     @State var filteredSources = [ItemSource]()
     @State var image: Image?
-    @State var phraseToRemember = ""
-    @State var translation = ""
+    @State var phraseToRemember: AttributedString = ""
+    @State var translation: AttributedString = ""
     @State var transcription = ""
     @State var selectedSources = Set<ItemSource>()
     @State var newSourceText = ""
@@ -65,9 +65,10 @@ struct SetupCardView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
+                        hideKeyboard()
                         save()
                     }
-                    .disabled(phraseToRemember.isEmpty)
+                    .disabled(phraseToRemember.characters.isEmpty)
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
@@ -78,27 +79,33 @@ struct SetupCardView: View {
         }
     }
     
+    @ViewBuilder
     private func phraseSection() -> some View {
-        GroupBox("Phrase") {
-            TextField(
-                "Phrase to remember*",
+        GroupBox("Phrase to remember*") {
+            HighlightableTextView(
                 text: $phraseToRemember,
-                axis: .vertical)
-            .textFieldStyle(NeuTextFieldStyle(text: $phraseToRemember))
-            
-            TextField(
-                "Translation",
+                palette: settingsManager.highliterPalette)
+        }
+        .styleListSection()
+        .groupBoxStyle(PlainGroupBoxStyle())
+        
+        GroupBox("Translation") {
+            HighlightableTextView(
                 text: $translation,
-                axis: .vertical)
-            .textFieldStyle(NeuTextFieldStyle(text: $translation))
-            
+                palette: settingsManager.highliterPalette)
+        }
+        .styleListSection()
+        .groupBoxStyle(PlainGroupBoxStyle())
+        
+        GroupBox("Transcription") {
             TextField(
-                "Transcription",
+                "",
                 text: $transcription,
                 axis: .vertical)
             .textFieldStyle(NeuTextFieldStyle(text: $transcription))
         }
         .styleListSection()
+        .groupBoxStyle(PlainGroupBoxStyle())
     }
     
     private func sourcesSection(geometry: GeometryProxy) -> some View {
@@ -106,10 +113,11 @@ struct SetupCardView: View {
             if !selectedSources.isEmpty {
                 Text("Selected sources:")
                     .foregroundStyle(Color.gray)
-                TagCloudView(items: selectedSources.sorted(),
-                             geometry: geometry,
-                             totalHeight: $totalHeight,
-                             action: { selectedSources.remove(selectedSources.sorted()[$0]) })
+                TagCloudView(
+                    items: selectedSources.sorted(),
+                    geometry: geometry,
+                    totalHeight: $totalHeight,
+                    action: { selectedSources.remove(selectedSources.sorted()[$0]) })
                 Text("Tap to remove")
                     .font(.footnote)
                     .foregroundStyle(Color.gray)
@@ -162,6 +170,7 @@ struct SetupCardView: View {
                 })
         }
         .styleListSection()
+        .groupBoxStyle(PlainGroupBoxStyle())
     }
     
     private func setup(from item: Item) {
@@ -169,9 +178,9 @@ struct SetupCardView: View {
            let uiImage = UIImage(data: imageData) {
             image = Image(uiImage: uiImage)
         }
-        phraseToRemember = item.phraseToRemember
+        phraseToRemember = AttributedString(item.phraseToRemember)
         if let translation = item.translation {
-            self.translation = translation
+            self.translation = AttributedString(translation)
         }
         if let transcription = item.transcription {
             self.transcription = transcription
@@ -180,7 +189,7 @@ struct SetupCardView: View {
         if let sources = item.sources?.allObjects as? [ItemSource] {
             selectedSources = Set(sources)
         }
-
+        
         let selectedSourceIDs = Set(selectedSources.map { $0.id })
         filteredSources = Array(sources)
             .filter { !selectedSourceIDs.contains($0.id) }
@@ -193,8 +202,8 @@ struct SetupCardView: View {
             case .create:
                 let item = Item(context: viewContext)
                 
-                item.phraseToRemember = phraseToRemember
-                item.translation = translation
+                item.phraseToRemember = NSAttributedString(phraseToRemember)
+                item.translation = NSAttributedString(translation)
                 item.transcription = transcription
                 item.status = Status.input
                 item.image = image?.pngData()
@@ -207,8 +216,8 @@ struct SetupCardView: View {
             case .edit:
                 guard let item = item else { return }
                 
-                item.phraseToRemember = phraseToRemember
-                item.translation = translation
+                item.phraseToRemember = NSAttributedString(phraseToRemember)
+                item.translation = NSAttributedString(translation)
                 item.transcription = transcription
                 item.image = image?.pngData()
                 
@@ -268,6 +277,8 @@ struct SetupCardView: View {
         }
     }
 }
+
+
 
 //#Preview {
 //    CreateCardView(showSetupCardView: .constant(true))

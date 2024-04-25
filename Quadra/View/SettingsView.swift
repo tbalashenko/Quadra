@@ -16,6 +16,7 @@ struct SettingsView: View {
     @State var selectedRatio: AspectRatio
     @State var selectedImageScale: ImageScale
     @State var showConfetti: Bool
+    @State var highlighterPalette: HighliterPalette = .pale
     
     var body: some View {
         NavigationStack {
@@ -24,6 +25,7 @@ struct SettingsView: View {
                 imagesSection()
                 animationSection()
                 sourcesSection()
+                highlighterPaletteSection()
             }
             .scrollContentBackground(.hidden)
             .background(Color.element)
@@ -41,6 +43,7 @@ struct SettingsView: View {
                 selectedRatio = settingsManager.aspectRatio
                 selectedImageScale = settingsManager.imageScale
                 showConfetti = settingsManager.showConfetti
+                highlighterPalette = settingsManager.highliterPalette
             }
         }
     }
@@ -90,7 +93,7 @@ struct SettingsView: View {
     
     func animationSection() -> some View {
         Section("Animation") {
-            Toggle("Show confetti", isOn: $showConfetti)
+            Toggle("Show Confetti", isOn: $showConfetti)
         }
     }
     
@@ -104,12 +107,34 @@ struct SettingsView: View {
         }
     }
     
+    func highlighterPaletteSection() -> some View {
+        Section("Text Formatting") {
+            Picker("Preferable Highlighter Palette", selection: $highlighterPalette) {
+                ForEach(HighliterPalette.allCases, id: \.self) { palette in
+                    Text(palette.title)
+                }
+            }
+            .pickerStyle(.menu)
+            
+            HStack(spacing: 16) {
+                Spacer()
+                ForEach(highlighterPalette.colors, id: \.self) { color in
+                    Image(systemName: "highlighter")
+                        .frame(width: 22, height: 22)
+                        .foregroundColor(Color(color))
+                }
+                Spacer()
+            }
+        }
+    }
+    
     func save() {
         settingsManager.save(
             voice: selectedVoice,
             aspectRatio: selectedRatio,
             imageScale: selectedImageScale,
-            showConfetti: showConfetti)
+            showConfetti: showConfetti,
+            highliterPalette: highlighterPalette)
         dismiss()
     }
 }

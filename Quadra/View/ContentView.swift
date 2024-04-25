@@ -107,6 +107,7 @@ struct ContentView: View {
         withAnimation {
             isLoading = true
         }
+        
         cardViews.removeAll()
         
         items

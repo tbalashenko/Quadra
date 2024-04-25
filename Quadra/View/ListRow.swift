@@ -12,7 +12,7 @@ struct ListRow: View {
     
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
-            Text(item.phraseToRemember)
+            Text(AttributedString(item.phraseToRemember))
                 .padding()
             Spacer()
             if let data = item.image,

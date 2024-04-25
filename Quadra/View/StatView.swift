@@ -176,7 +176,8 @@ struct StatView: View {
         for index in 0...365 {
             let date = Calendar.current.date(byAdding: .day, value: index, to: fromDate!) ?? Date()
             let item = Item(context: viewContext)
-            item.phraseToRemember = "Test" + String(Int.random(in: 1...365))
+            let string = "Test" + String(Int.random(in: 1...365))
+            item.phraseToRemember = NSAttributedString(string: string)
             item.status = Status.input
             item.id = UUID()
             item.additionTime = date

@@ -18,8 +18,8 @@ public struct UserDefaultsManager {
         UserDefaults.standard.synchronize()
     }
     
-    public static func integerForKey(_ defaultName: String) -> Int {
-        return UserDefaults.standard.integer(forKey: defaultName)
+    public static func integerForKey(_ defaultName: String) -> Int? {
+        return UserDefaults.standard.object(forKey: defaultName) as? Int
     }
     
     public static func doubleForKey(_ defaultName: String) -> Double? {
@@ -48,4 +48,5 @@ struct UserDefaultsKeys {
     static let imageScale = "imageScale"
     static let showConfetti = "showConfetti"
     static let showChartTab = "showChartTab"
+    static let highlighterPalette = "highlighterPalette"
 }

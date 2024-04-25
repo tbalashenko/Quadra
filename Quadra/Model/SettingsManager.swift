@@ -27,17 +27,24 @@ final class SettingsManager: ObservableObject {
         UserDefaultsManager.boolForKey(UserDefaultsKeys.showConfetti) ?? true
     }
     
+    public var highliterPalette: HighliterPalette {
+        let rawValue = UserDefaultsManager.integerForKey(UserDefaultsKeys.highlighterPalette) ?? 0
+        return HighliterPalette(rawValue: rawValue) ?? .pale
+    }
+    
     init() { }
     
     public func save(
         voice: Voice,
         aspectRatio: AspectRatio,
         imageScale: ImageScale,
-        showConfetti: Bool
+        showConfetti: Bool,
+        highliterPalette: HighliterPalette
     ) {
         UserDefaultsManager.saveObject(voice.identifier, forKey: UserDefaultsKeys.textToSpeechVoiceIdentifier)
         UserDefaultsManager.saveObject(aspectRatio.rawValue, forKey: UserDefaultsKeys.aspectRatio)
         UserDefaultsManager.saveObject(imageScale.rawValue, forKey: UserDefaultsKeys.imageScale)
         UserDefaultsManager.saveObject(showConfetti, forKey: UserDefaultsKeys.showConfetti)
+        UserDefaultsManager.saveObject(highliterPalette.rawValue, forKey: UserDefaultsKeys.highlighterPalette)
     }
 }
