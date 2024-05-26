@@ -8,6 +8,26 @@
 import SwiftUI
 
 struct TextToSpeechPlayView: View {
+    @StateObject var viewModel = TextToSpeechViewModel()
+    var color: Color?
+    var text: String
+    var voice: Voice?
+    var buttonSize: TextToSpeechPlayView.size = .small
+    let settingsManager = SettingsManager.shared
+    
+    var body: some View {
+        Button(action: {
+            viewModel.speak(text, voice: voice ?? settingsManager.voice)
+        }, label: {
+            Image(systemName: viewModel.isSpeaking ? "stop.fill" : "play.fill")
+                .resizable()
+                .frame(width: buttonSize.width, height: buttonSize.height)
+                .foregroundStyle(color ?? Color.accentColor)
+        })
+    }
+}
+
+extension TextToSpeechPlayView {
     enum size {
         case small, medium
         
@@ -28,25 +48,6 @@ struct TextToSpeechPlayView: View {
                     22
             }
         }
-    }
-    
-    var color: Color?
-    var text: String
-    var voice: Voice?
-    var buttonSize: TextToSpeechPlayView.size = .medium
-    
-    @StateObject var viewModel = TextToSpeechViewModel()
-    @EnvironmentObject var settingsManager: SettingsManager
-    
-    var body: some View {
-        Button(action: {
-            viewModel.speak(text, voice: voice ?? settingsManager.voice)
-        }, label: {
-            Image(systemName: viewModel.isSpeaking ? "stop.fill" : "play.fill")
-                .resizable()
-                .frame(width: buttonSize.width, height: buttonSize.height)
-                .foregroundStyle(color ?? Color.accentColor)
-        })
     }
 }
 

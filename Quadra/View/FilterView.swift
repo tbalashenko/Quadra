@@ -7,23 +7,82 @@
 
 import SwiftUI
 
+final class FilterViewModel: ObservableObject {
+    @Published var sources = [CardSource]()
+    @Published var selectedSources = [CardSource]() {
+        didSet {
+            setFilteredSources()
+        }
+    }
+    @Published var filteredSources = [CardSource]()
+    @Published var filteredArchiveTags = [CardArchiveTag]()
+    @Published var selectedArchiveTags = [CardArchiveTag]() {
+        didSet {
+            setFilteredArchiveTags()
+        }
+    }
+    @Published var archiveTags = [CardArchiveTag]()
+    @Published var selectedStatuses = [Status]()
+    @Published var minDate: Date = Date()
+    
+    @Published var fromDate: Date = Date() {
+        didSet {
+            isDateSetFromFilter = true
+        }
+    }
+    @Published var toDate: Date = Date() {
+        didSet {
+            isDateSetFromFilter = true
+        }
+    }
+    @Published private var modifiedSources: [CardSource] = []
+    @Published var isDateSetFromFilter: Bool = false
+    
+    init() {
+        setFilteredArchiveTags()
+        setFilteredSources()
+    }
+    
+    func removeFromSelectedSources(index: Int) {
+        selectedSources.remove(at: index)
+    }
+    
+    func resetFilter() {
+        selectedArchiveTags = []
+        selectedSources = []
+        selectedStatuses = []
+        fromDate = minDate
+        toDate = Date()
+    }
+    
+    func setFilteredArchiveTags() {
+        if selectedArchiveTags.isEmpty {
+            filteredArchiveTags = archiveTags
+        } else {
+            filteredArchiveTags = archiveTags.filter { !selectedArchiveTags.contains($0) }
+        }
+    }
+    
+    func setFilteredSources() {
+        if !selectedSources.isEmpty {
+            filteredSources = sources.filter { source in
+                !selectedSources.contains(where: { $0.id == source.id })
+            }
+        } else {
+            filteredSources = Array(sources)
+        }
+    }
+}
+
 struct FilterView: View {
-    @FetchRequest(sortDescriptors: []) var sources: FetchedResults<ItemSource>
-    @EnvironmentObject var dataController: DataController
-    @Environment(\.managedObjectContext) var viewContext
+    @StateObject var viewModel = FilterViewModel()
     @Environment(\.dismiss) var dismiss
-    @Binding var selectedStatuses: [Status]
-    @Binding var selectedArchiveTags: [ItemArchiveTag]
-    @Binding var fromDate: Date
-    @Binding var toDate: Date
-    @Binding var isDateSetFromFilter: Bool
-    @Binding var selectedSources: [ItemSource]
-    @Binding var minDate: Date
+    
+
     @State private var totalHeight = CGFloat.infinity
-    @State private var modifiedSources: [ItemSource] = []
-    @State var filteredSources = [ItemSource]()
-    @State var filteredArchiveTags = [ItemArchiveTag]()
-    var archiveTags: [ItemArchiveTag]
+    
+    @State var filteredArchiveTags = [CardArchiveTag]()
+    var archiveTags: [CardArchiveTag]
     
     var body: some View {
         GeometryReader { geometry in
@@ -37,22 +96,6 @@ struct FilterView: View {
             .scrollContentBackground(.hidden)
             .background(Color.element)
             .navigationTitle("Filter")
-            .onAppear {
-                setFilteredSources()
-                setFilteredArchiveTags()
-            }
-            .onChange(of: selectedSources) {
-                setFilteredSources()
-            }
-            .onChange(of: selectedArchiveTags) {
-                setFilteredArchiveTags()
-            }
-            .onChange(of: fromDate) { _, _ in
-                isDateSetFromFilter = true
-            }
-            .onChange(of: toDate) { _, _ in
-                isDateSetFromFilter = true
-            }
             .toolbar {
                 resetButton
             }
@@ -64,7 +107,7 @@ struct FilterView: View {
             HStack(spacing: 8) {
                 ForEach(Status.allStatuses, id: \.self) { status in
                     TagView(text: status.title,
-                            backgroundColor: selectedStatuses.contains(status) ? Color(hex: status.color) : .offWhiteGray) {
+                            backgroundColor: viewModel.selectedStatuses.contains(status) ? Color(hex: status.color) : .offWhiteGray) {
                         toggleStatus(status)
                     }
                 }
@@ -76,11 +119,11 @@ struct FilterView: View {
     private func creationDateSection() -> some View {
         GroupBox("Creation Date") {
             DatePicker("From",
-                       selection: $fromDate,
+                       selection: $viewModel.fromDate,
                        displayedComponents: [.date])
             .datePickerStyle(.compact)
             DatePicker("To",
-                       selection: $toDate,
+                       selection: $viewModel.toDate,
                        displayedComponents: [.date])
             .datePickerStyle(.compact)
         }
@@ -89,22 +132,22 @@ struct FilterView: View {
     
     @ViewBuilder
     private func sourceSection(geometry: GeometryProxy) -> some View {
-        if !sources.isEmpty {
+        if !viewModel.sources.isEmpty {
             GroupBox("Sources") {
-                if !selectedSources.isEmpty {
-                    TagCloudView(items: selectedSources,
+                if !viewModel.selectedSources.isEmpty {
+                    TagCloudView(items: viewModel.selectedSources,
                                  geometry: geometry,
                                  totalHeight: $totalHeight,
-                                 action: { selectedSources.remove(at: $0)
+                                 action: { viewModel.removeFromSelectedSources(index: $0)
                     })
                 }
                 
-                if !filteredSources.isEmpty {
-                    TagCloudView(items: filteredSources,
+                if !viewModel.filteredSources.isEmpty {
+                    TagCloudView(items: viewModel.filteredSources,
                                  geometry: geometry,
                                  totalHeight: $totalHeight,
                                  inactiveColor: Color.offWhiteGray,
-                                 action: { selectedSources.append(filteredSources[$0]) })
+                                 action: { viewModel.selectedSources.append(viewModel.filteredSources[$0]) })
                 }
             }
             .styleListSection()
@@ -114,8 +157,8 @@ struct FilterView: View {
     @ViewBuilder
     private func archiveTagsSection(geometry: GeometryProxy) -> some View {
         if !archiveTags.isEmpty {
-            let selectedItems = selectedArchiveTags.map { TagCloudItem(title: $0.title, color: $0.color) }
-            let filteredItems = filteredArchiveTags.map { TagCloudItem(title: $0.title, color: Color.offWhiteGray.toHex()) }
+            let selectedItems = viewModel.selectedArchiveTags.map { TagCloudItem(title: $0.title, color: $0.color) }
+            let filteredItems = viewModel.filteredArchiveTags.map { TagCloudItem(title: $0.title, color: Color.offWhiteGray.toHex()) }
             
             GroupBox("Archive tags") {
                 if !selectedItems.isEmpty {
@@ -123,7 +166,7 @@ struct FilterView: View {
                         items: selectedItems,
                         geometry: geometry,
                         totalHeight: $totalHeight,
-                        action: { selectedArchiveTags.remove(at: $0) }
+                        action: { viewModel.selectedArchiveTags.remove(at: $0) }
                     )
                 }
                 
@@ -133,7 +176,7 @@ struct FilterView: View {
                         geometry: geometry,
                         totalHeight: $totalHeight,
                         inactiveColor: Color.offWhiteGray,
-                        action: { selectedArchiveTags.append(filteredArchiveTags[$0]) }
+                        action: { viewModel.selectedArchiveTags.append(filteredArchiveTags[$0]) }
                     )
                 }
             }
@@ -143,40 +186,17 @@ struct FilterView: View {
     
     private var resetButton: some View {
         Button {
-            selectedArchiveTags = []
-            selectedSources = []
-            selectedStatuses = []
-            fromDate = minDate
-            toDate = Date()
-            isDateSetFromFilter = false
+            viewModel.resetFilter()
         } label: {
             Text("Reset")
         }
     }
     
     func toggleStatus(_ status: Status) {
-        if selectedStatuses.contains(status) {
-            selectedStatuses.removeAll { $0 == status }
+        if viewModel.selectedStatuses.contains(status) {
+            viewModel.selectedStatuses.removeAll { $0 == status }
         } else {
-            selectedStatuses.append(status)
-        }
-    }
-    
-    func setFilteredSources() {
-        if !selectedSources.isEmpty {
-            filteredSources = sources.filter { source in
-                !selectedSources.contains(where: { $0.id == source.id })
-            }
-        } else {
-            filteredSources = Array(sources)
-        }
-    }
-    
-    func setFilteredArchiveTags() {
-        if selectedArchiveTags.isEmpty {
-            filteredArchiveTags = archiveTags
-        } else {
-            filteredArchiveTags = archiveTags.filter { !selectedArchiveTags.contains($0) }
+            viewModel.selectedStatuses.append(status)
         }
     }
 }

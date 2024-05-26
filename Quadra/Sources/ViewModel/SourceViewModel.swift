@@ -1,0 +1,51 @@
+//
+//  SourceViewModel.swift
+//  Quadra
+//
+//  Created by Tatyana Balashenko on 15/05/2024.
+//
+
+import Foundation
+
+final class SourceViewModel: ObservableObject {
+    var source: CardSource
+    @Published var editableTitle: String = ""
+    @Published var compoundTitle: String = ""
+    @Published var color: String = ""
+    
+    let sourceService = CardSourceService.shared
+    
+    init(source: CardSource) {
+        self.source = source
+        self.editableTitle = source.title
+        self.compoundTitle = getTitle(for: source)
+        self.color = source.color
+    }
+    
+    /// Generates a title for the source based on the count of cards.
+    /// - Parameter source: The card source.
+    /// - Returns: The formatted title string.
+    private func getTitle(for source: CardSource) -> String {
+        guard let cardsCount = source.cards?.count else {
+            return source.title
+        }
+        
+        switch cardsCount {
+            case 0:
+                return "\(source.title) - no cards"
+            case 1:
+                return "\(source.title) - 1 card"
+            default:
+                return "\(source.title) - \(cardsCount) cards"
+        }
+    }
+    
+    func saveChanges() {
+        do {
+            try sourceService.editSource(source: source, title: editableTitle, color: color)
+        } catch {
+            print("Failed to save source: \(error.localizedDescription)")
+        }
+        compoundTitle = getTitle(for: source)
+    }
+}

@@ -7,63 +7,69 @@
 
 import SwiftUI
 
-struct InfoView: View {
-    @EnvironmentObject var dataController: DataController
-    @Environment(\.managedObjectContext) var viewContext
-    @FetchRequest(sortDescriptors: []) var items: FetchedResults<Item>
-    @Binding var needUpdateView: Bool
-
-    var body: some View {
-        GeometryReader { geometry in
-            HStack {
-                Spacer()
-                VStack {
-                    Spacer()
-
-                    Button {
-                        //
-                    } label: {
-                        Label("How to use the app", systemImage: "info.circle")
-                    }
-                    .buttonStyle(NeuButtonStyle(width: geometry.size.width / 2, height: 40))
-
-                    Spacer()
-                        .frame(height: 16)
-
-                    Text(getHint())
-
-                    if !items.filter({ $0.isReadyToRepeat }).isEmpty {
-                        Button {
-                            needUpdateView = true
-                        } label: {
-                            Label("Start again", systemImage: "repeat.circle")
-                        }
-                        .buttonStyle(NeuButtonStyle(width: geometry.size.width / 2, height: 40))
-                    }
-                    Spacer()
-                }
-                Spacer()
-            }
-            .onAppear {
-                items.forEach { $0.setReadyToRepeat() }
-                try? viewContext.save()
-            }
-        }
+final class InfoViewModel: ObservableObject {
+    @Published var isReadyToRepeat = false
+    
+    init() {
+        isReadyToRepeat = !CardService.shared.cards
+            .filter { $0.isReadyToRepeat }
+            .isEmpty
     }
     
     func getHint() -> String {
-        let readyToRepeatItems = items.filter { $0.isReadyToRepeat }
+        let cards = CardService.shared.cards
+        let readyToRepeatCards = cards.filter { $0.isReadyToRepeat }
         
-        if items.isEmpty {
+        if cards.isEmpty {
             return "Add your first card"
-        } else if readyToRepeatItems.isEmpty {
+        } else if readyToRepeatCards.isEmpty {
             return "That's it for today, but you can add new cards"
         }
         
         return ""
     }
+    
+}
+
+struct InfoView: View {
+    @StateObject var viewModel = InfoViewModel()
+    @Binding var showConfetti: Bool
+    var onAction: (() -> Void)?
+
+    var body: some View {
+        ZStack {
+            ConfettiView(isShown: $showConfetti, timeInS: 4)
+            VStack {
+                Button {
+                    
+                } label: {
+                    Label("How to use the app", systemImage: "info.circle")
+                }
+                .buttonStyle(NeuButtonStyle(
+                    width: SizeConstants.buttonWith,
+                    height: SizeConstants.buttonHeigh))
+                Spacer()
+                    .frame(height: 16)
+                
+                Text(viewModel.getHint())
+                
+                if viewModel.isReadyToRepeat {
+                    Button {
+                        onAction?()
+                    } label: {
+                        Label("Start again", systemImage: "repeat.circle")
+                    }
+                    .buttonStyle(NeuButtonStyle(
+                        width: SizeConstants.buttonWith,
+                        height: SizeConstants.buttonHeigh))
+                }
+            }
+            
+        }
+    }
+    
 }
 
 #Preview {
-    InfoView(needUpdateView: .constant(true))
+    InfoView(showConfetti: .constant(true))
 }

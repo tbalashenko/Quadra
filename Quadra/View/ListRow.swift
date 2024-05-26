@@ -7,15 +7,23 @@
 
 import SwiftUI
 
+final class ListRowViewModel: ObservableObject {
+    @Published var card: Card
+    
+    init(card: Card) {
+        self.card = card
+    }
+}
+
 struct ListRow: View {
-    @ObservedObject var item: Item
+    @StateObject var viewModel: ListRowViewModel
     
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
-            Text(AttributedString(item.phraseToRemember))
+            Text(AttributedString(viewModel.card.phraseToRemember))
                 .padding()
             Spacer()
-            if let data = item.image,
+            if let data = viewModel.card.image,
                let uiImage = UIImage(data: data) {
                 Image(uiImage: uiImage)
                     .resizable()

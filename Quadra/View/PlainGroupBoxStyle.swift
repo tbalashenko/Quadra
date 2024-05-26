@@ -14,6 +14,5 @@ struct PlainGroupBoxStyle: GroupBoxStyle {
                 .bold()
             configuration.content
         }
-        .padding(.horizontal, 16)
     }
 }

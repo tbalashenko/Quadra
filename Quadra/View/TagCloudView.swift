@@ -17,8 +17,6 @@ struct TagCloudItem: TagCloudViewItem {
     var color: String
 }
 
-extension ItemSource: TagCloudViewItem { }
-
 struct TagCloudView: View {
     var max: Int?
     var items: [TagCloudViewItem]

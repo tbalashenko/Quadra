@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum HighliterPalette: Int, CaseIterable {
+enum HighlighterPalette: Int, CaseIterable {
     case pale = 0, bright
     
     var title: String {

@@ -11,7 +11,7 @@ struct HighlightableTextView: View {
     @State private var dynamicHeight: CGFloat = 100
     @State private var showingPlaceholder = true
     @Binding var text: AttributedString
-    let palette: HighliterPalette
+    let palette = SettingsManager.shared.highliterPalette
     
     var body: some View {
         HStack(spacing: 8) {
@@ -53,9 +53,9 @@ fileprivate struct UITextViewRepresentable: UIViewRepresentable {
     @Binding var text: AttributedString
     @Binding var calculatedHeight: CGFloat
     let textView = HighlightableUITextView()
-    let pallete: HighliterPalette
+    let pallete: HighlighterPalette
     
-    init(text: Binding<AttributedString>, pallete: HighliterPalette, calculatedHeight: Binding<CGFloat>) {
+    init(text: Binding<AttributedString>, pallete: HighlighterPalette, calculatedHeight: Binding<CGFloat>) {
         self._text = text
         self._calculatedHeight = calculatedHeight
         textView.palette = pallete
@@ -107,9 +107,9 @@ fileprivate struct UITextViewRepresentable: UIViewRepresentable {
 }
 
 fileprivate class HighlightableUITextView: UITextView {
-    var palette: HighliterPalette
+    var palette: HighlighterPalette
     
-    init(palette: HighliterPalette = .pale) {
+    init(palette: HighlighterPalette = .pale) {
         self.palette = palette
         super.init(frame: .zero, textContainer: nil)
         self.backgroundColor = .clear

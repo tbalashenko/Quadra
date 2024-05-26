@@ -10,11 +10,11 @@ import SwiftUI
 struct FullImageView: View {
     @Environment(\.dismiss) var dismiss
     @GestureState private var dragOffset: CGSize = .zero
-    let image: UIImage
+    let image: Image
     
     var body: some View {
         ZStack {
-            Image(uiImage: image)
+            image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .edgesIgnoringSafeArea(.all)
@@ -41,5 +41,5 @@ struct FullImageView: View {
 }
 
 #Preview {
-    FullImageView(image: UIImage(named: "test")!)
+    FullImageView(image: Image("test"))
 }

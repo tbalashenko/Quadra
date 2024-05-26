@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="23C64" minimumToolsVersion="Xcode 15.0" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Item" representedClassName="Item" syncable="YES">
+    <entity name="Card" representedClassName="Card" syncable="YES">
         <attribute name="additionTime" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="image" optional="YES" attributeType="Binary" valueTransformerName="ImageTransformer" customClassName="NSImage"/>
@@ -16,20 +16,20 @@
         <attribute name="status" attributeType="Transformable" valueTransformerName="StatusTransformer" customClassName=".Status"/>
         <attribute name="transcription" optional="YES" attributeType="String"/>
         <attribute name="translation" optional="YES" attributeType="Transformable" valueTransformerName="AttributedStringTransformer" customClassName="NSAttributedString"/>
-        <relationship name="archiveTag" maxCount="1" deletionRule="Nullify" destinationEntity="ItemArchiveTag" inverseName="items" inverseEntity="ItemArchiveTag"/>
-        <relationship name="sources" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ItemSource" inverseName="items" inverseEntity="ItemSource"/>
+        <relationship name="archiveTag" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CardArchiveTag" inverseName="cards" inverseEntity="CardArchiveTag"/>
+        <relationship name="sources" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CardSource" inverseName="cards" inverseEntity="CardSource"/>
     </entity>
-    <entity name="ItemArchiveTag" representedClassName="ItemArchiveTag" syncable="YES">
+    <entity name="CardArchiveTag" representedClassName="CardArchiveTag" syncable="YES">
         <attribute name="color" attributeType="String"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String"/>
-        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="archiveTag" inverseEntity="Item"/>
+        <relationship name="cards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Card" inverseName="archiveTag" inverseEntity="Card"/>
     </entity>
-    <entity name="ItemSource" representedClassName="ItemSource" syncable="YES">
+    <entity name="CardSource" representedClassName="CardSource" syncable="YES">
         <attribute name="color" attributeType="String"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String"/>
-        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="sources" inverseEntity="Item"/>
+        <relationship name="cards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Card" inverseName="sources" inverseEntity="Card"/>
     </entity>
     <entity name="StatData" representedClassName="StatData" syncable="YES">
         <attribute name="addedItemsCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>

@@ -9,43 +9,168 @@ import SwiftUI
 import PhotosUI
 import CoreData
 
-struct SetupCardView: View {
-    enum SetupCardViewMode {
-        case create, edit
+final class SetupCardViewModel: ObservableObject {
+    @Published var cardModel: CardModel
+    @Published var filteredSources = [CardSource]()
+    @Published var selectedSources = Set<CardSource>() {
+        didSet {
+            filterSources()
+        }
+    }
+    @Published var phraseToRemember = AttributedString()
+    @Published var translation = AttributedString()
+    @Published var transcription = ""
+    @Published var newSourceText = "" {
+        didSet {
+            filterSources()
+        }
     }
     
-    @EnvironmentObject var dataController: DataController
-    @EnvironmentObject var settingsManager: SettingsManager
-    @Environment(\.managedObjectContext) var viewContext
-    @FetchRequest(sortDescriptors: []) var items: FetchedResults<Item>
-    @FetchRequest(sortDescriptors: []) var sources: FetchedResults<ItemSource>
-    @FetchRequest(sortDescriptors: []) var archiveTags: FetchedResults<ItemArchiveTag>
-    @FetchRequest(sortDescriptors: []) var statData: FetchedResults<StatData>
+    var mode: SetupCardViewMode
+    let sourceService = CardSourceService.shared
     
-    var setupCardViewMode: SetupCardViewMode
-    var item: Item?
+    //private var cards = [Card]()
+    private var sources = [CardSource]()
+    private var archiveTags = [CardArchiveTag]()
+    private var statData = [StatData]()
+    
+    init(cardModel: CardModel, mode: SetupCardViewMode) {
+        self.mode = mode
+        self.cardModel = cardModel
+        
+        //fetchCards()
+        fetchSources()
+        fetchStatData()
+        fetchArchiveTags()
+        filteredSources = sources
+        phraseToRemember = AttributedString(cardModel.card.phraseToRemember)
+        translation = AttributedString(cardModel.card.translation ?? NSAttributedString(string: ""))
+        transcription = cardModel.card.transcription ?? ""
+        if let sources = cardModel.card.sources?.allObjects as? [CardSource] {
+            selectedSources = Set(sources)
+        }
+        filterSources()
+    }
+    
+//    func fetchCards() {
+//        do {
+//            cards = try CardService.shared.fetchCards()
+//        } catch {
+//            print("Error fetching cards: \(error.localizedDescription)")
+//        }
+//    }
+    
+    func fetchSources() {
+        do {
+            sources = try sourceService.fetchSources()
+        } catch {
+            print("Failed to fetch sources: \(error.localizedDescription)")
+        }
+    }
+    
+    func fetchStatData() {
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
+        do {
+            statData = try StatDataService.shared.fetchStatData(sortDescriptors: [sortDescriptor])
+        } catch {
+            print("Error fetching statData: \(error.localizedDescription)")
+        }
+    }
+    
+    func fetchArchiveTags() {
+        do {
+            archiveTags = try ArchiveTagService.shared.fetchArchiveTags()
+        } catch {
+            print("Error fetching archive tags: \(error.localizedDescription)")
+        }
+    }
+    
+    @MainActor 
+    func saveCard(image: Image?) {
+        let image = image?.convert(scale: SettingsManager.shared.imageScale)
+        
+        do {
+            let card = try CardService.shared.editCard(
+                card: cardModel.card,
+                phraseToRemember: NSAttributedString(phraseToRemember),
+                translation: NSAttributedString(translation),
+                transcription: transcription,
+                imageData: image?.pngData(),
+                sources: Array(selectedSources)
+            )
+        } catch {
+            print("Error editing card: \(error.localizedDescription)")
+        }
+        StatDataService.shared.incrementAddedItemsCounter()
+    }
+    
+    func saveSource(color: Color) {
+        let hashTagTitle = "#" + newSourceText.replacingOccurrences(of: "#", with: "")
+        
+        do {
+            let source = try sourceService.saveSource(title: hashTagTitle, color: color.toHex())
+            selectedSources.insert(source)
+            newSourceText = ""
+        } catch {
+            print("Error saving source: \(error.localizedDescription)")
+        }
+    }
+    
+    func filterSources() {
+        let selectedSourceIDs = Set(selectedSources.map { $0.id })
+        if newSourceText.isEmpty {
+            filteredSources = Array(sources)
+                .filter { !selectedSourceIDs.contains($0.id) }
+        } else {
+            filteredSources = Array(sources)
+                .filter { $0.title.localizedCaseInsensitiveContains(newSourceText) }
+                .filter { !selectedSourceIDs.contains($0.id) }
+        }
+    }
+    
+    func addToSelectedSources(sourceIndex: Int) {
+        selectedSources.insert(filteredSources[sourceIndex])
+    }
+    
+    func deleteCard() {
+        do {
+            try CardService.shared.delete(card: cardModel.card)
+        } catch {
+            print("Error deleting card: \(error.localizedDescription)")
+        }
+    }
+}
+
+enum SetupCardViewMode {
+    case create, edit
+    
+    var navigationTitle: String {
+        switch self {
+            case .create:
+                return "Add a new card"
+            case .edit:
+                return "Edit your card"
+        }
+    }
+}
+
+struct SetupCardView: View {
+    @StateObject var viewModel: SetupCardViewModel
+    @Binding var showSetupCardView: Bool
+    let settingsManager = SettingsManager.shared
     
     @State private var totalHeight: CGFloat = CGFloat.infinity
-    @State var filteredSources = [ItemSource]()
     @State var image: Image?
-    @State var phraseToRemember: AttributedString = ""
-    @State var translation: AttributedString = ""
-    @State var transcription = ""
-    @State var selectedSources = Set<ItemSource>()
-    @State var newSourceText = ""
     @State var sourceColor = Color.morningBlue
-    @Binding var showSetupCardView: Bool
-    @State private var selectedSourceIndex = 0
     
     var body: some View {
         GeometryReader { geometry in
             List {
-                PhotoPickerView(
-                    ratio: settingsManager.aspectRatio.ratio,
-                    image: $image)
-                .frame(height: geometry.size.width * settingsManager.aspectRatio.ratio)
-                .padding(.horizontal)
-                .styleListSection()
+                PhotoPickerView(image: $image)
+                    .styleListSection()
+                    .frame(
+                        width: geometry.size.width * 0.9,
+                        height: geometry.size.width * 0.9 * settingsManager.aspectRatio.ratio)
                 
                 phraseSection()
                 sourcesSection(geometry: geometry)
@@ -54,25 +179,23 @@ struct SetupCardView: View {
             .scrollContentBackground(.hidden)
             .background(Color.element)
             .onAppear {
-                filteredSources = Array(sources)
-                
-                guard let item = item else { return }
-                
-                setup(from: item)
+                setup()
             }
-            .navigationTitle(setupCardViewMode == .create ? "Add a new card" : "Edit your card")
+            .navigationTitle(viewModel.mode.navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
                         hideKeyboard()
-                        save()
+                        viewModel.saveCard(image: image)
+                        showSetupCardView = false
                     }
-                    .disabled(phraseToRemember.characters.isEmpty)
+                    .disabled(viewModel.phraseToRemember.characters.isEmpty)
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         showSetupCardView = false
+                        viewModel.deleteCard()
                     }
                 }
             }
@@ -82,17 +205,13 @@ struct SetupCardView: View {
     @ViewBuilder
     private func phraseSection() -> some View {
         GroupBox("Phrase to remember*") {
-            HighlightableTextView(
-                text: $phraseToRemember,
-                palette: settingsManager.highliterPalette)
+            HighlightableTextView(text: $viewModel.phraseToRemember)
         }
         .styleListSection()
         .groupBoxStyle(PlainGroupBoxStyle())
         
         GroupBox("Translation") {
-            HighlightableTextView(
-                text: $translation,
-                palette: settingsManager.highliterPalette)
+            HighlightableTextView(text: $viewModel.translation)
         }
         .styleListSection()
         .groupBoxStyle(PlainGroupBoxStyle())
@@ -100,9 +219,9 @@ struct SetupCardView: View {
         GroupBox("Transcription") {
             TextField(
                 "",
-                text: $transcription,
+                text: $viewModel.transcription,
                 axis: .vertical)
-            .textFieldStyle(NeuTextFieldStyle(text: $transcription))
+            .textFieldStyle(NeuTextFieldStyle(text: $viewModel.transcription))
         }
         .styleListSection()
         .groupBoxStyle(PlainGroupBoxStyle())
@@ -110,14 +229,14 @@ struct SetupCardView: View {
     
     private func sourcesSection(geometry: GeometryProxy) -> some View {
         GroupBox("Sources") {
-            if !selectedSources.isEmpty {
+            if !viewModel.selectedSources.isEmpty {
                 Text("Selected sources:")
                     .foregroundStyle(Color.gray)
                 TagCloudView(
-                    items: selectedSources.sorted(),
+                    items: viewModel.selectedSources.sorted(),
                     geometry: geometry,
                     totalHeight: $totalHeight,
-                    action: { selectedSources.remove(selectedSources.sorted()[$0]) })
+                    action: { viewModel.selectedSources.remove(viewModel.selectedSources.sorted()[$0]) })
                 Text("Tap to remove")
                     .font(.footnote)
                     .foregroundStyle(Color.gray)
@@ -127,45 +246,29 @@ struct SetupCardView: View {
                     .frame(width: 22, height: 22)
                     .northWestShadow()
                 
-                TextField("Add a new source", text: $newSourceText)
-                    .textFieldStyle(NeuTextFieldStyle(text: $newSourceText))
+                TextField("Add a new source", text: $viewModel.newSourceText)
+                    .textFieldStyle(NeuTextFieldStyle(text: $viewModel.newSourceText))
                     .padding(.horizontal)
-                    .onChange(of: newSourceText) { _, _ in
-                        let selectedSourceIDs = Set(selectedSources.map { $0.id })
-                        if newSourceText.isEmpty {
-                            filteredSources = Array(sources)
-                                .filter { !selectedSourceIDs.contains($0.id) }
-                        } else {
-                            filteredSources = Array(sources)
-                                .filter { $0.title.localizedCaseInsensitiveContains(newSourceText) }
-                                .filter { !selectedSourceIDs.contains($0.id) }
-                        }
-                    }
-                
                 Button(action: {
-                    if !newSourceText.isEmpty {
+                    if !viewModel.newSourceText.isEmpty {
                         hideKeyboard()
-                        saveSource()
+                        viewModel.saveSource(color: sourceColor)
+                        sourceColor = .morningBlue
                     }
                 }, label: {
                     Image(systemName: "plus")
                 })
                 .buttonStyle(NeuButtonStyle(width: 38, height: 38))
-                .disabled(newSourceText.isEmpty)
-                .onChange(of: selectedSources) { _, _ in
-                    let selectedSourceIDs = Set(selectedSources.map { $0.id })
-                    filteredSources = Array(sources)
-                        .filter { !selectedSourceIDs.contains($0.id) }
-                }
+                .disabled(viewModel.newSourceText.isEmpty)
             }
             
             TagCloudView(
                 max: 10,
-                items: filteredSources.sorted(),
+                items: viewModel.filteredSources.sorted(),
                 geometry: geometry,
                 totalHeight: $totalHeight,
                 action: {
-                    selectedSources.insert(filteredSources.sorted()[$0])
+                    viewModel.addToSelectedSources(sourceIndex: $0)
                     hideKeyboard()
                 })
         }
@@ -173,112 +276,13 @@ struct SetupCardView: View {
         .groupBoxStyle(PlainGroupBoxStyle())
     }
     
-    private func setup(from item: Item) {
-        if let imageData = item.image,
+    private func setup() {
+        if let imageData = viewModel.cardModel.card.image,
            let uiImage = UIImage(data: imageData) {
             image = Image(uiImage: uiImage)
         }
-        phraseToRemember = AttributedString(item.phraseToRemember)
-        if let translation = item.translation {
-            self.translation = AttributedString(translation)
-        }
-        if let transcription = item.transcription {
-            self.transcription = transcription
-        }
-        
-        if let sources = item.sources?.allObjects as? [ItemSource] {
-            selectedSources = Set(sources)
-        }
-        
-        let selectedSourceIDs = Set(selectedSources.map { $0.id })
-        filteredSources = Array(sources)
-            .filter { !selectedSourceIDs.contains($0.id) }
-    }
-    
-    func save() {
-        let image = image?.convert(scale: settingsManager.imageScale)
-        
-        switch setupCardViewMode {
-            case .create:
-                let item = Item(context: viewContext)
-                
-                item.phraseToRemember = NSAttributedString(phraseToRemember)
-                item.translation = NSAttributedString(translation)
-                item.transcription = transcription
-                item.status = Status.input
-                item.image = image?.pngData()
-                item.id = UUID()
-                item.additionTime = Date()
-                
-                saveArchiveTag(to: item)
-                saveSources(to: item)
-                saveStatData()
-            case .edit:
-                guard let item = item else { return }
-                
-                item.phraseToRemember = NSAttributedString(phraseToRemember)
-                item.translation = NSAttributedString(translation)
-                item.transcription = transcription
-                item.image = image?.pngData()
-                
-                item.sources = nil
-                
-                saveSources(to: item)
-        }
-        
-        try? viewContext.save()
-        
-        showSetupCardView = false
-    }
-    
-    func saveSources(to item: Item) {
-        sources.forEach {
-            item.addToSources($0)
-            $0.addToItems(item)
-        }
-    }
-    
-    func saveSource() {
-        let source = ItemSource(context: viewContext)
-        source.id = UUID()
-        source.color = sourceColor.toHex()
-        source.title = "#" + newSourceText
-        
-        try? viewContext.save()
-        
-        selectedSources.insert(source)
-        newSourceText = ""
-        sourceColor = .morningBlue
-    }
-    
-    func saveArchiveTag(to item: Item) {
-        if let tag = archiveTags.first(where: { $0.title == Date().prepareTag() }) {
-            tag.addToItems(item)
-        } else {
-            let tag = ItemArchiveTag(context: viewContext)
-            tag.id = UUID()
-            tag.color = ItemArchiveTag.getColor(for: Date())
-            tag.title = Date().prepareTag()
-            tag.items = NSSet(array: [item])
-        }
-    }
-    
-    func saveStatData() {
-        let currentDate = Date().formattedForStats()
-        
-        if let statData = statData.first(where: { $0.date == currentDate }) {
-            statData.addedItemsCounter += 1
-            statData.totalNumberOfCards = items.count + 1
-        } else {
-            let statData = StatData(context: viewContext)
-            statData.date = currentDate ?? Date()
-            statData.addedItemsCounter += 1
-            statData.totalNumberOfCards = items.count + 1
-        }
     }
 }
-
-
 
 //#Preview {
 //    CreateCardView(showSetupCardView: .constant(true))

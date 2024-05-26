@@ -9,7 +9,6 @@ import SwiftUI
 import PhotosUI
 
 struct PhotoPickerView: View {
-    var ratio: CGFloat
     @State var photosPickerItem: PhotosPickerItem?
     @Binding var image: Image?
     
@@ -66,7 +65,5 @@ struct PhotoPickerView: View {
 }
 
 #Preview {
-        PhotoPickerView(
-            ratio: AspectRatio.sixteenToNine.ratio,
-            image: .constant(nil))
+        PhotoPickerView(image: .constant(nil))
 }
