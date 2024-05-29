@@ -65,5 +65,5 @@ struct PhotoPickerView: View {
 }
 
 #Preview {
-        PhotoPickerView(image: .constant(nil))
+    PhotoPickerView(image: .constant(nil))
 }

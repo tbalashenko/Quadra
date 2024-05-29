@@ -8,21 +8,17 @@
 import SwiftUI
 
 struct TextToSpeechPlayView: View {
-    @StateObject var viewModel = TextToSpeechViewModel()
-    var color: Color?
-    var text: String
-    var voice: Voice?
+    @StateObject var viewModel: TextToSpeechViewModel
     var buttonSize: TextToSpeechPlayView.size = .small
-    let settingsManager = SettingsManager.shared
     
     var body: some View {
         Button(action: {
-            viewModel.speak(text, voice: voice ?? settingsManager.voice)
+            viewModel.speak()
         }, label: {
             Image(systemName: viewModel.isSpeaking ? "stop.fill" : "play.fill")
                 .resizable()
                 .frame(width: buttonSize.width, height: buttonSize.height)
-                .foregroundStyle(color ?? Color.accentColor)
+                .foregroundStyle(Color.accentColor)
         })
     }
 }
@@ -52,5 +48,5 @@ extension TextToSpeechPlayView {
 }
 
 #Preview {
-    TextToSpeechPlayView(text: "Long, Long text")
+    TextToSpeechPlayView(viewModel: TextToSpeechViewModel(text: "Long, Long text"))
 }

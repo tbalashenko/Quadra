@@ -51,7 +51,7 @@ struct SkeletonCardView: View {
             }
             .background(Color.element)
             .clipShape(RoundedRectangle(cornerRadius: 8))
-            .northWestShadow()
+            .southEastShadow()
         }
     }
 }

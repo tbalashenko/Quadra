@@ -8,13 +8,20 @@
 import Foundation
 
 struct Voice {
+    var id: UUID = UUID()
     var code: String
     var language: String
     var name: String
     var identifier: String
     var samplePhrase: String
     
-    init(code: String, language: String, name: String, identifier: String, samplePhrase: String) {
+    init(
+        code: String,
+        language: String,
+        name: String,
+        identifier: String,
+        samplePhrase: String
+    ) {
         self.code = code
         self.language = language
         self.name = name
@@ -23,114 +30,13 @@ struct Voice {
     }
     
     init(identifier: String) {
-        switch identifier {
-            case Voice.chech.identifier:
-                self = .chech
-            case Voice.danish.identifier:
-                self = .danish
-            case Voice.greek.identifier:
-                self = .greek
-            case Voice.german0.identifier:
-                self = .german0
-            case Voice.german1.identifier:
-                self = .german1
-            case Voice.german2.identifier:
-                self = .german2
-            case Voice.englishAu0.identifier:
-                self = .englishAu0
-            case Voice.englishAu1.identifier:
-                self = .englishAu1
-            case Voice.englishAu2.identifier:
-                self = .englishAu2
-            case Voice.englishGb0.identifier:
-                self = .englishGb0
-            case Voice.englishGb1.identifier:
-                self = .englishGb1
-            case Voice.englishGb2.identifier:
-                self = .englishGb2
-            case Voice.englishIr.identifier:
-                self = .englishIr
-            case Voice.englishUs0.identifier:
-                self = .englishUs0
-            case Voice.englishUs1.identifier:
-                self = .englishUs1
-            case Voice.englishUs2.identifier:
-                self = .englishUs2
-            case Voice.englishUs3.identifier:
-                self = .englishUs3
-            case Voice.spanishSp.identifier:
-                self = .spanishSp
-            case Voice.spanishMx.identifier:
-                self = .spanishMx
-            case Voice.finnish.identifier:
-                self = .finnish
-            case Voice.frenchCa.identifier:
-                self = .frenchCa
-            case Voice.frenchFr0.identifier:
-                self = .frenchFr0
-            case Voice.frenchFr1.identifier:
-                self = .frenchFr1
-            case Voice.frenchFr2.identifier:
-                self = .frenchFr2
-            case Voice.hebrew.identifier:
-                self = .hebrew
-            case Voice.hindi.identifier:
-                self = .hindi
-            case Voice.hungarian.identifier:
-                self = .hungarian
-            case Voice.indonesian.identifier:
-                self = .indonesian
-            case Voice.italian.identifier:
-                self = .italian
-            case Voice.japanese0.identifier:
-                self = .japanese0
-            case Voice.japanese1.identifier:
-                self = .japanese1
-            case Voice.japanese2.identifier:
-                self = .japanese2
-            case Voice.korean.identifier:
-                self = .korean
-            case Voice.dutchBe.identifier:
-                self = .dutchBe
-            case Voice.dutchNl.identifier:
-                self = .dutchNl
-            case Voice.norwegian.identifier:
-                self = .norwegian
-            case Voice.polish.identifier:
-                self = .polish
-            case Voice.portugueseBr.identifier:
-                self = .portugueseBr
-            case Voice.portuguesePt.identifier:
-                self = .portuguesePt
-            case Voice.romanian.identifier:
-                self = .romanian
-            case Voice.russian.identifier:
-                self = .russian
-            case Voice.slovak.identifier:
-                self = .slovak
-            case Voice.swedish.identifier:
-                self = .swedish
-            case Voice.thai.identifier:
-                self = .thai
-            case Voice.turkish.identifier:
-                self = .turkish
-            case Voice.chineseCn0.identifier:
-                self = .chineseCn0
-            case Voice.chineseCn1.identifier:
-                self = .chineseCn1
-            case Voice.chineseCn2.identifier:
-                self = .chineseCn2
-            case Voice.chineseHk.identifier:
-                self = .chineseHk
-            case Voice.chineseTw.identifier:
-                self = .chineseTw
-            default:
-                self = .englishUs0
+        if let voice = Voice.voiceDictionary[identifier] {
+            self = voice
+        } else {
+            self = .englishUs0
         }
     }
 }
-
-extension Voice: Hashable { }
 
 extension Voice {
     static let allVoices: [Voice] = [
@@ -186,6 +92,10 @@ extension Voice {
         .chineseTw
     ]
     
+    static let voiceDictionary: [String: Voice] = Dictionary(uniqueKeysWithValues: allVoices.map { ($0.identifier, $0) })
+}
+
+extension Voice {
     static let chech = Voice(code: "cs-CZ", language: "Chech", name: "Zuzana", identifier: "com.apple.ttsbundle.Zuzana-compact", samplePhrase: "Ahoj, Světe!")
     static let danish = Voice(code: "da-DK", language: "Danish", name: "Sara", identifier: "com.apple.ttsbundle.Sara-compact", samplePhrase: "Hej, Verden!")
     static let greek = Voice(code: "el-GR", language: "Greek", name: "Melina", identifier: "com.apple.ttsbundle.Melina-compact", samplePhrase: "Γεια σου, κόσμε!")
@@ -193,7 +103,6 @@ extension Voice {
     static let german0 = Voice(code: "de-DE", language: "German", name: "Anna", identifier: "com.apple.ttsbundle.Anna-compact", samplePhrase: "Hallo, Welt!")
     static let german1 = Voice(code: "de-DE", language: "German", name: "Helena", identifier: "com.apple.ttsbundle.siri_female_de-DE_compact", samplePhrase: "Hallo, Welt!")
     static let german2 = Voice(code: "de-DE", language: "German", name: "Martin", identifier: "com.apple.ttsbundle.siri_male_de-DE_compact", samplePhrase: "Hallo, Welt!")
-    
     
     static let englishAu0 = Voice(code: "en-AU", language: "English (Australia)", name: "Catherine", identifier: "com.apple.ttsbundle.siri_female_en-AU_compact", samplePhrase: "Hello, World!")
     static let englishAu1 = Voice(code: "en-AU", language: "English (Australia)", name: "Gordon", identifier: "com.apple.ttsbundle.siri_male_en-AU_compact", samplePhrase: "Hello, World!")
@@ -255,3 +164,6 @@ extension Voice {
     static let chineseHk = Voice(code: "zh-HK", language: "Chinese (Hong Kong)", name: "Sin-Ji", identifier: "com.apple.ttsbundle.Sin-Ji-compact", samplePhrase: "你好，世界!")
     static let chineseTw = Voice(code: "zh-TW", language: "Chinese (Taiwan)", name: "Mei-Jia", identifier: "com.apple.ttsbundle.Mei-Jia-compact", samplePhrase: "你好，世界!")
 }
+
+//MARK: - Hashable
+extension Voice: Hashable { }

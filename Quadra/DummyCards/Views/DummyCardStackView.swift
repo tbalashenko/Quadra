@@ -16,7 +16,8 @@ struct DummyCardStackView: View {
                 ForEach(viewModel.cardModels) { model in
                     DummyCardView(
                         viewModel: viewModel,
-                        model: model)
+                        model: model
+                    )
                 }
                 if viewModel.cardModels.isEmpty {
                     Button {
@@ -24,14 +25,18 @@ struct DummyCardStackView: View {
                     } label: {
                         Image(systemName: "repeat.circle")
                             .resizable()
-                            .frame(width: 22, height: 22)
+                            .frame(
+                                width: SizeConstants.buttonImageHeighWidth,
+                                height: SizeConstants.buttonImageHeighWidth
+                            )
                     }
                     .buttonStyle(NeuButtonStyle())
                 }
             }
             .frame(
                 width: geometry.size.width,
-                height: geometry.size.height)
+                height: geometry.size.height
+            )
         }
     }
 }

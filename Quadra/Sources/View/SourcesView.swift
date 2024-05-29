@@ -19,7 +19,6 @@ struct SourcesView: View {
         }
         .listStyle(.plain)
         .navigationTitle("Your Sources")
-        .onAppear { viewModel.fetchSources() }
         .scrollContentBackground(.hidden)
         .background(Color.element)
     }

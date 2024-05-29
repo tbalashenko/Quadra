@@ -15,4 +15,32 @@ struct MockData {
         DummyItem(title: "Oh, never mind", image: Image("oh-never-mind")),
         DummyItem(title: "That sounds great", image: Image("that-sounds-great"))
     ]
+    
+    static let tagCloudItems: [TagCloudItem] = [
+        TagCloudItem(
+            isSelected: true,
+            id: UUID(),
+            title: "Test",
+            color: Color.green.toHex()),
+        TagCloudItem(
+            isSelected: true,
+            id: UUID(),
+            title: "Testhfiuewhfiueh",
+            color: Color.green.toHex()),
+        TagCloudItem(
+            isSelected: true,
+            id: UUID(),
+            title: "Testofjeiuhfj",
+            color: Color.green.toHex()),
+        TagCloudItem(
+            isSelected: true,
+            id: UUID(),
+            title: "Testojhuhhuuuuuu",
+            color: Color.green.toHex()),
+        TagCloudItem(
+            isSelected: true,
+            id: UUID(),
+            title: "Testoheuiwhfiuehf",
+            color: Color.green.toHex())
+    ]
 }

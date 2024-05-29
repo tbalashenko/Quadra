@@ -21,9 +21,11 @@ struct VoicePickerView: View {
             HStack {
                 Text(viewModel.selectedVoice.samplePhrase)
                 TextToSpeechPlayView(
-                    text: viewModel.selectedVoice.samplePhrase,
-                    voice: viewModel.selectedVoice,
-                    buttonSize: .small)
+                    viewModel: TextToSpeechViewModel(
+                        text: viewModel.selectedVoice.samplePhrase,
+                        voice: viewModel.selectedVoice
+                    )
+                )
             }
         }
     }

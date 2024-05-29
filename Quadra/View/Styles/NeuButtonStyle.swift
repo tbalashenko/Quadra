@@ -14,8 +14,8 @@ struct NeuButtonStyle: ButtonStyle {
         case roundedRectangle
     }
     
-    var width: CGFloat = 22
-    var height: CGFloat = 22
+    var width: CGFloat = SizeConstants.buttonImageHeighWidth
+    var height: CGFloat = SizeConstants.buttonImageHeighWidth
     var color = Color.element
     
     var form: NeuButtonStyleForm = .capsule

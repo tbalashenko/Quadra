@@ -8,13 +8,18 @@
 import SwiftUI
 
 struct SizeConstants {
+    //MARK: - Buttons
+    static let buttonHeigh: CGFloat = 40.0
     static var buttonWith: CGFloat {
         UIScreen.main.bounds.width * 0.6
     }
+    static let buttonImageHeighWidth: CGFloat = 22.0
     
-    static var buttonHeigh: CGFloat {
-        return 40
-    }
+    
+    
+    //MARK: - Cards
+    
+    static let cornerRadius: CGFloat = 8
     
     static var cardWith: CGFloat {
         UIScreen.main.bounds.width * 0.8
@@ -24,11 +29,11 @@ struct SizeConstants {
         UIScreen.main.bounds.height * 0.7
     }
     
-    static var screenCutOff: CGFloat {
-        cardWith * 0.8
+    static var photoPickerWidth: CGFloat {
+        UIScreen.main.bounds.width * 0.9
     }
     
-    static var cornerRadius: CGFloat {
-        return 8
+    static var screenCutOff: CGFloat {
+        cardWith * 0.8
     }
 }

@@ -20,11 +20,16 @@ struct MoveToButton: View {
                     HStack {
                         Text("→").bold()
                         TagView(
-                            text: model.card.getNewStatus.title,
-                            backgroundColor: Color(hex: model.card.getNewStatus.color),
-                            withShadow: false) {
-                                viewModel.removeCard(model: model, changeStatus: true)
-                            }
+                            item: TagCloudItem(
+                                isSelected: true,
+                                id: UUID(),
+                                title: model.card.getNewStatus.title,
+                                color: model.card.getNewStatus.color,
+                                action: { viewModel.removeCard(model: model, changeStatus: true) }
+                            ),
+                            withShadow: false,
+                            isSelectable: false
+                        )
                     }
                 }
                 .padding(4)

@@ -41,12 +41,13 @@ class StatViewModel: ObservableObject {
         for index in stride(from: 0, to: 366, by: 2) {
             let date = Calendar.current.date(byAdding: .day, value: index, to: fromDate) ?? Date()
             let string = "Test" + String("\(date)")
-            let phraseToRemember = NSAttributedString(string: string)
+            let phraseToRemember = AttributedString(stringLiteral: string)
             
             do {
-                _ = try CardService.shared.saveEmptyCard(
+                try CardService.shared.saveCard(
                     phraseToRemember: phraseToRemember,
-                    additionDate: date)
+                    additionDate: date
+                )
             } catch {
                 print("Error saving item: \(error.localizedDescription)")
             }

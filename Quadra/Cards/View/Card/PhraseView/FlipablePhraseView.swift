@@ -13,7 +13,7 @@ struct FlipablePhraseView: View {
     var body: some View {
         if viewModel.showPhraseView {
             HStack(spacing: 12) {
-                TextToSpeechPlayView(text: viewModel.textToSpeech)
+                TextToSpeechPlayView(viewModel: TextToSpeechViewModel(text: viewModel.textToSpeech))
                 Text(viewModel.phrase)
                     .font(.title2)
                     .bold()

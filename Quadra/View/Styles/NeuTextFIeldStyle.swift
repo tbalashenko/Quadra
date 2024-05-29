@@ -22,7 +22,7 @@ struct NeuTextFieldStyle: TextFieldStyle {
                             .resizable()
                             .foregroundColor(.secondary)
                     }
-                    .buttonStyle(NeuButtonStyle(width: 22, height: 22))
+                    .buttonStyle(NeuButtonStyle())
                 }
                 .padding(.horizontal, 4)
                 .zIndex(1)

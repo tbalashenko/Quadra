@@ -42,19 +42,32 @@ class CardService: ObservableObject {
             throw DataServiceError.fetchFailed(description: "Failed to fetch cards: \(error.localizedDescription)")
         }
     }
-    
-    func saveEmptyCard(
-        phraseToRemember: NSAttributedString = NSAttributedString(string: ""),
-        additionDate: Date = Date()
-    ) throws -> Card {
+
+    func saveCard(
+        phraseToRemember: AttributedString,
+        additionDate: Date = Date(),
+        translation: AttributedString? = nil,
+        transcription: String? = nil,
+        imageData: Data? = nil,
+        sources: [CardSource] = []
+    ) throws {
         let context = dataController.container.viewContext
         let card = Card(context: context)
         
-        card.phraseToRemember = phraseToRemember
+        card.phraseToRemember = NSAttributedString(phraseToRemember)
+        if let translation = translation {
+            card.translation =  NSAttributedString(translation)
+        }
+        card.transcription = transcription
+        card.image = imageData
+        sources.forEach {
+            card.addToSources($0)
+            $0.addToCards(card)
+        }
         card.status = .input
         card.id = UUID()
         card.additionTime = additionDate
-
+        
         var tag: CardArchiveTag? = nil
         
         do {
@@ -71,29 +84,24 @@ class CardService: ObservableObject {
                 tag.addToCards(card)
             }
             
-            do {
-                cards = try fetchCards()
-            } catch {
-                print("Error fetching cards \(error.localizedDescription)")
-            }
-            
-            return card
+            updateCards()
         } catch {
             throw DataServiceError.saveFailed(description: "Failed to save card: \(error.localizedDescription)")
         }
     }
-
     
     func editCard(
         card: Card,
-        phraseToRemember: NSAttributedString,
-        translation: NSAttributedString? = nil,
+        phraseToRemember: AttributedString,
+        translation: AttributedString? = nil,
         transcription: String? = nil,
         imageData: Data? = nil,
         sources: [CardSource]
-    ) throws -> Card {
-        card.phraseToRemember = phraseToRemember
-        card.translation = translation
+    ) throws {
+        card.phraseToRemember = NSAttributedString(phraseToRemember)
+        if let translation = translation {
+            card.translation = NSAttributedString(translation)
+        }
         card.transcription = transcription
         card.image = imageData
         sources.forEach {
@@ -103,14 +111,7 @@ class CardService: ObservableObject {
         
         do {
             try dataController.container.viewContext.save()
-            
-            do {
-                cards = try fetchCards()
-            } catch {
-                print("Error fetching cards \(error.localizedDescription)")
-            }
-            
-            return card
+            updateCards()
         } catch {
             throw DataServiceError.saveFailed(description: "Failed to save card: \(error.localizedDescription)")
         }
@@ -247,6 +248,7 @@ class CardService: ObservableObject {
         
         do {
             try dataController.container.viewContext.save()
+            updateCards()
         } catch {
             throw DataServiceError.saveFailed(description: "Failed to delete card: \(error.localizedDescription)")
         }

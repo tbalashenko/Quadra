@@ -5,36 +5,27 @@
 //  Created by Tatyana Balashenko on 16/04/2024.
 //
 
-import Foundation
 import SwiftUI
 
 extension CardArchiveTag {
     static func getColor(for date: Date) -> String {
-        switch date.currentMonth() {
-            case .january:
-                return Color.Month.january.toHex()
-            case .february:
-                return Color.Month.february.toHex()
-            case .march:
-                return Color.Month.march.toHex()
-            case .april:
-                return Color.Month.april.toHex()
-            case .may:
-                return Color.Month.may.toHex()
-            case .june:
-                return Color.Month.june.toHex()
-            case .july:
-                return Color.Month.july.toHex()
-            case .august:
-                return Color.Month.august.toHex()
-            case .september:
-                return Color.Month.september.toHex()
-            case .october:
-                return Color.Month.october.toHex()
-            case .november:
-                return Color.Month.november.toHex()
-            case .december:
-                return Color.Month.december.toHex()
-        }
+        let monthColors = [
+            Color.Month.january,
+            Color.Month.february,
+            Color.Month.march,
+            Color.Month.april,
+            Color.Month.may,
+            Color.Month.june,
+            Color.Month.july,
+            Color.Month.august,
+            Color.Month.september,
+            Color.Month.october,
+            Color.Month.november,
+            Color.Month.december
+        ]
+        
+        let monthIndex = Calendar.current.component(.month, from: date) - 1
+        return monthColors[monthIndex].toHex()
     }
 }
+

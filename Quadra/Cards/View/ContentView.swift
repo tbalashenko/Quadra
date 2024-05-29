@@ -10,7 +10,7 @@ import CoreData
 import SpriteKit
 
 struct ContentView: View {
-    @StateObject var viewModel =  CardsViewModel()
+    @StateObject var viewModel = CardsViewModel()
     
     @State private var showSetupCardView = false
     
@@ -29,23 +29,25 @@ struct ContentView: View {
                             }
                         }
                     }
-                    .sheet(isPresented: $showSetupCardView, onDismiss: viewModel.updateCards) {
+                    .sheet(isPresented: $showSetupCardView, onDismiss: updateCards) {
                         NavigationStack {
-                            if let model = viewModel.getEmptyCardModel() {
-                                SetupCardView(
-                                    viewModel: SetupCardViewModel(
-                                        cardModel: model,
-                                        mode: .create),
-                                    showSetupCardView: $showSetupCardView)
-                            }
+                            SetupCardView(
+                                viewModel: SetupCardViewModel(mode: .create),
+                                showSetupCardView: $showSetupCardView)
                         }
                     }
-                if viewModel.showInfoView {
+                if !viewModel.isLoading, viewModel.showInfoView {
                     InfoView(showConfetti: $viewModel.showConfetti) {
-                        viewModel.updateCards()
+                       updateCards()
                     }
                 }
             }
+        }
+    }
+    
+    func updateCards() {
+        Task {
+            await viewModel.updateCards()
         }
     }
 }

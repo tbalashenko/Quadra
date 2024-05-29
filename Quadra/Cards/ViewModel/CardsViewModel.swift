@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 final class CardsViewModel: ObservableObject {
     @Published var visibleCardModels = [CardModel]()
     @Published var showConfetti = false
@@ -17,27 +18,36 @@ final class CardsViewModel: ObservableObject {
     var cardModels = [CardModel]()
     let settingsManager = SettingsManager.shared
     let statDataService = StatDataService.shared
+    let cardService = CardService.shared
     
     private let visibleCardCount = 5
     
     init() {
-        updateCards()
+        Task {
+            await self.updateCards()
+        }
     }
     
-    func updateCards() {
+    func updateCards() async {
         isLoading = true
         
-        let filteredCards = CardService.shared.cards
-            .filter { $0.isReadyToRepeat }
-            .map { CardModel(card: $0, mode: .repetition) }
+        await Task.detached {
+            self.cardService.updateCards()
+            
+            let filteredCards = self.cardService.cards
+                .filter { $0.isReadyToRepeat }
+                .map { CardModel(card: $0, mode: .repetition) }
+            
+            await MainActor.run {
+                self.cardModels = filteredCards
+                self.showInfoView = self.cardModels.isEmpty
+                self.loadVisibleCards()
+                self.showConfetti = false
+            }
+        }.value
         
-        DispatchQueue.main.async {
-            self.cardModels = filteredCards
-            self.showInfoView = self.cardModels.isEmpty
-            self.loadVisibleCards()
-            self.isLoading = false
-            self.showConfetti = false
-        }
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        isLoading = false
     }
     
     func loadVisibleCards() {
@@ -63,16 +73,6 @@ final class CardsViewModel: ObservableObject {
         showInfoView = cardModels.isEmpty
         if cardModels.isEmpty {
             CardService.shared.updateCards()
-        }
-    }
-    
-    func getEmptyCardModel() -> CardModel? {
-        do {
-            let card = try CardService.shared.saveEmptyCard()
-            return CardModel(card: card, mode: .repetition)
-        } catch {
-            print("Error saving new card: \(error.localizedDescription)")
-            return nil
         }
     }
 }

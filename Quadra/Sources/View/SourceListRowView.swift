@@ -20,7 +20,10 @@ struct SourceListRowView: View {
                     viewModel.saveChanges()
                 }
             ))
-            .frame(width: 22, height: 22)
+            .frame(
+                width: SizeConstants.buttonImageHeighWidth,
+                height: SizeConstants.buttonImageHeighWidth
+            )
             .northWestShadow()
             
             if isEditing {
@@ -38,7 +41,7 @@ struct SourceListRowView: View {
                             .resizable()
                             .foregroundStyle(viewModel.editableTitle.isEmpty ? Color.Green.isabelline : Color.Green.darkSeaGreen)
                     }
-                    .buttonStyle(NeuButtonStyle(width: 22, height: 22))
+                    .buttonStyle(NeuButtonStyle())
                     .disabled(viewModel.editableTitle.isEmpty)
                     
                     Button {
@@ -48,7 +51,7 @@ struct SourceListRowView: View {
                             .resizable()
                             .foregroundStyle(Color.puce)
                     }
-                    .buttonStyle(NeuButtonStyle(width: 22, height: 22))
+                    .buttonStyle(NeuButtonStyle())
                 }
             } else {
                 Text(viewModel.compoundTitle)

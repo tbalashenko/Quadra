@@ -22,7 +22,10 @@ struct HighlighterPaletteView: View {
             Spacer()
             ForEach(viewModel.highlighterPalette.colors, id: \.self) { color in
                 Image(systemName: "highlighter")
-                    .frame(width: 22, height: 22)
+                    .frame(
+                        width: SizeConstants.buttonImageHeighWidth,
+                        height: SizeConstants.buttonImageHeighWidth
+                    )
                     .foregroundColor(Color(color))
             }
             Spacer()

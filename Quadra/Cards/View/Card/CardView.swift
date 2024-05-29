@@ -47,7 +47,7 @@ struct CardView: View {
             .sheet(isPresented: $showSetupCardView ) {
                 NavigationStack {
                     SetupCardView(
-                        viewModel: SetupCardViewModel(cardModel: model, mode: .edit),
+                        viewModel: SetupCardViewModel(mode: .edit(model: model)),
                         showSetupCardView: $showSetupCardView)
                 }
             }

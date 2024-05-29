@@ -13,7 +13,7 @@ final class AdditionalnfoViewModel: ObservableObject {
         let value: String
     }
     
-    @Published var tags = [TagCloudViewItem]()
+    @Published var tags = [TagCloudItem]()
     @Published var transcripton: String = ""
     @Published var showTranscription: Bool = false
     @Published var additionalInfo = [Info]()
@@ -29,13 +29,33 @@ final class AdditionalnfoViewModel: ObservableObject {
     
     func prepareTags(for card: Card) {
         if card.status.id == 3, let tag = card.archiveTag {
-            tags.append(TagCloudItem(title: tag.title, color: tag.color))
+            let archiveTag = TagCloudItem(
+                isSelected: true,
+                id: card.id,
+                title: tag.title,
+                color: tag.color)
+            
+            tags.append(archiveTag)
         }
         
-        tags.append(TagCloudItem(title: card.status.title, color: card.status.color))
+        let statusTag = TagCloudItem(
+            isSelected: true,
+            id: card.id,
+            title: card.status.title,
+            color: card.status.color)
+        
+        tags.append(statusTag)
         
         if let sources = card.sources?.allObjects as? [CardSource] {
-            tags.append(contentsOf: sources)
+            let sourceTags = sources.map {
+                TagCloudItem(
+                    isSelected: true,
+                    id: $0.id,
+                    title: $0.title,
+                    color: $0.color
+                )
+            }
+            tags.append(contentsOf: sourceTags)
         }
     }
     

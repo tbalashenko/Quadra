@@ -43,8 +43,16 @@ final class FilterViewModel: ObservableObject {
         setFilteredSources()
     }
     
-    func removeFromSelectedSources(index: Int) {
-        selectedSources.remove(at: index)
+    func removeFromSelectedSources(id: UUID) {
+        guard let source = sources.first(where: { $0.id == id }) else { return }
+        
+        selectedSources.removeAll { $0 == source }
+    }
+    
+    func appendSource(id: UUID) {
+        guard let source = sources.first(where: { $0.id == id }) else { return }
+        
+        selectedSources.append(source)
     }
     
     func resetFilter() {
@@ -90,7 +98,7 @@ struct FilterView: View {
                 statusSection()
                 creationDateSection()
                 sourceSection(geometry: geometry)
-                archiveTagsSection(geometry: geometry)
+                //archiveTagsSection(geometry: geometry)
             }
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
@@ -105,12 +113,13 @@ struct FilterView: View {
     private func statusSection() -> some View {
         GroupBox("Status") {
             HStack(spacing: 8) {
-                ForEach(Status.allStatuses, id: \.self) { status in
-                    TagView(text: status.title,
-                            backgroundColor: viewModel.selectedStatuses.contains(status) ? Color(hex: status.color) : .offWhiteGray) {
-                        toggleStatus(status)
-                    }
-                }
+//                ForEach(Status.allStatuses, id: \.self) { status in
+//                    TagView(text: status.title, 
+//                            id: UUID(),
+//                            backgroundColor: viewModel.selectedStatuses.contains(status) ? Color(hex: status.color) : .offWhiteGray) {_ in
+//                        toggleStatus(status)
+//                    }
+//                }
             }
         }
         .styleListSection()
@@ -135,54 +144,53 @@ struct FilterView: View {
         if !viewModel.sources.isEmpty {
             GroupBox("Sources") {
                 if !viewModel.selectedSources.isEmpty {
-                    TagCloudView(items: viewModel.selectedSources,
-                                 geometry: geometry,
-                                 totalHeight: $totalHeight,
-                                 action: { viewModel.removeFromSelectedSources(index: $0)
-                    })
+//                    TagCloudView(totalHeight: $totalHeight, items: viewModel.selectedSources.map { TagCloudItem(id: $0.id, title: $0.title, color: $0.color) },
+//                                 geometry: geometry
+//                                 //action: { viewModel.removeFromSelectedSources(id: $0)
+//                    )
                 }
                 
                 if !viewModel.filteredSources.isEmpty {
-                    TagCloudView(items: viewModel.filteredSources,
-                                 geometry: geometry,
-                                 totalHeight: $totalHeight,
-                                 inactiveColor: Color.offWhiteGray,
-                                 action: { viewModel.selectedSources.append(viewModel.filteredSources[$0]) })
+//                    TagCloudView(totalHeight: $totalHeight, items: viewModel.filteredSources.map { TagCloudItem(id: $0.id, title: $0.title, color: $0.color) },
+//                                 geometry: geometry,
+//                                 inactiveColor: Color.offWhiteGray
+//                                 //action: { viewModel.appendSource(id: $0) }
+//                    )
                 }
             }
             .styleListSection()
         }
     }
     
-    @ViewBuilder
-    private func archiveTagsSection(geometry: GeometryProxy) -> some View {
-        if !archiveTags.isEmpty {
-            let selectedItems = viewModel.selectedArchiveTags.map { TagCloudItem(title: $0.title, color: $0.color) }
-            let filteredItems = viewModel.filteredArchiveTags.map { TagCloudItem(title: $0.title, color: Color.offWhiteGray.toHex()) }
-            
-            GroupBox("Archive tags") {
-                if !selectedItems.isEmpty {
-                    TagCloudView(
-                        items: selectedItems,
-                        geometry: geometry,
-                        totalHeight: $totalHeight,
-                        action: { viewModel.selectedArchiveTags.remove(at: $0) }
-                    )
-                }
-                
-                if !filteredItems.isEmpty {
-                    TagCloudView(
-                        items: filteredItems,
-                        geometry: geometry,
-                        totalHeight: $totalHeight,
-                        inactiveColor: Color.offWhiteGray,
-                        action: { viewModel.selectedArchiveTags.append(filteredArchiveTags[$0]) }
-                    )
-                }
-            }
-            .styleListSection()
-        }
-    }
+//    @ViewBuilder
+//    private func archiveTagsSection(geometry: GeometryProxy) -> some View {
+//        if !archiveTags.isEmpty {
+////            let selectedItems = viewModel.selectedArchiveTags.map { TagCloudItem(id: $0.id, title: $0.title, color: $0.color) }
+////            let filteredItems = viewModel.filteredArchiveTags.map { TagCloudItem(id: $0.id, title: $0.title, color: Color.offWhiteGray.toHex()) }
+//#warning("Replace")
+////            GroupBox("Archive tags") {
+////                if !selectedItems.isEmpty {
+////                    TagCloudView(
+////                        totalHeight: $totalHeight, items: selectedItems,
+////                        geometry: geometry
+////                        //action: { print($0) }
+////                        //action: { viewModel.selectedArchiveTags.remove(at: $0) }
+////                    )
+////                }
+////#warning("Replace")
+////                if !filteredItems.isEmpty {
+////                    TagCloudView(
+////                        totalHeight: $totalHeight, items: filteredItems,
+////                        geometry: geometry,
+////                        inactiveColor: Color.offWhiteGray
+////                        //action: { print($0) }
+////                        //action: { viewModel.selectedArchiveTags.append(filteredArchiveTags[$0]) }
+////                    )
+////                }
+//            }
+//            .styleListSection()
+//        }
+//    }
     
     private var resetButton: some View {
         Button {

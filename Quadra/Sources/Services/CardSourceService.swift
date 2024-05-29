@@ -9,14 +9,21 @@ import Foundation
 import CoreData
 import SwiftUI
 
-final class CardSourceService {
+final class CardSourceService: ObservableObject {
+    @Published var sources = [CardSource]()
     static let shared = CardSourceService()
     
     let dataController = DataController.shared
     
-    private init() { }
+    private init() { 
+        do {
+            sources = try fetchSources()
+        } catch {
+            print("Error fetching archiveTags \(error.localizedDescription)")
+        }
+    }
     
-    func fetchSources() throws -> [CardSource] {
+    private func fetchSources() throws -> [CardSource] {
         let fetchRequest: NSFetchRequest<CardSource> = CardSource.fetchRequest()
         
         do {
@@ -34,6 +41,13 @@ final class CardSourceService {
         
         do {
             try dataController.container.viewContext.save()
+            
+            do {
+                sources = try fetchSources()
+            } catch {
+                print("Error fetching archiveTags \(error.localizedDescription)")
+            }
+            
             return source
         } catch {
             throw DataServiceError.saveFailed(description: "Failed to save source: \(error.localizedDescription)")
@@ -46,6 +60,12 @@ final class CardSourceService {
         
         do {
             try dataController.container.viewContext.save()
+            
+            do {
+                sources = try fetchSources()
+            } catch {
+                print("Error fetching archiveTags \(error.localizedDescription)")
+            }
         } catch {
             throw DataServiceError.saveFailed(description: "Failed to save changes to source: \(error.localizedDescription)")
         }
@@ -56,6 +76,12 @@ final class CardSourceService {
         
         do {
             try dataController.container.viewContext.save()
+            
+            do {
+                sources = try fetchSources()
+            } catch {
+                print("Error fetching archiveTags \(error.localizedDescription)")
+            }
         } catch {
             throw DataServiceError.saveFailed(description: "Failed to delete source: \(error.localizedDescription)")
         }

@@ -18,7 +18,8 @@ struct CardStackView: View {
                 ForEach(viewModel.visibleCardModels) { model in
                     CardView(
                         viewModel: viewModel,
-                        model: model)
+                        model: model
+                    )
                 }
             }
         }
@@ -26,7 +27,9 @@ struct CardStackView: View {
             width: SizeConstants.cardWith,
             height: SizeConstants.cardHeigh)
         .onAppear {
-            viewModel.updateCards()
+            Task {
+                await viewModel.updateCards()
+            }
         }
     }
 }

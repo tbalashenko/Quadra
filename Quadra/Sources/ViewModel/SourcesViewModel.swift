@@ -13,21 +13,13 @@ final class SourcesViewModel: ObservableObject {
     let service = CardSourceService.shared
     
     init() {
-        fetchSources()
-    }
-    
-    func fetchSources() {
-        do {
-            sources = try service.fetchSources()
-        } catch {
-            print("Failed to fetch sources: \(error.localizedDescription)")
-        }
+        self.sources = service.sources
     }
     
     func delete(source: CardSource) {
         do {
             try service.deleteSource(source: source)
-            fetchSources()
+            self.sources = service.sources
         } catch {
             print("Failed to delete source: \(error.localizedDescription)")
         }
