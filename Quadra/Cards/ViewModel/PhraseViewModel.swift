@@ -6,23 +6,46 @@
 //
 
 import Foundation
+import Combine
 
 final class PhraseViewModel: ObservableObject {
     @Published var showPhraseView: Bool = true
     @Published var showTranslationView: Bool
-    private var flipable: Bool = false
-    var translation: AttributedString?
-    var phrase: AttributedString
-    var textToSpeech: String
     
-    init(model: CardModel) {
-        showTranslationView = model.showTranslation
+    var translation: AttributedString?
+    var phrase: AttributedString { cardModel.card.convertedPhraseToRemember }
+    var textToSpeech: String { cardModel.card.phraseToRemember.string }
+    
+    private var cardModel: CardModel
+    private var cancellables = Set<AnyCancellable>()
+    private var flipable: Bool = false
+    
+    init(cardModel: CardModel) {
+        self.cardModel = cardModel
+        
+        self.showTranslationView = cardModel.showTranslation
+        if let translation = cardModel.card.convertedTranslation, !translation.characters.isEmpty {
+            self.translation = translation
+            self.flipable = !cardModel.showTranslation
+        }
+        self.setupBindings()
+    }
+    
+    private func setupBindings() {
+        cardModel.objectWillChange
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                self.updateProperties(from: self.cardModel)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func updateProperties(from model: CardModel) {
+        self.showTranslationView = cardModel.showTranslation
         if let translation = model.card.convertedTranslation, !translation.characters.isEmpty {
             self.translation = translation
             self.flipable = !model.showTranslation
         }
-        self.phrase = model.card.convertedPhraseToRemember
-        self.textToSpeech = model.card.phraseToRemember.string
     }
     
     func switchMode() {

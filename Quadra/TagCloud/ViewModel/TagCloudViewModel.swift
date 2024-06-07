@@ -9,23 +9,23 @@ import Foundation
 
 final class TagCloudViewModel: ObservableObject {
     @Published var displayedItems = [TagCloudItem]()
-    @Published var items = [TagCloudItem]() {
-        didSet {
-            updateDisplayedItems()
-        }
-    }
+    @Published var items = [TagCloudItem]()
+    
     let isSelectable: Bool
-    let max: Int?
+    private let max: Int?
     
     init(items: [TagCloudItem], isSelectable: Bool, max: Int? = nil) {
         self.items = items
         self.isSelectable = isSelectable
         self.max = max
-        
-        updateDisplayedItems()
+        setupDisplayedItems()
     }
     
     func updateDisplayedItems() {
+        displayedItems = displayedItems.sorted(by: { $0.isSelected && !$1.isSelected })
+    }
+    
+    private func setupDisplayedItems() {
         if let max = max {
             displayedItems = Array(items.prefix(max))
         } else {

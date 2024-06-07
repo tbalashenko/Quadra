@@ -20,12 +20,8 @@ extension Card {
     @NSManaged public var id: UUID
     @NSManaged public var image: Data?
     @NSManaged public var isArchived: Bool
-    @NSManaged public var isReadyToRepeat: Bool
     @NSManaged public var lastRepetition: Date?
     @NSManaged public var lastTimeStatusChanged: Date?
-    @NSManaged public var needMoveToArchive: Bool
-    @NSManaged public var needMoveToThisMonth: Bool
-    @NSManaged public var needMoveToThisWeek: Bool
     @NSManaged public var phraseToRemember: NSAttributedString
     @NSManaged public var repetitionCounter: Int
     @NSManaged public var status: Status

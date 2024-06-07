@@ -12,16 +12,7 @@ struct FlipablePhraseView: View {
     
     var body: some View {
         if viewModel.showPhraseView {
-            HStack(spacing: 12) {
-                TextToSpeechPlayView(viewModel: TextToSpeechViewModel(text: viewModel.textToSpeech))
-                Text(viewModel.phrase)
-                    .font(.title2)
-                    .bold()
-                    .onTapGesture {
-                        viewModel.switchMode()
-                    }
-            }
-            .padding(.horizontal)
+            PlayableTextView(viewModel: viewModel)
         }
         if viewModel.showTranslationView, let translation = viewModel.translation {
             Text(translation)
@@ -29,7 +20,7 @@ struct FlipablePhraseView: View {
                 .onTapGesture {
                     viewModel.switchMode()
                 }
-                .padding(.horizontal)
+                .padding()
         }
     }
 }

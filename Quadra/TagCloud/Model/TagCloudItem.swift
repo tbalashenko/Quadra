@@ -13,6 +13,7 @@ class TagCloudItem: ObservableObject {
     var title: String
     var color: String
     var action: (() -> Void)?
+    var isExceeded = false
     
     init(isSelected: Bool, id: UUID, title: String, color: String, action: (() -> Void)? = nil) {
         self.isSelected = isSelected
@@ -35,6 +36,9 @@ extension TagCloudItem: Hashable {
 //MARK: - Equatable
 extension TagCloudItem: Equatable {
     static func == (lhs: TagCloudItem, rhs: TagCloudItem) -> Bool {
-        return lhs.id == rhs.id
+        return lhs.id == rhs.id &&
+        lhs.isSelected == rhs.isSelected &&
+        lhs.title == rhs.title &&
+        lhs.color == rhs.color
     }
 }

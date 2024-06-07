@@ -12,7 +12,6 @@ struct SetupCardView: View {
     @Binding var showSetupCardView: Bool
     let settingsManager = SettingsManager.shared
     
-    @State private var totalHeight: CGFloat = CGFloat.infinity
     @State var image: Image?
     @State var sourceColor = Color.morningBlue
     @State private var dragOffset = CGFloat.zero
@@ -24,8 +23,8 @@ struct SetupCardView: View {
                 .styleListSection()
                 .frame(
                     width: SizeConstants.photoPickerWidth,
-                    height: SizeConstants.photoPickerWidth * settingsManager.aspectRatio.ratio)
-            
+                    height: SizeConstants.photoPickerWidth * settingsManager.aspectRatio.ratio
+                )
             SetupCardPhraseView(viewModel: viewModel)
             SetupCardSourceView(viewModel: viewModel)
         }
@@ -34,14 +33,16 @@ struct SetupCardView: View {
         .background(Color.element)
         .interactiveDismissDisabled(true)
         .onAppear { setup() }
-        .alert("Warning", isPresented: $isAlertShowing, actions: {
-            Button("Yes") {
-                showSetupCardView = false
+        .alert(
+            "Warning",
+            isPresented: $isAlertShowing,
+            actions: {
+                Button("Yes") { showSetupCardView = false }
+                Button("No", role: .cancel) { }
+            }, message: {
+                Text("Are you sure you want to close the window without saving?")
             }
-            Button("No", role: .cancel) { }
-        }, message: {
-            Text("Are you sure you want to close the window without saving?")
-        })
+        )
         .navigationTitle(viewModel.mode.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

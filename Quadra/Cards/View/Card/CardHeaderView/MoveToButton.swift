@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct MoveToButton: View {
-    @ObservedObject var viewModel: CardsViewModel
     @ObservedObject var model: CardModel
+    var action: (() -> ())?
     
     var body: some View {
         VStack {
             HStack {
                 Button(action: {
-                    viewModel.removeCard(model: model, changeStatus: true)
+                    action?()
                 }) {
                     HStack {
                         Text("→").bold()
@@ -25,10 +25,9 @@ struct MoveToButton: View {
                                 id: UUID(),
                                 title: model.card.getNewStatus.title,
                                 color: model.card.getNewStatus.color,
-                                action: { viewModel.removeCard(model: model, changeStatus: true) }
+                                action: { action?() }
                             ),
-                            withShadow: false,
-                            isSelectable: false
+                            withShadow: false
                         )
                     }
                 }

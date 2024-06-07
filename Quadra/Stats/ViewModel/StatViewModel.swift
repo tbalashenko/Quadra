@@ -46,7 +46,8 @@ class StatViewModel: ObservableObject {
             do {
                 try CardService.shared.saveCard(
                     phraseToRemember: phraseToRemember,
-                    additionDate: date
+                    additionDate: date,
+                    incrementAddedItemsCounter: false
                 )
             } catch {
                 print("Error saving item: \(error.localizedDescription)")
@@ -60,8 +61,7 @@ class StatViewModel: ObservableObject {
                         statData: statData,
                         repeatedItemsCounter: Int.random(in: 1...5),
                         addedItemsCounter: Int.random(in: 1...3),
-                        deletedItemsCounter: Int.random(in: 0...1),
-                        totalNumberOfCards: CardService.shared.cards.count)
+                        deletedItemsCounter: Int.random(in: 0...1))
                 } catch {
                     print("Error editing stat data: \(error.localizedDescription)")
                 }
@@ -71,8 +71,7 @@ class StatViewModel: ObservableObject {
                         date: currentDate ?? Date(),
                         repeatedItemsCounter: Int.random(in: 1...5),
                         addedItemsCounter: Int.random(in: 1...3),
-                        deletedItemsCounter: Int.random(in: 0...1),
-                        totalNumberOfCards: CardService.shared.cards.count)
+                        deletedItemsCounter: Int.random(in: 0...1))
                 } catch {
                     print("Error saving stat data: \(error.localizedDescription)")
                 }

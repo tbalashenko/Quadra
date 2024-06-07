@@ -16,21 +16,21 @@ struct CardStackView: View {
                 SkeletonCardView()
             } else {
                 ForEach(viewModel.visibleCardModels) { model in
-                    CardView(
+                    SwipeableCardView(
                         viewModel: viewModel,
                         model: model
+                    )
+                    .frame(
+                        width: SizeConstants.cardWith,
+                        height: SizeConstants.cardHeigh
                     )
                 }
             }
         }
-        .frame(
-            width: SizeConstants.cardWith,
-            height: SizeConstants.cardHeigh)
-        .onAppear {
-            Task {
-                await viewModel.updateCards()
-            }
+        .onDisappear {
+            viewModel.showConfetti = false
         }
+        
     }
 }
 

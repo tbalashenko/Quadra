@@ -21,8 +21,9 @@ struct PhotoPickerView: View {
                         .scaledToFill()
                         .frame(
                             width: geometry.size.width,
-                            height: geometry.size.height)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                            height: geometry.size.height
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
                 }
                 PhotosPicker(
                     selection: $photosPickerItem,
@@ -35,11 +36,12 @@ struct PhotoPickerView: View {
                                     .fill(.white.opacity(0.6))
                             }
                     }
-                if photosPickerItem != nil {
+                if photosPickerItem != nil || image != nil {
                     EdgeButtonView(
                         image: Image(systemName: "trash"),
                         edge: .topRight) {
                             self.photosPickerItem = nil
+                            self.image = nil
                         }
                 }
             }

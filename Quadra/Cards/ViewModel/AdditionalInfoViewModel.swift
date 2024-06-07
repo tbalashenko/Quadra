@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 final class AdditionalnfoViewModel: ObservableObject {
     struct Info: Hashable {
@@ -18,20 +19,40 @@ final class AdditionalnfoViewModel: ObservableObject {
     @Published var showTranscription: Bool = false
     @Published var additionalInfo = [Info]()
     
+    private var cardModel: CardModel
+    private var cancellables = Set<AnyCancellable>()
+    
     init(model: CardModel) {
+        self.cardModel = model
+        self.updateProperties(from: model)
+        prepareAdditionalInfo(for: model.card)
+        self.setupBindings()
+    }
+    
+    private func setupBindings() {
+        cardModel.objectWillChange
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                self.updateProperties(from: self.cardModel)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func updateProperties(from model: CardModel) {
         if let transcription = model.card.formattedTranscription {
             self.transcripton = transcription
             showTranscription = true
         }
         prepareTags(for: model.card)
-        prepareAdditionalInfo(for: model.card)
     }
     
     func prepareTags(for card: Card) {
+        tags.removeAll()
+        
         if card.status.id == 3, let tag = card.archiveTag {
             let archiveTag = TagCloudItem(
                 isSelected: true,
-                id: card.id,
+                id: tag.id,
                 title: tag.title,
                 color: tag.color)
             
@@ -40,7 +61,7 @@ final class AdditionalnfoViewModel: ObservableObject {
         
         let statusTag = TagCloudItem(
             isSelected: true,
-            id: card.id,
+            id: UUID(uuidString: card.status.title) ?? UUID(),
             title: card.status.title,
             color: card.status.color)
         

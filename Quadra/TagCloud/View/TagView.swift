@@ -13,7 +13,6 @@ struct TagView: View {
         item.isSelected ? (Color(hex: item.color).isDark ? .white : .black) : .black
     }
     var withShadow: Bool = true
-    var isSelectable: Bool
     var action: (() -> Void)?
     
     var body: some View {
@@ -21,9 +20,10 @@ struct TagView: View {
             .font(.caption)
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
-            .background(item.isSelected ? Color(hex: item.color) : .offWhiteGray)
+            .lineLimit(1)
+            .background(item.isSelected ? Color(hex: item.color) : Color.brightGray)
+            .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
             .foregroundColor(foregroundColor)
-            .cornerRadius(8)
             .if(withShadow) { content in
                 content.northWestShadow()
             }
@@ -35,8 +35,5 @@ struct TagView: View {
 }
 
 #Preview {
-    TagView(
-        item: MockData.tagCloudItems.first!,
-        isSelectable: true
-    )
+    TagView(item: MockData.tagCloudItems.first!)
 }

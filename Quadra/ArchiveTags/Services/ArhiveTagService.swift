@@ -32,20 +32,16 @@ class ArchiveTagService: ObservableObject {
         }
     }
     
-    func saveArchiveTag(id: UUID = UUID(), date: Date = Date()) throws -> CardArchiveTag {
+    func saveArchiveTag(date: Date = Date()) throws -> CardArchiveTag {
         let tag = CardArchiveTag(context: dataController.container.viewContext)
-        tag.id = id
+        tag.id = UUID()
         tag.color = CardArchiveTag.getColor(for: date)
         tag.title = date.prepareTag()
         
         do {
             try dataController.container.viewContext.save()
             
-            do {
-                archiveTags = try fetchArchiveTags()
-            } catch {
-                print("Error fetching archiveTags \(error.localizedDescription)")
-            }
+            archiveTags.append(tag)
             
             return tag
         } catch {
@@ -59,7 +55,7 @@ class ArchiveTagService: ObservableObject {
                 return tag
             }
             
-            return try ArchiveTagService.shared.saveArchiveTag()
+            return try ArchiveTagService.shared.saveArchiveTag(date: date)
         } catch {
             print("Error fetching or saving archive tag: \(error.localizedDescription)")
             return nil

@@ -15,25 +15,25 @@ struct SkeletonCardView: View {
     }
     
     var body: some View {
-        GeometryReader { geometry in
             VStack {
                 ZStack(alignment: .center) {
                     imageColor
                     VStack {
                         HStack {
                             SkeletonView()
-                                .frame(width: 100, height: 22)
+                                .frame(width: 150, height: 38)
                             Spacer()
                             SkeletonView()
-                                .frame(width: 22, height: 22)
+                                .frame(width: 38, height: 38)
                         }
-                        .padding()
+                        .padding(4)
                         Spacer()
                     }
                 }
                 .frame(
-                    width: geometry.size.width,
-                    height: geometry.size.width * SettingsManager.shared.aspectRatio.ratio)
+                    width: SizeConstants.cardWith,
+                    height: SizeConstants.cardWith * SettingsManager.shared.aspectRatio.ratio
+                )
                 HStack(spacing: 12) {
                     SkeletonView()
                         .frame(width: 22, height: 22)
@@ -52,8 +52,11 @@ struct SkeletonCardView: View {
             .background(Color.element)
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .southEastShadow()
+            .frame(
+                width: SizeConstants.cardWith,
+                height: SizeConstants.cardHeigh
+            )
         }
-    }
 }
 
 #Preview {

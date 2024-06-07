@@ -9,12 +9,8 @@ import Foundation
 import SwiftUI
 import CoreData
 
-public class Status: NSObject, NSCoding, NSSecureCoding {
-    public static var supportsSecureCoding: Bool {
-        return true
-    }
-
-    let id: Int
+final public class Status: NSObject, NSCoding, NSSecureCoding {
+    public let id: Int
     let title: String
     let color: String
 
@@ -24,6 +20,8 @@ public class Status: NSObject, NSCoding, NSSecureCoding {
     public static let thisWeek = Status(id: 1, title: "#thisWeek", color: Color.yellowIris)
     public static let thisMonth = Status(id: 2, title: "#thisMonth", color: Color.accentOrange)
     public static let archive = Status(id: 3, title: "#archive", color: Color.spanishGray)
+    
+    public static var supportsSecureCoding: Bool { return true }
 
     private init(id: Int, title: String, color: Color) {
         self.id = id
@@ -32,11 +30,11 @@ public class Status: NSObject, NSCoding, NSSecureCoding {
     }
 
     public required init?(coder: NSCoder) {
-        guard let title = coder.decodeObject(of: NSString.self, forKey: "title") as String?,
-              let color = coder.decodeObject(of: NSString.self, forKey: "color") as String?
-        else {
-            return nil
-        }
+        guard
+            let title = coder.decodeObject(of: NSString.self, forKey: "title") as String?,
+            let color = coder.decodeObject(of: NSString.self, forKey: "color") as String?
+        else { return nil }
+        
         self.id = coder.decodeInteger(forKey: "id")
         self.title = title
         self.color = color
@@ -46,6 +44,18 @@ public class Status: NSObject, NSCoding, NSSecureCoding {
         coder.encode(id, forKey: "id")
         coder.encode(title, forKey: "title")
         coder.encode(color, forKey: "color")
+    }
+    
+    //MARK: - Equitable
+    public override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? Status else { return false }
+        
+        return self.id == other.id
+    }
+
+    //MARK: - Hashable
+    public override var hash: Int {
+        return id.hashValue
     }
 }
 
@@ -72,3 +82,5 @@ public class StatusTransformer: ValueTransformer {
         }
     }
 }
+
+extension Status: Identifiable { }

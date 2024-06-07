@@ -15,10 +15,6 @@ class CardService: ObservableObject {
     let dataController = DataController.shared
     
     private init() {
-        updateCards()
-    }
-    
-    func updateCards() {
         do {
             cards = try fetchCards()
         } catch {
@@ -33,10 +29,6 @@ class CardService: ObservableObject {
         
         do {
             let cards = try dataController.container.viewContext.fetch(fetchRequest)
-            cards.forEach { card in
-                cheekIfStatusNeedUpdate(card: card)
-                setReadyToRepeat(card: card)
-            }
             return cards
         } catch {
             throw DataServiceError.fetchFailed(description: "Failed to fetch cards: \(error.localizedDescription)")
@@ -49,7 +41,8 @@ class CardService: ObservableObject {
         translation: AttributedString? = nil,
         transcription: String? = nil,
         imageData: Data? = nil,
-        sources: [CardSource] = []
+        sources: [CardSource] = [],
+        incrementAddedItemsCounter: Bool = true
     ) throws {
         let context = dataController.container.viewContext
         let card = Card(context: context)
@@ -84,7 +77,8 @@ class CardService: ObservableObject {
                 tag.addToCards(card)
             }
             
-            updateCards()
+            cards.append(card)
+            if incrementAddedItemsCounter { StatDataService.shared.incrementAddedItemsCounter() }
         } catch {
             throw DataServiceError.saveFailed(description: "Failed to save card: \(error.localizedDescription)")
         }
@@ -104,6 +98,7 @@ class CardService: ObservableObject {
         }
         card.transcription = transcription
         card.image = imageData
+        card.sources = nil
         sources.forEach {
             card.addToSources($0)
             $0.addToCards(card)
@@ -111,7 +106,7 @@ class CardService: ObservableObject {
         
         do {
             try dataController.container.viewContext.save()
-            updateCards()
+            if let index = cards.firstIndex(where: { $0.id == card.id }) { cards[index] = card }
         } catch {
             throw DataServiceError.saveFailed(description: "Failed to save card: \(error.localizedDescription)")
         }
@@ -128,81 +123,14 @@ class CardService: ObservableObject {
         }
     }
     
-    /// - Throughout the day (several times as new phrases are added) →  inbox  + Source tag   +
-    /// - In the morning (after one full night's sleep) →  this week
-    /// - After a week →  this month
-    /// - One month later →  archive   + #2024-2(Archive tag)
-    /// - After three months
-    /// - Six months later
-    /// - One year later
-    func setReadyToRepeat(card: Card) {
-        // phrase should be repeated throughout the day several times
-        guard let lastRepetitionDate = card.lastRepetition else {
-            card.isReadyToRepeat = true
-            
-            try? dataController.container.viewContext.save()
-            
-            return
-        }
-        
-        let firstSunday = Date().firstSunday(after: lastRepetitionDate)
-        let isLastRepetitionDateToday = lastRepetitionDate.isDateToday()
-        
-        switch card.status.id {
-                // input, should be repeatet throughout the day
-            case 0:
-                card.isReadyToRepeat = true
-                // this week, should be repeatet once a day
-            case 1:
-                card.isReadyToRepeat = !isLastRepetitionDateToday
-                // this month, should be repeated every sunday throughout the month
-            case 2:
-                if let firstSundayAfterLastRepetition = firstSunday, Date() >= firstSundayAfterLastRepetition {
-                    card.isReadyToRepeat = true
-                } else {
-                    card.isReadyToRepeat = false
-                }
-                // archive, should be repeated one month later, three months later, Six months later, one year later
-            case 3:
-                if let lastTimeStatusChanged = card.lastTimeStatusChanged {
-                    if Date().daysAgo(from: lastTimeStatusChanged) >= 30,
-                       Date().daysAgo(from: lastRepetitionDate) >= 30 {
-                        card.isReadyToRepeat = true
-                    } else if Date().daysAgo(from: lastTimeStatusChanged) >= 90,
-                              Date().daysAgo(from: lastRepetitionDate) >= 60 {
-                        card.isReadyToRepeat = true
-                    } else if Date().daysAgo(from: lastTimeStatusChanged) >= 180,
-                              Date().daysAgo(from: lastRepetitionDate) >= 90 {
-                        card.isReadyToRepeat = true
-                    } else if Date().daysAgo(from: lastTimeStatusChanged) >= 360,
-                              Date().daysAgo(from: lastRepetitionDate) >= 180 {
-                        card.isReadyToRepeat = true
-                    }
-                } else {
-                    card.isReadyToRepeat = false
-                }
-            default:
-                break
-        }
-        
-        do {
-            try dataController.container.viewContext.save()
-        } catch {
-            print("Failed to save context: \(error)")
-        }
-    }
-    
     func setNewStatus(card: Card) {
         if card.needMoveToThisWeek {
             card.status = .thisWeek
-            card.needMoveToThisWeek = false
         } else if card.needMoveToThisMonth {
             card.status = .thisMonth
-            card.needMoveToThisMonth = false
         } else if card.needMoveToArchive {
             card.status = .archive
             card.isArchived = true
-            card.needMoveToArchive = false
         }
         
         card.lastTimeStatusChanged = Date()
@@ -214,43 +142,18 @@ class CardService: ObservableObject {
         }
     }
     
-    func cheekIfStatusNeedUpdate(card: Card) {
-        if let date = card.lastTimeStatusChanged, date.isDateToday() || card.isArchived { return }
-        
-        if let date = Date().lastSundayOfMonth(for: card.additionTime), date <= Date() {
-            card.needMoveToArchive = true
-        } else {
-            switch card.status.id {
-                case 0:
-                    if let date = Date().firstSunday(after: card.additionTime), date <= Date() {
-                        card.needMoveToThisMonth = true
-                    } else if Date().isNextDay(from: card.additionTime) {
-                        card.needMoveToThisWeek = true
-                    }
-                case 1:
-                    if let date = Date().firstSunday(after: card.additionTime), date <= Date() {
-                        card.needMoveToThisMonth = true
-                    }
-                default:
-                    break
-            }
-        }
-        
-        do {
-            try dataController.container.viewContext.save()
-        } catch {
-            print("Failed to save context: \(error)")
-        }
-    }
-    
     func delete(card: Card) throws {
         dataController.container.viewContext.delete(card)
+        if let index = cards.firstIndex(where: { $0.id == card.id }) { cards.remove(at: index) }
         
         do {
             try dataController.container.viewContext.save()
-            updateCards()
+            
+            StatDataService.shared.incrementDeletedItemsCounter()
         } catch {
             throw DataServiceError.saveFailed(description: "Failed to delete card: \(error.localizedDescription)")
         }
     }
 }
+
+

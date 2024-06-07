@@ -26,7 +26,9 @@ final class SetupCardViewModel: ObservableObject {
     private let cardService = CardService.shared
     
     var hasChanged: Bool {
-        !phraseToRemember.characters.isEmpty || !translation.characters.isEmpty || !transcription.isEmpty
+        phraseToRemember != cardModel?.card.convertedPhraseToRemember
+        || translation != cardModel?.card.convertedTranslation
+        || transcription != cardModel?.card.transcription
     }
     
     init(mode: SetupCardViewMode) {
@@ -89,8 +91,6 @@ final class SetupCardViewModel: ObservableObject {
                         imageData: image?.pngData(),
                         sources: selectedSources
                     )
-                    
-                    StatDataService.shared.incrementAddedItemsCounter()
                 } catch {
                     print("Error saving card: \(error.localizedDescription)")
                 }

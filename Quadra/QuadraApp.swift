@@ -17,9 +17,9 @@ struct QuadraApp: App {
                 ContentView()
                     .tabItem { Image(systemName: "repeat") }
                     .tag(0)
-//                ListView()
-//                    .tabItem { Image(systemName: "list.bullet") }
-//                    .tag(1)
+                ListView()
+                    .tabItem { Image(systemName: "list.bullet") }
+                    .tag(1)
                 StatView()
                     .tabItem { Image(systemName: "chart.xyaxis.line") }
                     .tag(2)

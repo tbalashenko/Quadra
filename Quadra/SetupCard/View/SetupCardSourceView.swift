@@ -10,7 +10,6 @@ import SwiftUI
 struct SetupCardSourceView: View {
     @ObservedObject var viewModel: SetupCardViewModel
     @StateObject var tagCloudViewModel: TagCloudViewModel
-    @State private var totalHeight: CGFloat = CGFloat.infinity
     
     init(viewModel: SetupCardViewModel) {
         self._viewModel = ObservedObject(wrappedValue: viewModel)
@@ -20,9 +19,7 @@ struct SetupCardSourceView: View {
     var body: some View {
         GroupBox(TextConstants.sources) {
             AddNewSourceView(viewModel: viewModel)
-            TagCloudView(
-                viewModel: tagCloudViewModel,
-                totalHeight: $totalHeight)
+            TagCloudView(viewModel: tagCloudViewModel)
             
         }
         .applyFormStyle()

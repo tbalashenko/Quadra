@@ -9,7 +9,6 @@ import SwiftUI
 
 struct AdditionalnfoView: View {
     @State var viewModel: AdditionalnfoViewModel
-    @State var totalHeight = CGFloat.infinity
     
     var body: some View {
         VStack(alignment: .center) {
@@ -30,8 +29,7 @@ struct AdditionalnfoView: View {
             TagCloudView(
                 viewModel: TagCloudViewModel(
                     items: viewModel.tags,
-                    isSelectable: false),
-                totalHeight: $totalHeight
+                    isSelectable: false)
             )
         }
         .padding(.horizontal)

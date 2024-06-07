@@ -42,30 +42,28 @@ class StatDataService: ObservableObject {
         date: Date = Date(),
         repeatedItemsCounter: Int = 0,
         addedItemsCounter: Int = 0,
-        deletedItemsCounter: Int = 0,
-        totalNumberOfCards: Int) throws {
+        deletedItemsCounter: Int = 0) throws -> StatData? {
             let statData = StatData(context: DataController.shared.container.viewContext)
             statData.repeatedItemsCounter = repeatedItemsCounter
             statData.addedItemsCounter = addedItemsCounter
             statData.deletedItemsCounter = deletedItemsCounter
-            statData.totalNumberOfCards = totalNumberOfCards
+            statData.totalNumberOfCards = CardService.shared.cards.count
             statData.date = date
             
             do {
                 try dataController.container.viewContext.save()
+                self.statData.append(statData)
+                return statData
             } catch {
                 throw DataServiceError.saveFailed(description: "Failed to save StatData: \(error.localizedDescription)")
             }
-            
-            fetchStatData()
         }
     
     func editStatData(
         statData: StatData,
         repeatedItemsCounter: Int? = nil,
         addedItemsCounter: Int? = nil,
-        deletedItemsCounter: Int? = nil,
-        totalNumberOfCards: Int? = nil) throws {
+        deletedItemsCounter: Int? = nil) throws {
             if let repeatedItemsCounter = repeatedItemsCounter {
                 statData.repeatedItemsCounter = repeatedItemsCounter
             }
@@ -75,60 +73,72 @@ class StatDataService: ObservableObject {
             if let deletedItemsCounter = deletedItemsCounter {
                 statData.deletedItemsCounter = deletedItemsCounter
             }
-            if let totalNumberOfCards = totalNumberOfCards {
-                statData.totalNumberOfCards = totalNumberOfCards
-            }
+            
+            statData.totalNumberOfCards = CardService.shared.cards.count
             
             do {
                 try dataController.container.viewContext.save()
+                guard let statDataToChangeIndex = self.statData.firstIndex(where: { $0.date == statData.date }) else { return }
+                
+                self.statData[statDataToChangeIndex] = statData
             } catch {
                 throw DataServiceError.saveFailed(description: "Failed to save changes to StatData: \(error.localizedDescription)")
             }
-            
-            fetchStatData()
         }
     
     func incrementRepeatedItemsCounter() {
-        let currentDate = Date().formattedForStats()
-        if let statData = statData.first(where: { $0.date == currentDate }) {
-            do {
-                try editStatData(statData: statData, repeatedItemsCounter: statData.repeatedItemsCounter + 1)
-            } catch {
-                print("Failed to save changes to StatData: \(error.localizedDescription)")
-            }
-        } else {
-            do {
-                try saveStatData(
-                    date: currentDate ?? Date(),
-                    repeatedItemsCounter: 1,
-                    totalNumberOfCards: CardService.shared.cards.count)
-            } catch {
-                print("Error creating statData: \(error.localizedDescription)")
-            }
+        guard let statData = getStatData() else { return }
+        
+        do {
+            try editStatData(
+                statData: statData,
+                repeatedItemsCounter: statData.repeatedItemsCounter + 1
+            )
+        } catch {
+            print("Failed to save changes to StatData: \(error.localizedDescription)")
         }
     }
     
     func incrementAddedItemsCounter() {
+        guard let statData = getStatData() else { return }
+        
+        do {
+            try editStatData(
+                statData: statData,
+                addedItemsCounter: statData.addedItemsCounter + 1
+            )
+        } catch {
+            print("Failed to save changes to StatData: \(error.localizedDescription)")
+        }
+    }
+    
+    func incrementDeletedItemsCounter() {
+        guard let statData = getStatData() else { return }
+        
+        do {
+            try editStatData(
+                statData: statData,
+                deletedItemsCounter: statData.deletedItemsCounter + 1
+            )
+        } catch {
+            print("Failed to save changes to StatData: \(error.localizedDescription)")
+        }
+    }
+    
+    func getStatData() -> StatData? {
         let currentDate = Date().formattedForStats()
+        
         if let statData = statData.first(where: { $0.date == currentDate }) {
-            do {
-                try editStatData(
-                    statData: statData,
-                    addedItemsCounter: statData.addedItemsCounter + 1,
-                    totalNumberOfCards: CardService.shared.cards.count)
-            } catch {
-                print("Failed to save changes to StatData: \(error.localizedDescription)")
-            }
+            return statData
         } else {
             do {
-                try saveStatData(
-                    date: currentDate ?? Date(),
-                    repeatedItemsCounter: 1,
-                    totalNumberOfCards: CardService.shared.cards.count)
+                return try saveStatData(date: currentDate ?? Date())
             } catch {
                 print("Error creating statData: \(error.localizedDescription)")
             }
         }
+        
+        return nil
     }
 }
 

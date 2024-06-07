@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import Combine
+import SwiftUI
 
 @MainActor
 final class CardsViewModel: ObservableObject {
@@ -16,25 +18,32 @@ final class CardsViewModel: ObservableObject {
     @Published var isLoading = false
     
     var cardModels = [CardModel]()
-    let settingsManager = SettingsManager.shared
-    let statDataService = StatDataService.shared
-    let cardService = CardService.shared
     
     private let visibleCardCount = 5
+    private var cancellables = Set<AnyCancellable>()
     
     init() {
         Task {
             await self.updateCards()
         }
+        observeCardChanges()
+    }
+    
+    func observeCardChanges() {
+        CardService.shared.$cards
+            .sink { [weak self] _ in
+                Task {
+                    await self?.updateCards()
+                }
+            }
+            .store(in: &cancellables)
     }
     
     func updateCards() async {
         isLoading = true
         
         await Task.detached {
-            self.cardService.updateCards()
-            
-            let filteredCards = self.cardService.cards
+            let filteredCards = CardService.shared.cards
                 .filter { $0.isReadyToRepeat }
                 .map { CardModel(card: $0, mode: .repetition) }
             
@@ -46,7 +55,8 @@ final class CardsViewModel: ObservableObject {
             }
         }.value
         
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        try? await Task.sleep(for: .milliseconds(240))
+        
         isLoading = false
     }
     
@@ -63,7 +73,7 @@ final class CardsViewModel: ObservableObject {
         cardModels.removeAll { $0.id == model.id }
         visibleCardModels.removeAll { $0.id == model.id }
         try? CardService.shared.incrementCounter(card: model.card)
-        statDataService.incrementRepeatedItemsCounter()
+        StatDataService.shared.incrementRepeatedItemsCounter()
         
         if visibleCardModels.count < visibleCardCount {
             loadVisibleCards()
@@ -71,8 +81,5 @@ final class CardsViewModel: ObservableObject {
         
         showConfetti = cardModels.isEmpty
         showInfoView = cardModels.isEmpty
-        if cardModels.isEmpty {
-            CardService.shared.updateCards()
-        }
     }
 }
