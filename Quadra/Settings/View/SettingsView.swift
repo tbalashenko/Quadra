@@ -14,21 +14,21 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Language and Voice") {
+                Section(TextConstants.languageAndVoice) {
                   VoicePickerView(viewModel: viewModel)
                 }
-                Section("Images") {
+                Section(TextConstants.images) {
                   ImageSettingsView(viewModel: viewModel)
                 }
-                Section("Animation") {
-                    Toggle("Show Confetti", isOn: $viewModel.showConfetti)
+                Section(TextConstants.animation) {
+                    Toggle(TextConstants.showConfetti, isOn: $viewModel.showConfetti)
                 }
-                Section("Manage Sources") {
-                    NavigationLink("Sources") {
+                Section(TextConstants.manageSources) {
+                    NavigationLink(TextConstants.sources) {
                         SourcesView()
                     }
                 }
-                Section("Text Formatting") {
+                Section(TextConstants.textFormatting) {
                     HighlighterPaletteView(viewModel: viewModel)
                 }
             }
@@ -36,14 +36,14 @@ struct SettingsView: View {
             .background(Color.element)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
+                    Button(TextConstants.save) {
                         viewModel.save()
                         dismiss()
                     }
                 }
             }
             .toolbar(.hidden, for: .tabBar)
-            .navigationBarTitle("Settings")
+            .navigationBarTitle(TextConstants.settings)
         }
     }
 }

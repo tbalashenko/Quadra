@@ -28,7 +28,7 @@ struct PhotoPickerView: View {
                 PhotosPicker(
                     selection: $photosPickerItem,
                     matching: .images) {
-                        Label("Select Photo", systemImage: "photo")
+                        Label(TextConstants.selectPhoto, systemImage: "photo")
                             .foregroundStyle(.black)
                             .padding(10)
                             .background {

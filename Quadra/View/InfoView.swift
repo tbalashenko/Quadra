@@ -22,9 +22,9 @@ final class InfoViewModel: ObservableObject {
         let readyToRepeatCards = cards.filter { $0.isReadyToRepeat }
         
         if cards.isEmpty {
-            return "Add your first card"
+            return TextConstants.addFirstCards
         } else if readyToRepeatCards.isEmpty {
-            return "That's it for today, but you can add new cards"
+            return TextConstants.thatsItForToday
         }
         
         return ""
@@ -44,7 +44,7 @@ struct InfoView: View {
                 Button {
                     
                 } label: {
-                    Label("How to use the app", systemImage: "info.circle")
+                    Label(TextConstants.howToUseApp, systemImage: "info.circle")
                 }
                 .buttonStyle(NeuButtonStyle(
                     width: SizeConstants.buttonWith,
@@ -58,7 +58,7 @@ struct InfoView: View {
                     Button {
                         onAction?()
                     } label: {
-                        Label("Start again", systemImage: "repeat.circle")
+                        Label(TextConstants.restart, systemImage: "repeat.circle")
                     }
                     .buttonStyle(NeuButtonStyle(
                         width: SizeConstants.buttonWith,

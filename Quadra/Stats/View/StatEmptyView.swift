@@ -37,7 +37,7 @@ struct StatEmptyView: View {
             }
         }
         .background(.element)
-        .navigationTitle("Statistics")
+        .navigationTitle(TextConstants.statistics)
     }
 }
 

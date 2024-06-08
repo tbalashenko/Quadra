@@ -21,12 +21,10 @@ struct TagView: View {
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             .lineLimit(1)
-            .background(item.isSelected ? Color(hex: item.color) : Color.brightGray)
+            .background(item.isSelected ? Color(hex: item.color) : Color.offWhiteGray)
             .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
             .foregroundColor(foregroundColor)
-            .if(withShadow) { content in
-                content.northWestShadow()
-            }
+            .if(withShadow) { $0.northWestShadow() }
             .onTapGesture {
                 action?()
                 item.action?()

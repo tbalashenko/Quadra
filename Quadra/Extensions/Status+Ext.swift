@@ -16,10 +16,10 @@ final public class Status: NSObject, NSCoding, NSSecureCoding {
 
     public static let allStatuses = [Status.input, Status.thisWeek, Status.thisMonth, Status.archive]
 
-    public static let input = Status(id: 0, title: "#input", color: Color.Green.ashGray)
-    public static let thisWeek = Status(id: 1, title: "#thisWeek", color: Color.yellowIris)
-    public static let thisMonth = Status(id: 2, title: "#thisMonth", color: Color.accentOrange)
-    public static let archive = Status(id: 3, title: "#archive", color: Color.spanishGray)
+    public static let input = Status(id: 0, title: TextConstants.input, color: Color.Green.ashGray)
+    public static let thisWeek = Status(id: 1, title: TextConstants.thisWeek, color: Color.yellowIris)
+    public static let thisMonth = Status(id: 2, title: TextConstants.thisMonth, color: Color.accentOrange)
+    public static let archive = Status(id: 3, title: TextConstants.archive, color: Color.spanishGray)
     
     public static var supportsSecureCoding: Bool { return true }
 
@@ -83,4 +83,5 @@ public class StatusTransformer: ValueTransformer {
     }
 }
 
+//MARK: - Identifiable
 extension Status: Identifiable { }

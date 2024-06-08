@@ -91,9 +91,9 @@ extension StatViewModel {
         var instructionFirstPart: String {
             switch self {
                 case .empty:
-                    return "Add your first cards"
+                    return TextConstants.addFirstCards
                 case .notEnoughData:
-                    return "Continue adding and repeating your cards daily to see statistics"
+                    return TextConstants.continueAddAndRepHelp
                 case .noDataForPeriod:
                     return ""
             }
@@ -102,7 +102,7 @@ extension StatViewModel {
         var instructionSecondPart: String? {
             switch self {
                 case .empty:
-                    return "Continue adding and repeating your cards daily to see statistics"
+                    return TextConstants.continueAddAndRepHelp
                 case .notEnoughData:
                     return nil
                 case .noDataForPeriod:

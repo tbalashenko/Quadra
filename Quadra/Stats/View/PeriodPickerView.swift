@@ -11,7 +11,7 @@ struct PeriodPickerView: View {
     @Binding var selectedPeriod: Period
     
     var body: some View {
-        Picker("Period", selection: $selectedPeriod) {
+        Picker(TextConstants.period, selection: $selectedPeriod) {
             ForEach(Period.allCases) { period in
                 Text(period.rawValue).tag(period)
             }

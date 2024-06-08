@@ -18,7 +18,7 @@ struct SourcesView: View {
             .onDelete(perform: deleteSources)
         }
         .listStyle(.plain)
-        .navigationTitle("Your Sources")
+        .navigationTitle(TextConstants.yourSources)
         .scrollContentBackground(.hidden)
         .background(Color.element)
     }

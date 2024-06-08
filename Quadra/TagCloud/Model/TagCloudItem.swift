@@ -8,7 +8,7 @@
 import Foundation
 
 class TagCloudItem: ObservableObject {
-    @Published var isSelected: Bool
+    var isSelected: Bool
     var id: UUID
     var title: String
     var color: String

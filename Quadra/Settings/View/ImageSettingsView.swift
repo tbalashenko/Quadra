@@ -11,21 +11,21 @@ struct ImageSettingsView: View {
     @ObservedObject var viewModel: SettingsViewModel
     
     var body: some View {
-        Picker("Preferable Aspect Ratio", selection: $viewModel.selectedRatio) {
+        Picker(TextConstants.preferableAspectRatio, selection: $viewModel.selectedRatio) {
             ForEach(AspectRatio.allCases, id: \.self) { ratio in
                 Text(ratio.rawValue)
             }
         }
         .pickerStyle(.menu)
         
-        Picker("Preferable Image Quality", selection: $viewModel.selectedImageScale) {
+        Picker(TextConstants.preferableImageQuality, selection: $viewModel.selectedImageScale) {
             ForEach(ImageScale.allCases, id: \.self) { scale in
                 Text(scale.value)
             }
         }
         .pickerStyle(.menu)
         
-        Text("Choosing better quality may increase file sizes, consuming more storage space. Lower quality may compromise image readability.")
+        Text(TextConstants.preferableImageQualityHelp)
             .foregroundColor(.secondary)
             .font(.footnote)
     }

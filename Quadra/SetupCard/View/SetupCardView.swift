@@ -10,11 +10,9 @@ import SwiftUI
 struct SetupCardView: View {
     @StateObject var viewModel: SetupCardViewModel
     @Binding var showSetupCardView: Bool
-    let settingsManager = SettingsManager.shared
     
     @State var image: Image?
     @State var sourceColor = Color.morningBlue
-    @State private var dragOffset = CGFloat.zero
     @State private var isAlertShowing = false
     
     var body: some View {
@@ -23,7 +21,7 @@ struct SetupCardView: View {
                 .styleListSection()
                 .frame(
                     width: SizeConstants.photoPickerWidth,
-                    height: SizeConstants.photoPickerWidth * settingsManager.aspectRatio.ratio
+                    height: SizeConstants.photoPickerWidth * SettingsManager.shared.aspectRatio.ratio
                 )
             SetupCardPhraseView(viewModel: viewModel)
             SetupCardSourceView(viewModel: viewModel)
@@ -34,20 +32,19 @@ struct SetupCardView: View {
         .interactiveDismissDisabled(true)
         .onAppear { setup() }
         .alert(
-            "Warning",
+            TextConstants.warning,
             isPresented: $isAlertShowing,
             actions: {
-                Button("Yes") { showSetupCardView = false }
-                Button("No", role: .cancel) { }
-            }, message: {
-                Text("Are you sure you want to close the window without saving?")
-            }
+                Button(TextConstants.yes) { showSetupCardView = false }
+                Button(TextConstants.no, role: .cancel) { }
+            },
+            message: { Text(TextConstants.closeWithoutSavingHelp) }
         )
         .navigationTitle(viewModel.mode.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button("Save") {
+                Button(TextConstants.closeWithoutSavingHelp) {
                     hideKeyboard()
                     viewModel.saveCard(image: image)
                     showSetupCardView = false
@@ -55,7 +52,7 @@ struct SetupCardView: View {
                 .disabled(viewModel.phraseToRemember.characters.isEmpty)
             }
             ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") {
+                Button(TextConstants.cancel) {
                     if viewModel.hasChanged {
                         isAlertShowing = true
                     } else {

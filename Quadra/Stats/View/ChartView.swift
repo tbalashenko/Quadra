@@ -25,7 +25,7 @@ struct ChartView: View {
                 ChartLineToggleView(toggleBindings: toggleBindings)
             }
             .listStyle(.plain)
-            .navigationTitle("Statistics")
+            .navigationTitle(TextConstants.statistics)
             .scrollContentBackground(.hidden)
             .background(Color.element)
 #if DEBUG

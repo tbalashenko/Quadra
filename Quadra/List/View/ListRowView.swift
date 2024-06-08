@@ -1,5 +1,5 @@
 //
-//  ListRow.swift
+//  ListRowView.swift
 //  Quadra
 //
 //  Created by Tatyana Balashenko on 27/03/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ListRow: View {
+struct ListRowView: View {
     @ObservedObject var card: Card
     
     var body: some View {

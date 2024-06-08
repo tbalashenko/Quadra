@@ -81,11 +81,11 @@ final class AdditionalnfoViewModel: ObservableObject {
     }
     
     func prepareAdditionalInfo(for card: Card) {
-        additionalInfo.append(Info(description: "Added:", value: card.additionTime.formatDate()))
-        additionalInfo.append(Info(description: "Number of repetitions:", value: String(card.repetitionCounter)))
+        additionalInfo.append(Info(description: TextConstants.added, value: card.additionTime.formatDate()))
+        additionalInfo.append(Info(description: TextConstants.numberOfRepetitions, value: String(card.repetitionCounter)))
         
         if let lastRepetition = card.lastRepetition {
-            additionalInfo.append(Info(description: "Last repetition:", value: lastRepetition.formatDate()))
+            additionalInfo.append(Info(description: TextConstants.lastRepetition, value: lastRepetition.formatDate()))
         }
     }
 }

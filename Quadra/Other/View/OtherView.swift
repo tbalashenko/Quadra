@@ -11,13 +11,13 @@ struct OtherView: View {
     var body: some View {
         NavigationStack {
             List {
-                NavigationLink("Settings") {
+                NavigationLink(TextConstants.settings) {
                     SettingsView()
                 }
             }
             .scrollContentBackground(.hidden)
             .background(Color.element)
-            .navigationTitle("Other")
+            .navigationTitle(TextConstants.other)
         }
     }
 }

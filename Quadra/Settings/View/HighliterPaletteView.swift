@@ -11,7 +11,7 @@ struct HighlighterPaletteView: View {
     @ObservedObject var viewModel: SettingsViewModel
     
     var body: some View {
-        Picker("Preferable Highlighter Palette", selection: $viewModel.highlighterPalette) {
+        Picker(TextConstants.preferableHighlighterPalette, selection: $viewModel.highlighterPalette) {
             ForEach(HighlighterPalette.allCases, id: \.self) { palette in
                 Text(palette.title)
             }

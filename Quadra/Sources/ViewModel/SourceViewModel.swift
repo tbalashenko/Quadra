@@ -32,11 +32,11 @@ final class SourceViewModel: ObservableObject {
         
         switch cardsCount {
             case 0:
-                return "\(source.title) - no cards"
+                return "\(source.title) - \(TextConstants.noCards)"
             case 1:
-                return "\(source.title) - 1 card"
+                return "\(source.title) - \(TextConstants.oneCard)"
             default:
-                return "\(source.title) - \(cardsCount) cards"
+                return "\(source.title) - \(cardsCount) \(TextConstants.cards)"
         }
     }
     
