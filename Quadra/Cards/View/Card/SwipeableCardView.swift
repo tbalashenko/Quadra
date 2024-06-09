@@ -61,7 +61,7 @@ private extension SwipeableCardView {
     private func onRecieveSwipeAction(_ action: SwipeAction?) {
         guard let action = action else { return }
         
-        let topCard = $viewModel.cardModels.first?.wrappedValue.card
+        let topCard = viewModel.visibleCardModels.first?.card
         
         if topCard?.id == model.card.id {
             switch action {

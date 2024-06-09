@@ -30,7 +30,6 @@ struct CardStackView: View {
         .onDisappear {
             viewModel.showConfetti = false
         }
-        
     }
 }
 

@@ -29,6 +29,19 @@ struct ContentView: View {
                             }
                         }
                     }
+                    .toolbar {
+                        if !viewModel.showInfoView {
+                            ToolbarItem(placement: .topBarLeading) {
+                                ProgressView(
+                                    value: viewModel.progress,
+                                    label: { Text("") },
+                                    currentValueLabel: { Text(viewModel.progressViewLabel) }
+                                )
+                                .progressViewStyle(.linear)
+                                .frame(width: SizeConstants.screenWidth / 2)
+                            }
+                        }
+                    }
                     .sheet(isPresented: $showSetupCardView, onDismiss: updateCards) {
                         NavigationStack {
                             SetupCardView(

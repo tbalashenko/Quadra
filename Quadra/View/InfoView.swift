@@ -9,7 +9,6 @@ import SwiftUI
 
 final class InfoViewModel: ObservableObject {
     @Published var isReadyToRepeat = false
-    private let cardService = CardService.shared
     
     init() {
         isReadyToRepeat = !CardService.shared.cards
@@ -68,7 +67,6 @@ struct InfoView: View {
             
         }
     }
-    
 }
 
 #Preview {

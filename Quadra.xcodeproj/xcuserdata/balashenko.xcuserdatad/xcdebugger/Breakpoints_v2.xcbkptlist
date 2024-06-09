@@ -3,4 +3,54 @@
    uuid = "3D59E3A5-D097-432D-87E3-440F999D0F7E"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F33E62DA-694B-4671-B3E8-9E51B0C04378"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Quadra/Cards/View/Card/SwipeableCardView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
+            landmarkName = "onRecieveSwipeAction(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "F33E62DA-694B-4671-B3E8-9E51B0C04378 - e4b11112cdb78fd2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Quadra.SwipeableCardView.onRecieveSwipeAction(Swift.Optional&lt;Quadra.SwipeAction&gt;) -&gt; ()"
+                  moduleName = "Quadra"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/balashenko/Developer/Quadra/Quadra/Cards/View/Card/SwipeableCardView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "67"
+                  endingLineNumber = "67"
+                  offsetFromSymbolStart = "1564">
+               </Location>
+               <Location
+                  uuid = "F33E62DA-694B-4671-B3E8-9E51B0C04378 - e4b11112cdb78ff5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Quadra.SwipeableCardView.onRecieveSwipeAction(Swift.Optional&lt;Quadra.SwipeAction&gt;) -&gt; ()"
+                  moduleName = "Quadra"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/balashenko/Developer/Quadra/Quadra/Cards/View/Card/SwipeableCardView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "66"
+                  endingLineNumber = "66"
+                  offsetFromSymbolStart = "600">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

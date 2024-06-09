@@ -44,7 +44,7 @@ struct SetupCardView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button(TextConstants.closeWithoutSavingHelp) {
+                Button(TextConstants.save) {
                     hideKeyboard()
                     viewModel.saveCard(image: image)
                     showSetupCardView = false

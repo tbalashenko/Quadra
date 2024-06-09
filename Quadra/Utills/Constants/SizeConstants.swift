@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SizeConstants {
+    static let screenWidth: CGFloat = UIScreen.main.bounds.width
+    
     //MARK: - Buttons
     static let buttonHeigh: CGFloat = 40.0
     static var buttonWith: CGFloat {

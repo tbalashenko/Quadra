@@ -14,13 +14,21 @@ final class CardsViewModel: ObservableObject {
     @Published var visibleCardModels = [CardModel]()
     @Published var showConfetti = false
     @Published var swipeAction: SwipeAction?
-    @Published var showInfoView = false
     @Published var isLoading = false
     
-    var cardModels = [CardModel]()
-    
+    private var cardModels = [CardModel]()
     private let visibleCardCount = 5
+    private var totalNumberOfCards = 0
+    private var cardsShown = 0
     private var cancellables = Set<AnyCancellable>()
+    
+    var showInfoView: Bool { cardModels.isEmpty }
+    var progress: Double {
+        totalNumberOfCards == 0 ? 0 : Double(cardsShown) / Double(totalNumberOfCards)
+    }
+    var progressViewLabel: String {
+        "\(totalNumberOfCards - cardsShown) left"
+    }
     
     init() {
         Task {
@@ -49,9 +57,10 @@ final class CardsViewModel: ObservableObject {
             
             await MainActor.run {
                 self.cardModels = filteredCards
-                self.showInfoView = self.cardModels.isEmpty
                 self.loadVisibleCards()
                 self.showConfetti = false
+                self.cardsShown = 0
+                self.totalNumberOfCards = filteredCards.count
             }
         }.value
         
@@ -80,6 +89,6 @@ final class CardsViewModel: ObservableObject {
         }
         
         showConfetti = cardModels.isEmpty
-        showInfoView = cardModels.isEmpty
+        cardsShown += 1
     }
 }
