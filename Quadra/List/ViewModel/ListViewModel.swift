@@ -13,28 +13,28 @@ final class ListViewModel: ObservableObject {
     @Published var filteredCards: [CardStatus: [Card]] = [:]
     @Published var searchText: String = ""
     @Published var isSearchPresented: Bool = false
-    
+
     private var cancellables = Set<AnyCancellable>()
-    
+
     var sortedStatuses: [CardStatus] {
         return CardStatus.allStatuses.filter { filteredCards.keys.contains($0) }
     }
-    
+
     init() {
         filterCards()
         observeChanges()
-        
+
         $filteredCards
             .map { !$0.values.isEmpty }
             .assign(to: &$isSearchPresented)
     }
-    
+
     func observeChanges() {
             observeFilterableModelChanges()
             observeSearchTextChanges()
             observeCardServiceChanges()
         }
-    
+
     func filterCards() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
@@ -45,16 +45,16 @@ final class ListViewModel: ObservableObject {
                     let sourceMatches = self.checkSourceMatches(card: card)
                     let dateRangeMatches = self.checkDateRangeMatches(card: card)
                     let archiveTagMatches = self.checkArchiveTagMatches(card: card)
-                    
+
                     return textMatch && statusMatches && sourceMatches && dateRangeMatches && archiveTagMatches
                 }
             self.filteredCards = Dictionary(grouping: cards, by: { $0.cardStatus })
         }
     }
-    
+
     func delete(at offsets: IndexSet, from status: CardStatus) {
         guard let index = offsets.first else { return }
-        
+
         if let cards = filteredCards[status] {
             let card = cards[index]
             do {
@@ -80,7 +80,7 @@ extension ListViewModel {
         }
         .store(in: &cancellables)
     }
-    
+
     private func observeSearchTextChanges() {
         $searchText
             .sink { [weak self] _ in
@@ -88,7 +88,7 @@ extension ListViewModel {
             }
             .store(in: &cancellables)
     }
-    
+
     private func observeCardServiceChanges() {
         CardService.shared.$cards
             .sink { [weak self] _ in
@@ -96,7 +96,7 @@ extension ListViewModel {
             }
             .store(in: &cancellables)
     }
-    
+
     private func checkTextMatch(card: Card) -> Bool {
         if searchText.isEmpty || card.stringPhraseToRemember.lowercased().contains(searchText.lowercased()) {
             return true
@@ -105,7 +105,7 @@ extension ListViewModel {
         }
         return false
     }
-    
+
     private func checkStatusMatches(card: Card) -> Bool {
         if model.selectedStatuses == CardStatus.allStatuses || model.selectedStatuses.isEmpty {
             return true
@@ -113,30 +113,30 @@ extension ListViewModel {
             return model.selectedStatuses.map { $0.id }.contains(card.cardStatus.id)
         }
     }
-    
+
     private func checkSourceMatches(card: Card) -> Bool {
         if model.selectedSources.isEmpty {
             return true
         } else if let sources = card.sources?.allObjects as? [CardSource] {
             return sources.contains(where: { model.selectedSources.contains($0) })
         }
-        
+
         return false
     }
-    
+
     private func checkDateRangeMatches(card: Card) -> Bool {
         let fromDateComparison = Calendar.current.compare(model.fromDate, to: card.additionTime, toGranularity: .day)
         let toDateComparison = Calendar.current.compare(model.toDate, to: card.additionTime, toGranularity: .day)
         return fromDateComparison != .orderedDescending && toDateComparison != .orderedAscending
     }
-    
+
     private func checkArchiveTagMatches(card: Card) -> Bool {
         if model.selectedArchiveTags.isEmpty {
             return true
         } else if let archiveTag = card.archiveTag {
             return model.selectedArchiveTags.contains(archiveTag)
         }
-        
+
         return false
     }
 }

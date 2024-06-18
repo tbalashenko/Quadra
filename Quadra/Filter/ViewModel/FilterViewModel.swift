@@ -12,24 +12,24 @@ final class FilterViewModel: ObservableObject {
     @Published var statusTags: [TagCloudItem] = []
     @Published var archiveTags: [TagCloudItem] = []
     @Published var sourceTags: [TagCloudItem] = []
-    
+
     init(model: FilterableListModel) {
         self.model = model
         setupStatusTags()
         setupArchiveTags()
         setupSourceTags()
     }
-    
+
     func resetFilter() {
         model.reset()
         setupStatusTags()
         setupArchiveTags()
         setupSourceTags()
     }
-    
+
     private func setupStatusTags() {
         statusTags.removeAll()
-        
+
         CardStatus.allStatuses.forEach { status in
             let item = TagCloudItem(
                 isSelected: model.selectedStatuses.contains(status),
@@ -43,10 +43,10 @@ final class FilterViewModel: ObservableObject {
             statusTags.append(item)
         }
     }
-    
+
     private func setupArchiveTags() {
         archiveTags.removeAll()
-        
+
         ArchiveTagService.shared.archiveTags.forEach { tag in
             let item = TagCloudItem(
                 isSelected: model.selectedArchiveTags.contains(tag),
@@ -60,10 +60,10 @@ final class FilterViewModel: ObservableObject {
             archiveTags.append(item)
         }
     }
-    
+
     private func setupSourceTags() {
         sourceTags.removeAll()
-        
+
         CardSourceService.shared.sources.forEach { source in
             let item = TagCloudItem(
                 isSelected: model.selectedSources.contains(source),

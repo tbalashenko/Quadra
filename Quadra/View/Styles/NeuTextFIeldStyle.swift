@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NeuTextFieldStyle: TextFieldStyle {
     @Binding var text: String
-    
+
     func _body(configuration: TextField<Self._Label>) -> some View {
         ZStack {
             if !text.isEmpty {

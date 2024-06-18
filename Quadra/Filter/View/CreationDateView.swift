@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CreationDateView: View {
     @ObservedObject var viewModel: FilterViewModel
-    
+
     var body: some View {
         GroupBox(TextConstants.creationDate) {
             DatePicker(TextConstants.from,
@@ -27,6 +27,6 @@ struct CreationDateView: View {
     }
 }
 
-//#Preview {
+// #Preview {
 //    CreationDateView()
-//}
+// }

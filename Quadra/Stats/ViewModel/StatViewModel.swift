@@ -13,23 +13,23 @@ class StatViewModel: ObservableObject {
     @Published var showAddedCards = true
     @Published var showRepeatedCards = true
     @Published var showDeletedCards = true
-    
+
     init() {
         fetchStatData()
     }
-    
+
     func fetchStatData(fromDate: Date? = nil) {
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
-        var predicate: NSPredicate? = nil
+        var predicate: NSPredicate?
         if let fromDate {
             predicate = NSPredicate(format: "date >= %@ AND date <= %@", fromDate as NSDate, Date() as NSDate)
         }
-        
+
         guard let data = try? StatDataService.shared.fetchStatData(sortDescriptors: [sortDescriptor], predicate: predicate) else { return }
-        
+
         statData = data
     }
-    
+
     func getStatDataState() -> StatDataState {
         return StatDataService.shared.statData.isEmpty ? .empty : .notEnoughData
     }
@@ -40,7 +40,7 @@ extension StatViewModel {
         case empty
         case notEnoughData
         case noDataForPeriod
-        
+
         var instructionFirstPart: String {
             switch self {
                 case .empty:
@@ -51,7 +51,7 @@ extension StatViewModel {
                     return ""
             }
         }
-        
+
         var instructionSecondPart: String? {
             switch self {
                 case .empty:
@@ -64,4 +64,3 @@ extension StatViewModel {
         }
     }
 }
-

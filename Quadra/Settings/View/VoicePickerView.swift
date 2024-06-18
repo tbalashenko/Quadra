@@ -9,7 +9,7 @@ import SwiftUI
 
 struct VoicePickerView: View {
     @ObservedObject var viewModel: SettingsViewModel
-    
+
     var body: some View {
         Picker(TextConstants.voice, selection: $viewModel.selectedVoice) {
             ForEach(Voice.allVoices.sorted(by: { $0.language < $1.language }), id: \.self) { voice in

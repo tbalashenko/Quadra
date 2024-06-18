@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HighlighterPaletteView: View {
     @ObservedObject var viewModel: SettingsViewModel
-    
+
     var body: some View {
         Picker(TextConstants.preferableHighlighterPalette, selection: $viewModel.highlighterPalette) {
             ForEach(HighlighterPalette.allCases, id: \.self) { palette in
@@ -17,7 +17,7 @@ struct HighlighterPaletteView: View {
             }
         }
         .pickerStyle(.menu)
-        
+
         HStack(spacing: 16) {
             Spacer()
             ForEach(viewModel.highlighterPalette.colors, id: \.self) { color in

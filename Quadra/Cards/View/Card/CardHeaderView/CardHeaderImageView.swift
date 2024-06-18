@@ -11,7 +11,7 @@ struct CardHeaderImageView: View {
     let image: Image
     let croppedImage: Image
     @State private var showFullImage: Bool = false
-    
+
     var body: some View {
         Button(action: {
             showFullImage.toggle()
@@ -23,8 +23,7 @@ struct CardHeaderImageView: View {
                     .frame(size: SizeConstants.imageSize)
                     .clipped()
                     .northWestShadow()
-                
-                
+
             }
         }
         .frame(size: SizeConstants.imageSize)

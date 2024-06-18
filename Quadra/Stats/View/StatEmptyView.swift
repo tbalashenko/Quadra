@@ -9,7 +9,7 @@ import SwiftUI
 
 struct StatEmptyView: View {
     @EnvironmentObject var viewModel: StatViewModel
-    
+
     var body: some View {
         ScrollView {
             Text(viewModel.getStatDataState().instructionFirstPart)

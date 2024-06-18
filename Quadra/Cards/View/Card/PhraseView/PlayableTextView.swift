@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PlayableTextView: View {
     @ObservedObject var viewModel: PhraseViewModel
-    
+
     var body: some View {
         HStack(spacing: 12) {
             TextToSpeechPlayView(viewModel: TextToSpeechViewModel(text: viewModel.textToSpeech))
@@ -24,6 +24,6 @@ struct PlayableTextView: View {
     }
 }
 
-//#Preview {
+// #Preview {
 //    PlayableTextView()
-//}
+// }

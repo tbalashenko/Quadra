@@ -10,8 +10,8 @@ import PhotosUI
 
 struct CropView: View {
     var image: Image?
-    var onCrop: (Image?, Bool) -> ()
-    
+    var onCrop: (Image?, Bool) -> Void
+
     @Environment(\.dismiss) private var dismiss
     @State private var scale: CGFloat = 1
     @State private var magnifyBy: CGFloat = 1
@@ -19,7 +19,7 @@ struct CropView: View {
     @State private var lastStoredOffset = CGSize.zero
     @State private var rotationDegrees: Double = 0
     @GestureState private var isInteracting = false
-    
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -39,14 +39,14 @@ struct CropView: View {
                         ToolbarItem(placement: .confirmationAction) {
                             Button {
                                 let renderer = ImageRenderer(content: imageView(hideGrids: true))
-                                
+
                                 if let uiImage = renderer.uiImage {
                                     onCrop(Image(uiImage: uiImage), true)
                                 } else {
                                     onCrop(nil, false)
                                 }
                                 dismiss()
-                                
+
                             } label: {
                                 Text(TextConstants.save)
                             }
@@ -75,27 +75,27 @@ struct CropView: View {
             }
         }
     }
-    
+
     @ViewBuilder
     private func imageView(hideGrids: Bool = false) -> some View {
         GeometryReader {
             let size = $0.size
-            
+
             image?
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .overlay {
                     GeometryReader { geometry in
                         let rect = geometry.frame(in: .named("CropView"))
-                        
+
                         Color.clear
-                            .onChange(of: isInteracting) { oldValue, newValue in
+                            .onChange(of: isInteracting) { _, newValue in
                                 withAnimation(.easeInOut(duration: 0.2)) {
                                     if rect.size.width < size.width || rect.size.height < size.height {
                                         reset()
                                         return
                                     }
-                                    
+
                                     if rect.minX > 0 {
                                         offset.width = offset.width - rect.minX
                                         haptic(.medium)
@@ -113,7 +113,7 @@ struct CropView: View {
                                         haptic(.medium)
                                     }
                                 }
-                                
+
                                 if !newValue {
                                     lastStoredOffset = offset
                                 }
@@ -135,7 +135,7 @@ struct CropView: View {
         .gesture(magnification)
         .frame(size: SizeConstants.imageSize)
     }
-    
+
     @ViewBuilder
     private func grids() -> some View {
         ZStack {
@@ -158,8 +158,8 @@ struct CropView: View {
         }
         .border(.white, width: 2)
     }
-    
-    private func reset(){
+
+    private func reset() {
         offset = .zero
         magnifyBy = 1
         scale = 1
@@ -180,7 +180,7 @@ extension CropView {
                 magnifyBy = 1
             }
     }
-    
+
     private var drag: some Gesture {
         DragGesture()
             .updating($isInteracting) { _, state, _ in
@@ -195,8 +195,6 @@ extension CropView {
 
 #Preview {
     CropView(image: Image("test")) { _, _ in
-        
+
     }
 }
-
-

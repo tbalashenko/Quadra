@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FlipablePhraseView: View {
     @StateObject var viewModel: PhraseViewModel
-    
+
     var body: some View {
         if viewModel.showPhraseView {
             PlayableTextView(viewModel: viewModel)

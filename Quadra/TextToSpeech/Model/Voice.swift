@@ -14,7 +14,7 @@ struct Voice {
     var name: String
     var identifier: String
     var samplePhrase: String
-    
+
     init(
         code: String,
         language: String,
@@ -28,7 +28,7 @@ struct Voice {
         self.identifier = identifier
         self.samplePhrase = samplePhrase
     }
-    
+
     init(identifier: String) {
         if let voice = Voice.voiceDictionary[identifier] {
             self = voice
@@ -91,7 +91,7 @@ extension Voice {
         .chineseHk,
         .chineseTw
     ]
-    
+
     static let voiceDictionary: [String: Voice] = Dictionary(uniqueKeysWithValues: allVoices.map { ($0.identifier, $0) })
 }
 
@@ -99,26 +99,26 @@ extension Voice {
     static let chech = Voice(code: "cs-CZ", language: "Chech", name: "Zuzana", identifier: "com.apple.ttsbundle.Zuzana-compact", samplePhrase: "Ahoj, Světe!")
     static let danish = Voice(code: "da-DK", language: "Danish", name: "Sara", identifier: "com.apple.ttsbundle.Sara-compact", samplePhrase: "Hej, Verden!")
     static let greek = Voice(code: "el-GR", language: "Greek", name: "Melina", identifier: "com.apple.ttsbundle.Melina-compact", samplePhrase: "Γεια σου, κόσμε!")
-    
+
     static let german0 = Voice(code: "de-DE", language: "German", name: "Anna", identifier: "com.apple.ttsbundle.Anna-compact", samplePhrase: "Hallo, Welt!")
     static let german1 = Voice(code: "de-DE", language: "German", name: "Helena", identifier: "com.apple.ttsbundle.siri_female_de-DE_compact", samplePhrase: "Hallo, Welt!")
     static let german2 = Voice(code: "de-DE", language: "German", name: "Martin", identifier: "com.apple.ttsbundle.siri_male_de-DE_compact", samplePhrase: "Hallo, Welt!")
-    
+
     static let englishAu0 = Voice(code: "en-AU", language: "English (Australia)", name: "Catherine", identifier: "com.apple.ttsbundle.siri_female_en-AU_compact", samplePhrase: "Hello, World!")
     static let englishAu1 = Voice(code: "en-AU", language: "English (Australia)", name: "Gordon", identifier: "com.apple.ttsbundle.siri_male_en-AU_compact", samplePhrase: "Hello, World!")
     static let englishAu2 = Voice(code: "en-AU", language: "English (Australia)", name: "Karen", identifier: "com.apple.ttsbundle.Karen-compact", samplePhrase: "Hello, World!")
-    
+
     static let englishGb0 = Voice(code: "en-GB", language: "English (UK)", name: "Arthur", identifier: "com.apple.ttsbundle.siri_male_en-GB_compact", samplePhrase: "Hello, World!")
     static let englishGb1 = Voice(code: "en-GB", language: "English (UK)", name: "Daniel", identifier: "com.apple.ttsbundle.Daniel-compact", samplePhrase: "Hello, World!")
     static let englishGb2 = Voice(code: "en-GB", language: "English (UK)", name: "Martha", identifier: "com.apple.ttsbundle.siri_female_en-GB_compact", samplePhrase: "Hello, World!")
-    
+
     static let englishIr = Voice(code: "en-IE", language: "English (Ireland)", name: "Moira", identifier: "com.apple.ttsbundle.Moira-compact", samplePhrase: "Hello, World!")
-    
+
     static let englishUs0 = Voice(code: "en-US", language: "English (US)", name: "Aaron", identifier: "com.apple.ttsbundle.siri_male_en-US_compact", samplePhrase: "Hello, World!")
     static let englishUs1 = Voice(code: "en-US", language: "English (US)", name: "Fred", identifier: "com.apple.speech.synthesis.voice.Fred", samplePhrase: "Hello, World!")
     static let englishUs2 = Voice(code: "en-US", language: "English (US)", name: "Nicky", identifier: "com.apple.ttsbundle.siri_female_en-US_compact", samplePhrase: "Hello, World!")
     static let englishUs3 = Voice(code: "en-US", language: "English (US)", name: "Samantha", identifier: "com.apple.ttsbundle.Samantha-compact", samplePhrase: "Hello, World!")
-    
+
     static let spanishSp = Voice(code: "es-ES", language: "Spanish (Spain)", name: "Mónica", identifier: "com.apple.ttsbundle.Monica-compact", samplePhrase: "¡Hola, mundo!")
     static let spanishMx = Voice(code: "es-MX", language: "Spanish (Mexico)", name: "Paulina", identifier: "com.apple.ttsbundle.Paulina-compact", samplePhrase: "¡Hola, mundo!")
 
@@ -165,5 +165,5 @@ extension Voice {
     static let chineseTw = Voice(code: "zh-TW", language: "Chinese (Taiwan)", name: "Mei-Jia", identifier: "com.apple.ttsbundle.Mei-Jia-compact", samplePhrase: "你好，世界!")
 }
 
-//MARK: - Hashable
+// MARK: - Hashable
 extension Voice: Hashable { }

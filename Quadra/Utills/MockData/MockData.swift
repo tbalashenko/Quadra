@@ -15,7 +15,7 @@ struct MockData {
         DummyItem(title: "Oh, never mind", image: Image("oh-never-mind")),
         DummyItem(title: "That sounds great", image: Image("that-sounds-great"))
     ]
-    
+
     static let tagCloudItems: [TagCloudItem] = [
         TagCloudItem(
             isSelected: true,

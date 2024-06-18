@@ -7,13 +7,12 @@
 
 import SwiftUI
 
-
 struct NeuButtonStyle: ButtonStyle {
     enum NeuButtonStyleForm {
         case capsule
         case roundedRectangle
     }
-    
+
     var color = Color.element
     var size: CGSize = SizeConstants.smallButtonImageSize
     var form: NeuButtonStyleForm = .capsule
@@ -21,7 +20,7 @@ struct NeuButtonStyle: ButtonStyle {
     func makeBody(configuration: Self.Configuration)
     -> some View {
         let shape = form == .capsule ? AnyShape(Capsule()) : AnyShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
-        
+
         configuration.label
             .frame(size: size)
             .scaleEffect(configuration.isPressed ? 0.98 : 1)

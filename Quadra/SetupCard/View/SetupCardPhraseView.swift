@@ -10,7 +10,7 @@ import SwiftUI
 struct SetupCardPhraseView: View {
     @ObservedObject var viewModel: SetupCardViewModel
     @Binding var showPastedPopup: Bool
-    
+
     var body: some View {
         GroupBox(TextConstants.phraseToRemember) {
             HStack {
@@ -22,7 +22,7 @@ struct SetupCardPhraseView: View {
             }
         }
         .groupBoxStyle(PlainGroupBoxStyle())
-        
+
         GroupBox(TextConstants.translation) {
             HStack {
                 HighlightableTextView(text: $viewModel.translation)
@@ -33,7 +33,7 @@ struct SetupCardPhraseView: View {
             }
         }
         .groupBoxStyle(PlainGroupBoxStyle())
-        
+
         GroupBox(TextConstants.transcription) {
             HStack {
                 TextField(
@@ -54,6 +54,6 @@ struct SetupCardPhraseView: View {
         .groupBoxStyle(PlainGroupBoxStyle())
     }
 }
-    //#Preview {
+    // #Preview {
     //    SetupCardPhraseView()
-    //}
+    // }

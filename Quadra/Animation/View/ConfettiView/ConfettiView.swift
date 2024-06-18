@@ -11,7 +11,7 @@ import SpriteKit
 struct ConfettiView: View {
     @Binding var isShown: Bool
     var timeInS: Double
-    
+
     var body: some View {
         GeometryReader { geometry in
             if isShown {

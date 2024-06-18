@@ -10,7 +10,7 @@ import SwiftUI
 struct AlignableTransparentButton<Content: View>: View {
     var alignment: Alignment
     var content: () -> Content
-    var action: (() -> ())?
+    var action: (() -> Void)?
 
     var body: some View {
         GeometryReader { geometry in

@@ -11,7 +11,7 @@ struct FullImageView: View {
     @Environment(\.dismiss) var dismiss
     @GestureState private var dragOffset: CGSize = .zero
     let image: Image
-    
+
     var body: some View {
         ZStack {
             image

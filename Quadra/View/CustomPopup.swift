@@ -10,7 +10,7 @@ import SwiftUI
 struct CustomPopup: View {
     var text: String
     @Binding var showPopup: Bool
-    
+
     var body: some View {
         Text(text)
             .foregroundColor(.white)

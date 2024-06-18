@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension CardArchiveTag {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<CardArchiveTag> {
@@ -40,6 +39,6 @@ extension CardArchiveTag {
 
 }
 
-extension CardArchiveTag : Identifiable {
+extension CardArchiveTag: Identifiable {
 
 }

@@ -9,13 +9,13 @@ import Foundation
 
 final class SourcesViewModel: ObservableObject {
     @Published var sources = [CardSource]()
-    
+
     let service = CardSourceService.shared
-    
+
     init() {
         self.sources = service.sources
     }
-    
+
     func delete(source: CardSource) {
         do {
             try service.deleteSource(source: source)

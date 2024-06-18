@@ -33,7 +33,7 @@ struct TextConstants {
     static let preferableHighlighterPalette = "Preferable Highlighter Palette"
     static let closeWithoutSavingHelp = "Are you sure you want to close the window without saving?"
     static let period = "Period"
-    
+
     static let addFirstCards = "Add your first cards"
     static let continueAddAndRepHelp = "Continue adding and repeating your cards daily to see statistics"
     static let howToUseApp = "How to use the app"
@@ -46,15 +46,15 @@ struct TextConstants {
     static let noSamplePhrases = "Sorry, we didn't find any good example for you"
     static let copied = "Copied!"
     static let pasted = "Pasted!"
-    
+
     static let noCards = "no cards"
     static let oneCard = "1 card"
     static let cards = "cards"
-    
+
     static let from = "From"
     static let to = "To"
-    
-    //Navigation Titles
+
+    // Navigation Titles
     static let filter = "Filter"
     static let yourPhrases = "Your Phrases"
     static let yourSources = "Your Sources"
@@ -64,9 +64,8 @@ struct TextConstants {
     static let testFeatures = "Test Features"
     static let getSample = "Get a sample phrase"
     static let cropImage = "Crop Image"
-    
-    
-    //Buttons
+
+    // Buttons
     static let reset = "Reset"
     static let selectPhoto = "Select Photo"
     static let save = "Save"
@@ -74,8 +73,8 @@ struct TextConstants {
     static let yes = "Yes"
     static let no = "No"
     static let restart = "Restart"
-    
-    //Statuses
+
+    // Statuses
     static let input = "#input"
     static let thisWeek = "#thisWeek"
     static let thisMonth = "#thisMonth"

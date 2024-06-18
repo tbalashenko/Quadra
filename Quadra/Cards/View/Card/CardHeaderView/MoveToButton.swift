@@ -9,8 +9,8 @@ import SwiftUI
 
 struct MoveToButton: View {
     @ObservedObject var model: CardModel
-    var action: (() -> ())?
-    
+    var action: (() -> Void)?
+
     var body: some View {
         AlignableTransparentButton(alignment: .topLeading) {
             HStack {
@@ -28,6 +28,6 @@ struct MoveToButton: View {
     }
 }
 
-//#Preview {
+// #Preview {
 //    MoveToButton()
-//}
+// }

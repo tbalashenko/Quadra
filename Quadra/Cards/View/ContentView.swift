@@ -11,9 +11,9 @@ import SpriteKit
 
 struct ContentView: View {
     @StateObject var viewModel = CardsViewModel()
-    
+
     @State private var showSetupCardView = false
-    
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -57,7 +57,7 @@ struct ContentView: View {
             }
         }
     }
-    
+
     func updateCards() {
         Task {
             await viewModel.updateCards()

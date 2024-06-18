@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AdditionalnfoView: View {
     @State var viewModel: AdditionalnfoViewModel
-    
+
     var body: some View {
         VStack(alignment: .center) {
             if viewModel.showTranscription {
@@ -36,6 +36,6 @@ struct AdditionalnfoView: View {
     }
 }
 
-//#Preview {
+// #Preview {
 //    AdditionalnfoView()
-//}
+// }

@@ -10,11 +10,11 @@ import SwiftUI
 struct SwipeableCardView: View {
     @ObservedObject var viewModel: CardsViewModel
     @ObservedObject var model: CardModel
-    
+
     @State private var xOffset: CGFloat = .zero
     @State private var yOffset: CGFloat = .zero
     @State private var degrees: Double = 0
-    
+
     var body: some View {
         CardView(model: model) {
             swipeLeft(changeStatus: true)
@@ -37,7 +37,7 @@ private extension SwipeableCardView {
         yOffset = 0
         degrees = 0
     }
-    
+
     private func swipeRight(changeStatus: Bool = false) {
         withAnimation(.snappy(duration: 1)) {
             xOffset = 500
@@ -46,7 +46,7 @@ private extension SwipeableCardView {
             viewModel.removeCard(model: model, changeStatus: changeStatus)
         }
     }
-    
+
     private func swipeLeft(changeStatus: Bool = false) {
         withAnimation(.snappy(duration: 1)) {
             xOffset = -500
@@ -63,14 +63,14 @@ private extension SwipeableCardView {
         yOffset = value.translation.height
         degrees = Double(value.translation.width/25)
     }
-    
+
     private func onDragEnded(_ value: _ChangedGesture<DragGesture>.Value) {
         let width = value.translation.width
         if abs(width) <= SizeConstants.screenCutOff {
             returnToCenter()
             return
         }
-        
+
         if width >= SizeConstants.screenCutOff {
             swipeRight()
         } else {

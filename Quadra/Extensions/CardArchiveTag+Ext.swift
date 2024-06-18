@@ -23,9 +23,8 @@ extension CardArchiveTag {
             Color.Month.november,
             Color.Month.december
         ]
-        
+
         let monthIndex = Calendar.current.component(.month, from: date) - 1
         return monthColors[monthIndex].toHex()
     }
 }
-

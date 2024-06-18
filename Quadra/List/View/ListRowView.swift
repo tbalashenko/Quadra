@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ListRowView: View {
     @ObservedObject var card: Card
-    
+
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
             Text(AttributedString(card.phraseToRemember))
@@ -33,16 +33,16 @@ struct ListRowView: View {
     }
 }
 
-//#Preview {
+// #Preview {
 //    VStack {
 //        ListRow(item: Item.sampleData.first!)
 //        ListRow(item: Item.sampleData.last!)
 //    }
-//}
+// }
 
 struct ContentLengthPreference: PreferenceKey {
    static var defaultValue: CGFloat { 0 }
-   
+
    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
       value = nextValue()
    }

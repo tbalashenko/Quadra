@@ -9,10 +9,10 @@ import SwiftUI
 
 struct TagCloudView: View {
     @ObservedObject var viewModel: TagCloudViewModel
-    
+
     var body: some View {
         ScrollView {
-            TagLayout() {
+            TagLayout {
                 ForEach(viewModel.displayedItems, id: \.id) { item in
                     TagView(item: item) {
                         if viewModel.isSelectable {

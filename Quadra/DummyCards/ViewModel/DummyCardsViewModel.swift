@@ -15,13 +15,13 @@ enum SwipeAction {
 class DummyCardsViewModel: ObservableObject {
     @Published var cardModels = [DummyCardModel]()
     @Published var swipeAction: SwipeAction?
-    
+
     private let service = DummyCardService()
-    
+
     init() {
         Task { await fetchCardModels() }
     }
-    
+
     func fetchCardModels() async {
         do {
             self.cardModels = try await service.fetchCardModels()
@@ -29,16 +29,16 @@ class DummyCardsViewModel: ObservableObject {
             print("Failed to fetch cards with error \(error)")
         }
     }
-    
+
     func removeCard(_ card: DummyCardModel) {
         guard let index = cardModels.firstIndex(where: { $0.id == card.id }) else { return }
         cardModels.remove(at: index)
     }
-    
+
     func timerAction() {
         swipeAction = Bool.random() ? SwipeAction.left : SwipeAction.right
     }
-    
+
     func updateCardModels() {
         Task { await fetchCardModels() }
     }

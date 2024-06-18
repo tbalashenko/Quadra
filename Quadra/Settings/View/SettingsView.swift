@@ -10,7 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject var viewModel = SettingsViewModel()
-    
+
     var body: some View {
         NavigationStack {
             Form {
@@ -52,5 +52,3 @@ struct SettingsView: View {
 #Preview {
     SettingsView(viewModel: SettingsViewModel())
 }
-
-

@@ -12,11 +12,11 @@ class StatDataService: ObservableObject {
     @Published var statData = [StatData]()
     static let shared = StatDataService()
     let dataController = DataController.shared
-    
+
     private init() {
         fetchStatData()
     }
-    
+
     func fetchStatData() {
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
         do {
@@ -25,19 +25,19 @@ class StatDataService: ObservableObject {
             print("Error fetching statData \(error.localizedDescription)")
         }
     }
-    
+
     func fetchStatData(sortDescriptors: [NSSortDescriptor], predicate: NSPredicate? = nil) throws -> [StatData] {
         let fetchRequest: NSFetchRequest<StatData> = StatData.fetchRequest()
         fetchRequest.sortDescriptors = sortDescriptors
         fetchRequest.predicate = predicate
-        
+
         do {
             return try dataController.container.viewContext.fetch(fetchRequest)
         } catch {
             throw DataServiceError.fetchFailed(description: "Failed to fetch StatData: \(error.localizedDescription)")
         }
     }
-    
+
     func saveStatData(
         date: Date = Date(),
         repeatedItemsCounter: Int = 0,
@@ -49,7 +49,7 @@ class StatDataService: ObservableObject {
             statData.deletedItemsCounter = deletedItemsCounter
             statData.totalNumberOfCards = CardService.shared.cards.count
             statData.date = date
-            
+
             do {
                 try dataController.container.viewContext.save()
                 self.statData.append(statData)
@@ -58,7 +58,7 @@ class StatDataService: ObservableObject {
                 throw DataServiceError.saveFailed(description: "Failed to save StatData: \(error.localizedDescription)")
             }
         }
-    
+
     func editStatData(
         statData: StatData,
         repeatedItemsCounter: Int? = nil,
@@ -73,23 +73,23 @@ class StatDataService: ObservableObject {
             if let deletedItemsCounter {
                 statData.deletedItemsCounter = deletedItemsCounter
             }
-            
+
             statData.totalNumberOfCards = CardService.shared.cards.count
-            
+
             do {
                 try dataController.container.viewContext.save()
-                
+
                 guard let statDataToChangeIndex = self.statData.firstIndex(where: { $0.date == statData.date }) else { return }
-                
+
                 self.statData[statDataToChangeIndex] = statData
             } catch {
                 throw DataServiceError.saveFailed(description: "Failed to save changes to StatData: \(error.localizedDescription)")
             }
         }
-    
+
     func incrementRepeatedItemsCounter() {
         guard let statData = getStatData() else { return }
-        
+
         do {
             try editStatData(
                 statData: statData,
@@ -99,10 +99,10 @@ class StatDataService: ObservableObject {
             print("Failed to save changes to StatData: \(error.localizedDescription)")
         }
     }
-    
+
     func incrementAddedItemsCounter() {
         guard let statData = getStatData() else { return }
-        
+
         do {
             try editStatData(
                 statData: statData,
@@ -112,10 +112,10 @@ class StatDataService: ObservableObject {
             print("Failed to save changes to StatData: \(error.localizedDescription)")
         }
     }
-    
+
     func incrementDeletedItemsCounter() {
         guard let statData = getStatData() else { return }
-        
+
         do {
             try editStatData(
                 statData: statData,
@@ -125,10 +125,10 @@ class StatDataService: ObservableObject {
             print("Failed to save changes to StatData: \(error.localizedDescription)")
         }
     }
-    
+
     func getStatData() -> StatData? {
         let currentDate = Date().formattedForStats()
-        
+
         if let statData = statData.first(where: { $0.date == currentDate }) {
             return statData
         } else {
@@ -138,7 +138,7 @@ class StatDataService: ObservableObject {
                 print("Error creating statData: \(error.localizedDescription)")
             }
         }
-        
+
         return nil
     }
 }
@@ -147,4 +147,3 @@ enum DataServiceError: Error {
     case fetchFailed(description: String)
     case saveFailed(description: String)
 }
-

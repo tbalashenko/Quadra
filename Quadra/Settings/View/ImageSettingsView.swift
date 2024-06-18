@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ImageSettingsView: View {
     @ObservedObject var viewModel: SettingsViewModel
-    
+
     var body: some View {
         Picker(TextConstants.preferableAspectRatio, selection: $viewModel.selectedRatio) {
             ForEach(AspectRatio.allCases, id: \.self) { ratio in
@@ -17,14 +17,14 @@ struct ImageSettingsView: View {
             }
         }
         .pickerStyle(.menu)
-        
+
         Picker(TextConstants.preferableImageQuality, selection: $viewModel.selectedImageScale) {
             ForEach(ImageScale.allCases, id: \.self) { scale in
                 Text(scale.value)
             }
         }
         .pickerStyle(.menu)
-        
+
         Text(TextConstants.preferableImageQualityHelp)
             .foregroundColor(.secondary)
             .font(.footnote)

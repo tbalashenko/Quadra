@@ -10,15 +10,15 @@ import SpriteKit
 
 class ParticleScene: SKScene {
     let emitters = [SKEmitterNode(fileNamed: "Confetti"), SKEmitterNode(fileNamed: "Spirals")]
-    
+
     override init(size: CGSize) {
         super.init(size: size)
-        
+
         backgroundColor = .clear
-        
+
         for emitter in emitters {
             guard let emitter else { continue }
-            
+
             emitter.particleColorSequence = nil
             emitter.position.y += size.height
             emitter.position.x += size.width
@@ -29,7 +29,7 @@ class ParticleScene: SKScene {
             addChild(emitter)
         }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

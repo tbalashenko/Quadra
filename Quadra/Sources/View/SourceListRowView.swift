@@ -10,7 +10,7 @@ import SwiftUI
 struct SourceListRowView: View {
     @StateObject var viewModel: SourceViewModel
     @State var isEditing = false
-    
+
     var body: some View {
         HStack(spacing: 24) {
             ColorPicker("", selection: Binding<Color>(
@@ -22,14 +22,14 @@ struct SourceListRowView: View {
             ))
             .frame(size: SizeConstants.smallButtonImageSize)
             .northWestShadow()
-            
+
             if isEditing {
                 HStack(spacing: 12) {
                     TextField("", text: $viewModel.editableTitle)
                         .textFieldStyle(NeuTextFieldStyle(text: $viewModel.editableTitle))
-                    
+
                     Spacer()
-                    
+
                     Button {
                         viewModel.saveChanges()
                         isEditing = false
@@ -40,7 +40,7 @@ struct SourceListRowView: View {
                     }
                     .buttonStyle(NeuButtonStyle())
                     .disabled(viewModel.editableTitle.isEmpty)
-                    
+
                     Button {
                         isEditing = false
                     } label: {
@@ -55,7 +55,7 @@ struct SourceListRowView: View {
                     .onTapGesture { isEditing = true }
                 Spacer()
             }
-            
+
         }
         .padding()
         .background(

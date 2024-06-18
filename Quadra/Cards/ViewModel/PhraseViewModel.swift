@@ -11,18 +11,18 @@ import Combine
 final class PhraseViewModel: ObservableObject {
     @Published var showPhraseView: Bool = true
     @Published var showTranslationView: Bool
-    
+
     var translation: AttributedString?
     var phrase: AttributedString { cardModel.card.convertedPhraseToRemember }
     var textToSpeech: String { cardModel.card.phraseToRemember.string }
-    
+
     private var cardModel: CardModel
     private var cancellables = Set<AnyCancellable>()
     private var flipable: Bool = false
-    
+
     init(cardModel: CardModel) {
         self.cardModel = cardModel
-        
+
         self.showTranslationView = cardModel.showTranslation
         if let translation = cardModel.card.convertedTranslation, !translation.characters.isEmpty {
             self.translation = translation
@@ -30,7 +30,7 @@ final class PhraseViewModel: ObservableObject {
         }
         self.setupBindings()
     }
-    
+
     private func setupBindings() {
         cardModel.objectWillChange
             .sink { [weak self] _ in
@@ -39,7 +39,7 @@ final class PhraseViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-    
+
     private func updateProperties(from model: CardModel) {
         self.showTranslationView = cardModel.showTranslation
         if let translation = model.card.convertedTranslation, !translation.characters.isEmpty {
@@ -47,7 +47,7 @@ final class PhraseViewModel: ObservableObject {
             self.flipable = !model.showTranslation
         }
     }
-    
+
     func switchMode() {
         if flipable {
             showPhraseView.toggle()

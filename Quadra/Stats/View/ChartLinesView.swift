@@ -11,7 +11,7 @@ import Charts
 struct ChartLinesView: View {
     @ObservedObject var viewModel: StatViewModel
     @Binding var selectedPeriod: Period
-    
+
     var body: some View {
         Chart {
             ForEach(viewModel.statData) { data in
@@ -24,7 +24,7 @@ struct ChartLinesView: View {
                         )
                         .foregroundStyle(ChartLine.totalNumber.color)
                         .interpolationMethod(.monotone)
-                        
+
                         AreaMark(
                             x: .value("Date", data.date, unit: .day),
                             y: .value(ChartLine.totalNumber.rawValue, data.totalNumberOfCards),
@@ -34,7 +34,7 @@ struct ChartLinesView: View {
                         .interpolationMethod(.monotone)
                     }
                 }
-                
+
                 if viewModel.showAddedCards {
                     LineMark(
                         x: .value("Date", data.date, unit: .day),
@@ -44,7 +44,7 @@ struct ChartLinesView: View {
                     .foregroundStyle(ChartLine.added.color)
                     .interpolationMethod(.monotone)
                 }
-                
+
                 if viewModel.showRepeatedCards {
                     LineMark(
                         x: .value("Date", data.date, unit: .day),
@@ -54,14 +54,14 @@ struct ChartLinesView: View {
                     .foregroundStyle(ChartLine.repeated.color)
                     .interpolationMethod(.monotone)
                 }
-                
+
                 if viewModel.showDeletedCards {
                     LineMark(
                         x: .value("Date", data.date, unit: .day),
                         y: .value(ChartLine.deleted.rawValue, data.deletedItemsCounter),
                         series: .value(ChartLine.deleted.rawValue, "D")
                     )
-                    .lineStyle(StrokeStyle(dash: [5,7]))
+                    .lineStyle(StrokeStyle(dash: [5, 7]))
                     .foregroundStyle(ChartLine.deleted.color)
                     .interpolationMethod(.monotone)
                 }
@@ -76,7 +76,7 @@ struct ChartLinesView: View {
         .chartXVisibleDomain(length: selectedPeriod.chartXVisibleDomainLength)
         .chartScrollableAxes(.horizontal)
         .chartLegend(position: .bottom)
-        .chartYAxis() { AxisMarks(position: .leading) }
+        .chartYAxis { AxisMarks(position: .leading) }
         .chartXAxis {
             AxisMarks(values: selectedPeriod.axisMarksValues) { _ in
                 AxisGridLine()

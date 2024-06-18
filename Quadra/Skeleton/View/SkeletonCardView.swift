@@ -9,11 +9,11 @@ import SwiftUI
 
 struct SkeletonCardView: View {
     @Environment(\.colorScheme) var colorScheme
-    
+
     var imageColor: Color {
         colorScheme == .light ? Color.lightGray : Color.spanishGray
     }
-    
+
     var body: some View {
         VStack {
             ZStack(alignment: .center) {
@@ -54,8 +54,5 @@ struct SkeletonCardView: View {
 }
 
 #Preview {
-    GeometryReader { geometry in
-        SkeletonCardView()
-    }
+    SkeletonCardView()
 }
-

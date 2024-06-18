@@ -10,13 +10,13 @@ import SwiftUI
 struct AddNewSourceView: View {
     @ObservedObject var viewModel: SetupCardViewModel
     @State private var sourceColor = Color.morningBlue
-    
+
     var body: some View {
         HStack {
             ColorPicker("", selection: $sourceColor)
                 .frame(size: SizeConstants.mediumButtonImageSize)
                 .northWestShadow()
-            
+
             TextField(TextConstants.addSource, text: $viewModel.newSourceText)
                 .textFieldStyle(NeuTextFieldStyle(text: $viewModel.newSourceText))
                 .padding(.horizontal, 4)
@@ -35,6 +35,6 @@ struct AddNewSourceView: View {
     }
 }
 
-//#Preview {
+// #Preview {
 //    AddNewSourceView()
-//}
+// }

@@ -10,9 +10,9 @@ import CoreData
 
 struct StatView: View {
     @StateObject var viewModel = StatViewModel()
-    
+
     @State private var selectedPeriod = Period.lastWeek
-    
+
     private var toggleBindings: [Binding<Bool>] {
         [
             $viewModel.showTotalNumber,
@@ -21,7 +21,7 @@ struct StatView: View {
             $viewModel.showRepeatedCards
         ]
     }
-    
+
     var body: some View {
         NavigationStack {
             if StatDataService.shared.statData.count < 3 {

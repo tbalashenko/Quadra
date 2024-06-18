@@ -13,14 +13,14 @@ enum CardViewMode {
 
 struct DummyCardView: View {
     @ObservedObject var viewModel: DummyCardsViewModel
-    
+
     @State private var xOffset: CGFloat = .zero
     @State private var yOffset: CGFloat = .zero
     @State private var degrees: Double = 0
-    
+
     let model: DummyCardModel
     var mode: CardViewMode = .repetition
-    
+
     private let timer = Timer.publish(every: 4, on: .main, in: .common).autoconnect()
 
     var body: some View {
@@ -33,7 +33,7 @@ struct DummyCardView: View {
                         width: geometry.size.width,
                         height: geometry.size.width * AspectRatio.sixteenToNine.ratio)
                     .clipped()
-                    
+
                 HStack {
                     Image(systemName: "play.fill")
                         .resizable()
@@ -76,7 +76,7 @@ private extension DummyCardView {
         yOffset = 0
         degrees = 0
     }
-    
+
     func swipeRight() {
         withAnimation(.snappy(duration: 1)) {
             xOffset = 500
@@ -86,7 +86,7 @@ private extension DummyCardView {
             viewModel.removeCard(model)
         }
     }
-    
+
     func swipeLeft() {
         withAnimation(.snappy(duration: 1)) {
             xOffset = -500
@@ -96,12 +96,12 @@ private extension DummyCardView {
             viewModel.removeCard(model)
         }
     }
-    
+
     func onRecieveSwipeAction(_ action: SwipeAction?) {
         guard let action = action else { return }
-        
+
         let topCard = viewModel.cardModels.last
-        
+
         if topCard == model {
             switch action {
                 case .left:
@@ -119,14 +119,14 @@ private extension DummyCardView {
         yOffset = value.translation.height
         degrees = Double(value.translation.width/25)
     }
-    
+
     func onDragEnded(_ value: _ChangedGesture<DragGesture>.Value) {
         let width = value.translation.width
         if abs(width) <= SizeConstants.screenCutOff {
             returnToCenter()
             return
         }
-        
+
         if width >= SizeConstants.screenCutOff {
             swipeRight()
         } else {

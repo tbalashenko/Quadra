@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DummyCardStackView: View {
     @StateObject var viewModel = DummyCardsViewModel()
-    
+
     var body: some View {
         ZStack(alignment: .center) {
             ForEach(viewModel.cardModels) { model in

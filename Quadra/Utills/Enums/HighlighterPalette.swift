@@ -9,7 +9,7 @@ import UIKit
 
 enum HighlighterPalette: Int, CaseIterable {
     case pale = 0, bright
-    
+
     var title: String {
         switch self {
             case .pale:
@@ -18,7 +18,7 @@ enum HighlighterPalette: Int, CaseIterable {
                 return "Bright"
         }
     }
-    
+
     var colors: [UIColor] {
         switch self {
             case .pale:

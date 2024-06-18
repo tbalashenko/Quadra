@@ -11,8 +11,8 @@ struct CardView: View {
     @State var id = UUID()
     @ObservedObject var model: CardModel
     @State private var showSetupCardView = false
-    var action: (() -> ())?
-    
+    var action: (() -> Void)?
+
     var body: some View {
         ZStack {
             Color.element.ignoresSafeArea()
@@ -57,6 +57,6 @@ struct CardView: View {
     }
 }
 //
-//#Preview {
+// #Preview {
 //    CardView()
-//}
+// }

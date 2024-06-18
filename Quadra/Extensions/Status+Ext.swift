@@ -20,7 +20,7 @@ final public class CardStatus: NSObject, NSCoding, NSSecureCoding {
     public static let thisWeek = CardStatus(id: 1, title: TextConstants.thisWeek, color: Color.yellowIris)
     public static let thisMonth = CardStatus(id: 2, title: TextConstants.thisMonth, color: Color.accentOrange)
     public static let archive = CardStatus(id: 3, title: TextConstants.archive, color: Color.spanishGray)
-    
+
     public static var supportsSecureCoding: Bool { return true }
 
     private init(id: Int, title: String, color: Color) {
@@ -34,7 +34,7 @@ final public class CardStatus: NSObject, NSCoding, NSSecureCoding {
             let title = coder.decodeObject(of: NSString.self, forKey: "title") as String?,
             let color = coder.decodeObject(of: NSString.self, forKey: "color") as String?
         else { return nil }
-        
+
         self.id = coder.decodeInteger(forKey: "id")
         self.title = title
         self.color = color
@@ -45,15 +45,15 @@ final public class CardStatus: NSObject, NSCoding, NSSecureCoding {
         coder.encode(title, forKey: "title")
         coder.encode(color, forKey: "color")
     }
-    
-    //MARK: - Equitable
+
+    // MARK: - Equitable
     public override func isEqual(_ object: Any?) -> Bool {
         guard let other = object as? CardStatus else { return false }
-        
+
         return self.id == other.id
     }
 
-    //MARK: - Hashable
+    // MARK: - Hashable
     public override var hash: Int {
         return id.hashValue
     }
@@ -83,5 +83,5 @@ public class StatusTransformer: ValueTransformer {
     }
 }
 
-//MARK: - Identifiable
+// MARK: - Identifiable
 extension CardStatus: Identifiable { }

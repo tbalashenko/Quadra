@@ -13,9 +13,9 @@ enum ChartLine: String, CaseIterable, Identifiable {
     case added = "Number of added cards"
     case deleted = "Number of deleted cards"
     case repeated = "Number of repeated cards"
-    
+
     var id: String { self.rawValue }
-    
+
     var color: Color {
         switch self {
             case .totalNumber:
@@ -28,14 +28,14 @@ enum ChartLine: String, CaseIterable, Identifiable {
                 return .green
         }
     }
-    
+
     var gradient: LinearGradient {
         LinearGradient(
-            gradient: Gradient (
+            gradient: Gradient(
                 colors: [
                     color.opacity(0.5),
                     color.opacity(0.2),
-                    color.opacity(0.05),
+                    color.opacity(0.05)
                 ]
             ),
             startPoint: .top,

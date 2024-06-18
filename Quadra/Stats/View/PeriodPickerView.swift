@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PeriodPickerView: View {
     @Binding var selectedPeriod: Period
-    
+
     var body: some View {
         Picker(TextConstants.period, selection: $selectedPeriod) {
             ForEach(Period.allCases) { period in

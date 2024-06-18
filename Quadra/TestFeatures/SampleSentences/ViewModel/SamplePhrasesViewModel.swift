@@ -13,7 +13,7 @@ final class SamplePhrasesViewModel: ObservableObject {
     @Published var samples = [String]()
     @Published var showError: Bool = false
     private var cancellables = Set<AnyCancellable>()
-    
+
     init() {
         $searchText
             .sink { [weak self] value in
@@ -24,13 +24,13 @@ final class SamplePhrasesViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-    
+
     func fetchDefinition() {
         guard let formattedSearchText = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
-        
+
         var urlString = "https://api.dictionaryapi.dev/api/v2/entries/en/"
         urlString.append(formattedSearchText)
-        
+
         NetworkService.shared.request(urlString: urlString) { (result: Result<[DictionaryResponse], APIError>) in
             DispatchQueue.main.async { [ weak self ] in
                 guard let self = self else { return }
@@ -45,7 +45,7 @@ final class SamplePhrasesViewModel: ObservableObject {
             }
         }
     }
-    
+
     func prepareSamples(for response: [DictionaryResponse]) {
         samples.removeAll()
         response.forEach { response in

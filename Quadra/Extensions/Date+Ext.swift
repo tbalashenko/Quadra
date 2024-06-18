@@ -11,7 +11,7 @@ extension Date {
     enum Month: Int {
         case january = 1, february, march, april, may, june, july, august, september, october, november, december
     }
-    
+
     func prepareTag() -> String {
         let calendar = Calendar.current
 
@@ -88,7 +88,7 @@ extension Date {
     func subtractingDays(_ days: Int) -> Date? {
         Calendar.current.date(byAdding: .day, value: -days, to: self)
     }
-    
+
     func formatDate(
         dateStyle: DateFormatter.Style = .medium,
         timeStyle: DateFormatter.Style = .short
@@ -98,23 +98,23 @@ extension Date {
         formatter.timeStyle = timeStyle
         return formatter.string(from: self)
     }
-    
+
     func currentMonth() -> Month {
         let calendar = Calendar.current
         let monthNumber = calendar.component(.month, from: self)
         return Month(rawValue: monthNumber) ?? .january
     }
-    
-    func formattedForStats() -> Date?  {
+
+    func formattedForStats() -> Date? {
         let calendar = Calendar.current
-        
+
         let year = calendar.component(.year, from: self)
         let month = calendar.component(.month, from: self)
         let day = calendar.component(.day, from: self)
-        
+
         return calendar.date(from: DateComponents(year: year, month: month, day: day))
     }
-    
+
     func dayName() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "d MMM"

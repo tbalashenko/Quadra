@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct QuadraApp: App {
     @State private var selectedTab = 0
-    
+
     var body: some Scene {
         WindowGroup {
             TabView(selection: $selectedTab) {

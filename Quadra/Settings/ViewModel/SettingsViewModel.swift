@@ -14,9 +14,9 @@ final class SettingsViewModel: ObservableObject {
     @Published var showConfetti: Bool
     @Published var highlighterPalette: HighlighterPalette
     @Published var showProgress: Bool
-    
+
     let settingsManager = SettingsManager.shared
-    
+
     init() {
         selectedVoice = settingsManager.voice
         selectedRatio = settingsManager.aspectRatio
@@ -25,14 +25,14 @@ final class SettingsViewModel: ObservableObject {
         highlighterPalette = settingsManager.highliterPalette
         showProgress = settingsManager.showProgress
     }
-    
+
     func save() {
         settingsManager.save(
             voice: selectedVoice,
             aspectRatio: selectedRatio,
             imageScale: selectedImageScale,
             showConfetti: showConfetti,
-            highliterPalette: highlighterPalette, 
+            highliterPalette: highlighterPalette,
             showProgress: showProgress)
     }
 }

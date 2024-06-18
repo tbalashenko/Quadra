@@ -14,7 +14,7 @@ enum ImageScale: Double, RawRepresentable, CaseIterable {
     case percent80 = 0.8
     case percent90 = 0.9
     case percent100 = 1.0
-    
+
     var value: String {
         switch self {
             case .percent50:

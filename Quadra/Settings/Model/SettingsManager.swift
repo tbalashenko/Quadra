@@ -9,37 +9,37 @@ import Foundation
 
 final class SettingsManager {
     static let shared = SettingsManager()
-    
+
     public var voice: Voice {
         let identifier = UserDefaultsManager.stringForKey(UserDefaultsKeys.textToSpeechVoiceIdentifier) ?? Voice.englishUs0.identifier
         return Voice(identifier: identifier)
     }
-    
+
     public var aspectRatio: AspectRatio {
         let rawValue = UserDefaultsManager.stringForKey(UserDefaultsKeys.aspectRatio) ?? AspectRatio.sixteenToNine.rawValue
         return AspectRatio(rawValue: rawValue) ?? .sixteenToNine
     }
-    
+
     public var imageScale: ImageScale {
         let rawValue = UserDefaultsManager.doubleForKey(UserDefaultsKeys.imageScale) ?? ImageScale.percent100.rawValue
         return ImageScale(rawValue: rawValue) ?? .percent100
     }
-    
+
     public var showConfetti: Bool {
         UserDefaultsManager.boolForKey(UserDefaultsKeys.showConfetti) ?? true
     }
-    
+
     public var highliterPalette: HighlighterPalette {
         let rawValue = UserDefaultsManager.integerForKey(UserDefaultsKeys.highlighterPalette) ?? 0
         return HighlighterPalette(rawValue: rawValue) ?? .pale
     }
-    
+
     public var showProgress: Bool {
         UserDefaultsManager.boolForKey(UserDefaultsKeys.showProgress) ?? true
     }
-    
+
     private init() { }
-    
+
     public func save(
         voice: Voice,
         aspectRatio: AspectRatio,

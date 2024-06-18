@@ -11,13 +11,13 @@ public struct Popup<PopupContent>: ViewModifier where PopupContent: View {
     @Binding var isPresented: Bool
     @State private var presenterContentRect: CGRect = .zero
     @State private var sheetContentRect: CGRect = .zero
-    
+
     var view: () -> PopupContent
-    
+
     private var currentOpacity: CGFloat {
         return isPresented ? 1 : 0
     }
-    
+
     init(isPresented: Binding<Bool>,
          view: @escaping () -> PopupContent) {
         self._isPresented = isPresented

@@ -11,7 +11,7 @@ import Combine
 struct FilterView: View {
     @StateObject var viewModel: FilterViewModel
     @Environment(\.dismiss) var dismiss
-    
+
     var body: some View {
         List {
             FilterTagCloudView(

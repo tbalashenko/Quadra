@@ -11,20 +11,20 @@ struct CopyPasteButton: View {
     enum CopyPasteMode {
         case copy(String)
         case paste((String) -> Void)
-        
+
         var imageName: String {
             switch self {
-                case .copy( _):
+                case .copy:
                     return "doc.on.doc.fill"
-                case .paste( _):
+                case .paste:
                     return "doc.on.clipboard.fill"
             }
         }
     }
-    
+
     let mode: CopyPasteMode
     @Binding var showPopup: Bool
-    
+
     var body: some View {
         Button(action: performAction) {
             Image(systemName: mode.imageName)
@@ -34,7 +34,7 @@ struct CopyPasteButton: View {
                 .frame(width: 22, height: 22)
         }
     }
-    
+
     private func performAction() {
         switch mode {
             case .copy(let text):
@@ -47,18 +47,18 @@ struct CopyPasteButton: View {
                 }
         }
     }
-    
+
     private func showPopupWithDelay() {
         withAnimation {
             showPopup = true
         }
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             showPopup = false
         }
     }
 }
 
-//#Preview {
+// #Preview {
 //    CopyPasteButton()
-//}
+// }

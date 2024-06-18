@@ -10,7 +10,7 @@ import SwiftUI
 struct FilterTagCloudView: View {
     let title: String
     let items: [TagCloudItem]
-    
+
     var body: some View {
         GroupBox(title) {
             TagCloudView(

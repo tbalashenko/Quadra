@@ -11,7 +11,7 @@ struct ChartView: View {
     @Binding var selectedPeriod: Period
     var toggleBindings: [Binding<Bool>]
     @ObservedObject var viewModel: StatViewModel
-    
+
     var body: some View {
         GeometryReader { geometry in
             List {
@@ -37,9 +37,9 @@ struct ChartView: View {
     let toggle2 = Binding<Bool>(get: { true }, set: { _ in })
     let toggle3 = Binding<Bool>(get: { true }, set: { _ in })
     let toggle4 = Binding<Bool>(get: { true }, set: { _ in })
-    
+
     let toggleBindings: [Binding<Bool>] = [toggle1, toggle2, toggle3, toggle4]
-    
+
     return ChartView(
         selectedPeriod: .constant(.last2Weeks),
         toggleBindings: toggleBindings,

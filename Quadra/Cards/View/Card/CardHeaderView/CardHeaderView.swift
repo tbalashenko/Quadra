@@ -9,8 +9,8 @@ import SwiftUI
 
 struct CardHeaderView: View {
     @ObservedObject var model: CardModel
-    var action: (() -> ())?
-    
+    var action: (() -> Void)?
+
     var body: some View {
         GeometryReader { geometry in
             ZStack {

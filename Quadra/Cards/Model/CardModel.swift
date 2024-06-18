@@ -12,21 +12,21 @@ import SwiftUI
 final class CardModel: ObservableObject {
     @Published var card: Card
     @Published var showAdditionalInfo: Bool
-    
+
     let id = UUID()
     var showTranslation: Bool { mode == .view && card.translation != nil }
     var showMoveToButton: Bool { card.needSetNewStatus && mode == .repetition }
     var showInfoButton: Bool { mode == .repetition }
     var canBeChanged: Bool { mode == .view }
-    
+
     private var mode: CardViewMode
     private var cancellables = Set<AnyCancellable>()
-    
+
     init(card: Card, mode: CardViewMode) {
         self.card = card
         self.mode = mode
         self.showAdditionalInfo = mode == .view
-        
+
         CardService.shared.cards.first(where: { $0.id == card.id })
             .publisher
             .sink { card in
@@ -34,7 +34,7 @@ final class CardModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-    
+
     func changeStatus() {
         CardService.shared.setNewStatus(card: card)
     }

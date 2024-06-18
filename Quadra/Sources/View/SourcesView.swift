@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SourcesView: View {
     @StateObject var viewModel = SourcesViewModel()
-    
+
     var body: some View {
         List {
             ForEach(viewModel.sources, id: \.id) { source in
@@ -22,7 +22,7 @@ struct SourcesView: View {
         .scrollContentBackground(.hidden)
         .background(Color.element)
     }
-    
+
     private func deleteSources(offsets: IndexSet) {
         withAnimation {
             offsets

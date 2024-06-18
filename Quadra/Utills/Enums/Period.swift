@@ -16,13 +16,13 @@ enum Period: String, CaseIterable, Identifiable {
     case lastMonth = "Last Month"
     case last2Weeks = "Last 2 Weeks"
     case lastWeek = "Last Week"
-    
+
     var id: String { self.rawValue }
-    
+
     var fromDate: Date {
         let toDate = Date()
         let calendar = Calendar.current
-        
+
         switch self {
             case .lastYear:
                 return calendar.date(byAdding: .year, value: -1, to: toDate) ?? Date()
@@ -38,7 +38,7 @@ enum Period: String, CaseIterable, Identifiable {
                 return calendar.date(byAdding: .day, value: -7, to: toDate) ?? Date()
         }
     }
-    
+
     var axisMarksValues: AxisMarkValues {
         switch self {
             case .lastYear:
@@ -51,7 +51,7 @@ enum Period: String, CaseIterable, Identifiable {
                 return .stride(by: .day, count: 1)
         }
     }
-    
+
     var chartXVisibleDomainLength: Int {
         switch self {
             case .lastYear:

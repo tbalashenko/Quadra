@@ -13,7 +13,7 @@ struct TagView: View {
         item.isSelected ? (Color(hex: item.color).isDark ? .white : .black) : .black
     }
     var action: (() -> Void)?
-    
+
     var body: some View {
         Text(item.title)
             .font(.caption)

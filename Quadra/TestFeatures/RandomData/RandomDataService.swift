@@ -9,17 +9,17 @@ import Foundation
 
 final class RandomDataService {
     static let shared = RandomDataService()
-    
+
     private init() { }
-    
+
     func addRandomData() {
         let fromDate = Calendar.current.date(byAdding: .year, value: -1, to: Date())!
-        
+
         for index in stride(from: 0, to: 366, by: 2) {
             let date = Calendar.current.date(byAdding: .day, value: index, to: fromDate) ?? Date()
             let string = "Test" + String("\(date)")
             let phraseToRemember = AttributedString(stringLiteral: string)
-            
+
             do {
                 try CardService.shared.saveCard(
                     phraseToRemember: phraseToRemember,
@@ -29,9 +29,9 @@ final class RandomDataService {
             } catch {
                 print("Error saving item: \(error.localizedDescription)")
             }
-            
+
             let currentDate = date.formattedForStats()
-            
+
             if let statData = StatDataService.shared.statData.first(where: { $0.date == currentDate }) {
                 do {
                     try StatDataService.shared.editStatData(

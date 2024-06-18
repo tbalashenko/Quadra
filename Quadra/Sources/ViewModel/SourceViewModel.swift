@@ -12,16 +12,16 @@ final class SourceViewModel: ObservableObject {
     @Published var editableTitle: String = ""
     @Published var compoundTitle: String = ""
     @Published var color: String = ""
-    
+
     let sourceService = CardSourceService.shared
-    
+
     init(source: CardSource) {
         self.source = source
         self.editableTitle = source.title
         self.compoundTitle = getTitle(for: source)
         self.color = source.color
     }
-    
+
     /// Generates a title for the source based on the count of cards.
     /// - Parameter source: The card source.
     /// - Returns: The formatted title string.
@@ -29,7 +29,7 @@ final class SourceViewModel: ObservableObject {
         guard let cardsCount = source.cards?.count else {
             return source.title
         }
-        
+
         switch cardsCount {
             case 0:
                 return "\(source.title) - \(TextConstants.noCards)"
@@ -39,7 +39,7 @@ final class SourceViewModel: ObservableObject {
                 return "\(source.title) - \(cardsCount) \(TextConstants.cards)"
         }
     }
-    
+
     func saveChanges() {
         do {
             try sourceService.editSource(source: source, title: editableTitle, color: color)

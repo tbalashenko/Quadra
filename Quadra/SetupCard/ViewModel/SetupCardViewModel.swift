@@ -11,39 +11,39 @@ import Combine
 final class SetupCardViewModel: ObservableObject {
     @Published var cardModel: CardModel?
     @Published var tagCloudItems = [TagCloudItem]()
-    
+
     @Published var image: Image?
     @Published var croppedImage: Image?
     @Published var phraseToRemember = AttributedString()
     @Published var translation = AttributedString()
     @Published var transcription = ""
-    
+
     @Published var newSourceText = ""
-    
+
     @Published var selectedSources = [CardSource]()
     let mode: SetupCardViewMode
     private let sourceService = CardSourceService.shared
     private let cardService = CardService.shared
-    
+
     var hasChanged: Bool {
         switch mode {
-            case .edit(model: _):
+            case .edit:
                 return phraseToRemember != cardModel?.card.convertedPhraseToRemember
                 || translation != cardModel?.card.convertedTranslation
                 || transcription != cardModel?.card.transcription
-                
+
             case .create:
                 return !String(phraseToRemember.characters).isEmpty
                 || !String(translation.characters).isEmpty
                 || !transcription.isEmpty
         }
     }
-    
+
     private var cancellables = Set<AnyCancellable>()
-    
+
     init(mode: SetupCardViewMode) {
         self.mode = mode
-        
+
         if case .edit(let model) = mode {
             self.cardModel = model
             phraseToRemember = AttributedString(model.card.phraseToRemember)
@@ -58,7 +58,7 @@ final class SetupCardViewModel: ObservableObject {
         observeNewSourceTextChanges()
 
     }
-    
+
     func observeNewSourceTextChanges() {
         $newSourceText
             .sink { [weak self] _ in
@@ -66,7 +66,7 @@ final class SetupCardViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-    
+
     func updateTagCloudItems() {
         tagCloudItems = sourceService.sources
             .filter { source in
@@ -87,7 +87,7 @@ final class SetupCardViewModel: ObservableObject {
                 }
             }
     }
-    
+
     private func toggleSourceSelection(source: CardSource) {
         if selectedSources.contains(source) {
             selectedSources.removeAll { $0.id == source.id }
@@ -95,12 +95,12 @@ final class SetupCardViewModel: ObservableObject {
             selectedSources.append(source)
         }
     }
-    
+
     @MainActor
     func saveCard() {
         let image = image?.convert(scale: SettingsManager.shared.imageScale)
         let croppedImage = croppedImage?.convert(scale: ImageScale.percent100)
-        
+
         switch mode {
             case .create:
                 do {
@@ -108,17 +108,17 @@ final class SetupCardViewModel: ObservableObject {
                         phraseToRemember: phraseToRemember,
                         translation: translation,
                         transcription: transcription,
-                        croppedImageData: croppedImage?.pngData(), 
+                        croppedImageData: croppedImage?.pngData(),
                         imageData: image?.pngData(),
                         sources: selectedSources
                     )
                 } catch {
                     print("Error saving card: \(error.localizedDescription)")
                 }
-            case .edit(_):
+            case .edit:
                 do {
                     guard let cardModel = cardModel else { return }
-                    
+
                     try cardService.editCard(
                         card: cardModel.card,
                         phraseToRemember: phraseToRemember,
@@ -132,12 +132,12 @@ final class SetupCardViewModel: ObservableObject {
                 }
         }
     }
-    
+
     @MainActor
     func saveSource(color: Color) {
         let hashTagTitle = "#" + newSourceText.replacingOccurrences(of: "#", with: "")
         newSourceText = ""
-        
+
         do {
             let source = try sourceService.saveSource(title: hashTagTitle, color: color.toHex())
             selectedSources.append(source)
@@ -146,17 +146,17 @@ final class SetupCardViewModel: ObservableObject {
             print("Error saving source: \(error.localizedDescription)")
         }
     }
-    
+
     func formatAndSetPhrase(_ text: String, string: inout AttributedString) {
         let updatedAttributes: [NSAttributedString.Key: Any] = [
             .backgroundColor: UIColor.clear,
             .font: UIFont.systemFont(ofSize: 18),
             .foregroundColor: UIColor.black
         ]
-        
+
         let attributedString = NSMutableAttributedString(string: text)
         attributedString.addAttributes(updatedAttributes, range: NSRange(location: 0, length: attributedString.length))
-        
+
         string = AttributedString(attributedString)
     }
 }
@@ -165,7 +165,7 @@ extension SetupCardViewModel {
     enum SetupCardViewMode {
         case create
         case edit(model: CardModel)
-        
+
         var navigationTitle: String {
             switch self {
                 case .create:

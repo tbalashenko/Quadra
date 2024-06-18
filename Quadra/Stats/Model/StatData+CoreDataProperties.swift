@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension StatData {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<StatData> {
@@ -24,6 +23,6 @@ extension StatData {
 
 }
 
-extension StatData : Identifiable {
+extension StatData: Identifiable {
 
 }

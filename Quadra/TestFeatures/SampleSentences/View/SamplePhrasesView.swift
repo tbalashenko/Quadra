@@ -10,7 +10,7 @@ import SwiftUI
 struct SamplePhrasesView: View {
     @StateObject var viewModel = SamplePhrasesViewModel()
     @State private var showCopiedPopup = false
-    
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -40,7 +40,7 @@ struct SamplePhrasesView: View {
                 }
                 .padding(.horizontal, 32)
                 ForEach(viewModel.samples, id: \.self) { sampleText in
-                    HStack() {
+                    HStack {
                         Text(sampleText)
                         Spacer()
                         CopyPasteButton(mode: .copy(sampleText), showPopup: $showCopiedPopup)

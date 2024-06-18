@@ -10,10 +10,10 @@ import SwiftUI
 struct SetupCardView: View {
     @StateObject var viewModel: SetupCardViewModel
     @Binding var showSetupCardView: Bool
-    
+
     @State private var showAlert = false
     @State var showPopup: Bool = false
-    
+
     var body: some View {
         ScrollView {
             PhotoPickerView(image: $viewModel.image, croppedImage: $viewModel.croppedImage)
@@ -65,6 +65,6 @@ struct SetupCardView: View {
     }
 }
 
-//#Preview {
+// #Preview {
 //    CreateCardView(showSetupCardView: .constant(true))
-//}
+// }

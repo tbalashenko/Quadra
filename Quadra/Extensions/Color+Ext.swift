@@ -31,7 +31,7 @@ extension Color {
         static var ashGray = Color(hex: "#afc7b3") // pastel light green
         static var darkSeaGreen = Color(hex: "#96b4a0") // pastel green
     }
-    
+
     struct Month {
         static var january = Color(hex: "#98A1C5")
         static var february = Color(hex: "#BCBFBE")
@@ -91,7 +91,7 @@ extension Color {
         let lum = 0.2126 * red + 0.7152 * green + 0.0722 * blue
         return lum < 0.5
     }
-    
+
     static var randomColor: Color {
         let red = Double.random(in: 0...1)
         let green = Double.random(in: 0...1)

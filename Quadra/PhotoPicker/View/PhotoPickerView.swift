@@ -13,7 +13,7 @@ struct PhotoPickerView: View {
     @Binding var image: Image?
     @Binding var croppedImage: Image?
     @State var showEditingView: Bool = false
-    
+
     var body: some View {
         ZStack(alignment: .center) {
             croppedImage?
@@ -56,7 +56,7 @@ struct PhotoPickerView: View {
         }
         .fullScreenCover(isPresented: $showEditingView) {
             if let image {
-                CropView(image: image) { croppedImage, status in
+                CropView(image: image) { croppedImage, _ in
                     if let croppedImage {
                         self.croppedImage = croppedImage
                     }
@@ -64,7 +64,7 @@ struct PhotoPickerView: View {
             }
         }
     }
-    
+
     func setImage() {
         Task {
             guard
@@ -75,7 +75,7 @@ struct PhotoPickerView: View {
                 croppedImage = nil
                 return
             }
-            
+
             image = Image(uiImage: uiImage)
             croppedImage = Image(uiImage: uiImage)
         }

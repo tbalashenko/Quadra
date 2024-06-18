@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CardStackView: View {
     @StateObject var viewModel: CardsViewModel
-    
+
     var body: some View {
         ZStack(alignment: .center) {
             if viewModel.isLoading {

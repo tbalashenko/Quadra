@@ -12,7 +12,7 @@ enum AspectRatio: String, CaseIterable, RawRepresentable {
     case fourToThree = "4:3"
     case oneToOne = "1:1"
     case twoToOne = "2:1"
-    
+
     var ratio: CGFloat {
         switch self {
             case .sixteenToNine:
