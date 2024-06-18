@@ -30,7 +30,7 @@ struct ContentView: View {
                         }
                     }
                     .toolbar {
-                        if !viewModel.showInfoView {
+                        if !viewModel.showInfoView, SettingsManager.shared.showProgress {
                             ToolbarItem(placement: .topBarLeading) {
                                 ProgressView(
                                     value: viewModel.progress,

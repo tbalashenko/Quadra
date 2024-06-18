@@ -45,11 +45,20 @@ extension Card {
         return Image(uiImage: uiImage)
     }
     
+    var convertedCroppedImage: Image? {
+        guard
+            let imageData = croppedImage,
+            let uiImage = UIImage(data: imageData)
+        else { return nil }
+        
+        return Image(uiImage: uiImage)
+    }
+    
     var needSetNewStatus: Bool {
         needMoveToThisWeek || needMoveToThisMonth || needMoveToArchive
     }
     
-    var getNewStatus: Status {
+    var getNewStatus: CardStatus {
         if needMoveToThisWeek {
             return .thisWeek
         } else if needMoveToThisMonth {
@@ -58,7 +67,7 @@ extension Card {
             return .archive
         }
         
-        return status
+        return cardStatus
     }
     
     /// - Throughout the day (several times as new phrases are added) →  inbox  + Source tag   +
@@ -75,7 +84,7 @@ extension Card {
         let firstSunday = Date().firstSunday(after: lastRepetitionDate)
         let isLastRepetitionDateToday = lastRepetitionDate.isDateToday()
         
-        switch status.id {
+        switch cardStatus.id {
                 // input, should be repeatet throughout the day
             case 0:
                 return true
@@ -91,7 +100,7 @@ extension Card {
                 }
                 // archive, should be repeated one month later, three months later, Six months later, one year later
             case 3:
-                if let lastTimeStatusChanged = lastTimeStatusChanged {
+                if let lastTimeStatusChanged {
                     if Date().daysAgo(from: lastTimeStatusChanged) >= 30,
                        Date().daysAgo(from: lastRepetitionDate) >= 30 {
                         return true
@@ -128,7 +137,7 @@ extension Card {
     var needMoveToThisMonth: Bool {
         if let date = lastTimeStatusChanged, date.isDateToday() || isArchived { return false }
         
-        if (status.id == 0 || status.id == 1) , let date = Date().firstSunday(after: additionTime), date <= Date() {
+        if (cardStatus.id == 0 || cardStatus.id == 1) , let date = Date().firstSunday(after: additionTime), date <= Date() {
             return true
         }
         
@@ -138,7 +147,7 @@ extension Card {
     var needMoveToThisWeek: Bool {
         if let date = lastTimeStatusChanged, date.isDateToday() || isArchived { return false }
         
-        if status.id == 0, Date().isNextDay(from: additionTime) {
+        if cardStatus.id == 0, Date().isNextDay(from: additionTime) {
             return true
         }
         

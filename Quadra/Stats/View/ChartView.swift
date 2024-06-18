@@ -28,18 +28,6 @@ struct ChartView: View {
             .navigationTitle(TextConstants.statistics)
             .scrollContentBackground(.hidden)
             .background(Color.element)
-#if DEBUG
-            .toolbar {
-                ToolbarItem {
-                    Button(action: {
-                        viewModel.addRandomData()
-                        viewModel.fetchStatData(fromDate: selectedPeriod.fromDate)
-                    }) {
-                        Image(systemName: "plus.circle.fill")
-                    }
-                }
-            }
-#endif
         }
     }
 }

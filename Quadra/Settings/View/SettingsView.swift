@@ -22,6 +22,7 @@ struct SettingsView: View {
                 }
                 Section(TextConstants.animation) {
                     Toggle(TextConstants.showConfetti, isOn: $viewModel.showConfetti)
+                    Toggle(TextConstants.showProgress, isOn: $viewModel.showProgress)
                 }
                 Section(TextConstants.manageSources) {
                     NavigationLink(TextConstants.sources) {

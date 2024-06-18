@@ -9,36 +9,32 @@ import SwiftUI
 
 struct CardHeaderImageView: View {
     let image: Image
+    let croppedImage: Image
     @State private var showFullImage: Bool = false
     
     var body: some View {
-        GeometryReader { geometry in
-            Button(action: {
-                showFullImage.toggle()
-            }) {
-                ZStack {
-                    image
-                        .resizable()
-                        .scaledToFill()
-                        .frame(
-                            width: geometry.size.width,
-                            height: geometry.size.width * SettingsManager.shared.aspectRatio.ratio)
-                        .clipped()
-                        .northWestShadow()
-                    
-                    
-                }
-            }
-            .frame(
-                width: geometry.size.width,
-                height: geometry.size.width * SettingsManager.shared.aspectRatio.ratio)
-            .fullScreenCover(isPresented: $showFullImage) {
-                FullImageView(image: image)
+        Button(action: {
+            showFullImage.toggle()
+        }) {
+            ZStack {
+                croppedImage
+                    .resizable()
+                    .scaledToFill()
+                    .frame(size: SizeConstants.imageSize)
+                    .clipped()
+                    .northWestShadow()
+                
+                
             }
         }
+        .frame(size: SizeConstants.imageSize)
+        .fullScreenCover(isPresented: $showFullImage) {
+            FullImageView(image: image)
+        }
+        .drawingGroup()
     }
 }
 
-//#Preview {
-//    CardHeaderImageView()
-//}
+#Preview {
+    CardHeaderImageView(image: Image("hello-world"), croppedImage: Image("hello-world"))
+}

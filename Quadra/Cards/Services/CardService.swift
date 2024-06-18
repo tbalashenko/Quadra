@@ -40,6 +40,7 @@ class CardService: ObservableObject {
         additionDate: Date = Date(),
         translation: AttributedString? = nil,
         transcription: String? = nil,
+        croppedImageData: Data? = nil,
         imageData: Data? = nil,
         sources: [CardSource] = [],
         incrementAddedItemsCounter: Bool = true
@@ -48,16 +49,17 @@ class CardService: ObservableObject {
         let card = Card(context: context)
         
         card.phraseToRemember = NSAttributedString(phraseToRemember)
-        if let translation = translation {
+        if let translation {
             card.translation =  NSAttributedString(translation)
         }
         card.transcription = transcription
+        card.croppedImage = croppedImageData
         card.image = imageData
         sources.forEach {
             card.addToSources($0)
             $0.addToCards(card)
         }
-        card.status = .input
+        card.cardStatus = .input
         card.id = UUID()
         card.additionTime = additionDate
         
@@ -73,7 +75,7 @@ class CardService: ObservableObject {
         
         do {
             try dataController.container.viewContext.save()
-            if let tag = tag {
+            if let tag {
                 tag.addToCards(card)
             }
             
@@ -90,14 +92,16 @@ class CardService: ObservableObject {
         translation: AttributedString? = nil,
         transcription: String? = nil,
         imageData: Data? = nil,
+        croppedImageData: Data? = nil,
         sources: [CardSource]
     ) throws {
         card.phraseToRemember = NSAttributedString(phraseToRemember)
-        if let translation = translation {
+        if let translation {
             card.translation = NSAttributedString(translation)
         }
         card.transcription = transcription
         card.image = imageData
+        card.croppedImage = croppedImageData
         card.sources = nil
         sources.forEach {
             card.addToSources($0)
@@ -118,6 +122,7 @@ class CardService: ObservableObject {
         
         do {
             try dataController.container.viewContext.save()
+            if let index = cards.firstIndex(where: { $0.id == card.id }) { cards[index] = card }
         } catch {
             throw DataServiceError.saveFailed(description: "Failed to save card: \(error.localizedDescription)")
         }
@@ -125,11 +130,11 @@ class CardService: ObservableObject {
     
     func setNewStatus(card: Card) {
         if card.needMoveToThisWeek {
-            card.status = .thisWeek
+            card.cardStatus = .thisWeek
         } else if card.needMoveToThisMonth {
-            card.status = .thisMonth
+            card.cardStatus = .thisMonth
         } else if card.needMoveToArchive {
-            card.status = .archive
+            card.cardStatus = .archive
             card.isArchived = true
         }
         
@@ -137,6 +142,7 @@ class CardService: ObservableObject {
         
         do {
             try dataController.container.viewContext.save()
+            if let index = cards.firstIndex(where: { $0.id == card.id }) { cards[index] = card }
         } catch {
             print("Failed to save context: \(error)")
         }

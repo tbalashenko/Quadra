@@ -23,7 +23,7 @@ struct CreationDateView: View {
                        displayedComponents: [.date])
             .datePickerStyle(.compact)
         }
-        .styleListSection()
+        .groupBoxStyle(PlainGroupBoxStyle())
     }
 }
 

@@ -23,7 +23,7 @@ struct SkeletonListRowView: View {
                 .frame(width: 88, height: 88)
         }
         .background(Color.element
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
             .northWestShadow()
         )
     }

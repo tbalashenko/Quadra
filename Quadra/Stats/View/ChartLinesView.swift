@@ -84,7 +84,6 @@ struct ChartLinesView: View {
                 AxisValueLabel(format: .dateTime.month().day(), centered: true)
             }
         }
-        .styleListSection()
     }
 }
 

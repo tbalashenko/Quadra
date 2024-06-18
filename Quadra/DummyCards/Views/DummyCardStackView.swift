@@ -11,40 +11,27 @@ struct DummyCardStackView: View {
     @StateObject var viewModel = DummyCardsViewModel()
     
     var body: some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .center) {
-                ForEach(viewModel.cardModels) { model in
-                    DummyCardView(
-                        viewModel: viewModel,
-                        model: model
-                    )
-                }
-                if viewModel.cardModels.isEmpty {
-                    Button {
-                        viewModel.updateCardModels()
-                    } label: {
-                        Image(systemName: "repeat.circle")
-                            .resizable()
-                            .frame(
-                                width: SizeConstants.buttonImageHeighWidth,
-                                height: SizeConstants.buttonImageHeighWidth
-                            )
-                    }
-                    .buttonStyle(NeuButtonStyle())
-                }
+        ZStack(alignment: .center) {
+            ForEach(viewModel.cardModels) { model in
+                DummyCardView(
+                    viewModel: viewModel,
+                    model: model
+                )
             }
-            .frame(
-                width: geometry.size.width,
-                height: geometry.size.height
-            )
+            if viewModel.cardModels.isEmpty {
+                Button {
+                    viewModel.updateCardModels()
+                } label: {
+                    Image(systemName: "repeat.circle")
+                        .smallButtonImage()
+                }
+                .buttonStyle(NeuButtonStyle())
+            }
         }
     }
 }
 
 #Preview {
     DummyCardStackView()
-        .frame(
-            width: SizeConstants.cardWith,
-            height: SizeConstants.cardHeigh
-        )
+        .frame(size: SizeConstants.cardSize)
 }

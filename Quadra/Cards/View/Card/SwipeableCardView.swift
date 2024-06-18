@@ -16,20 +16,18 @@ struct SwipeableCardView: View {
     @State private var degrees: Double = 0
     
     var body: some View {
-        GeometryReader { geometry in
-            CardView(model: model) {
-                viewModel.removeCard(model: model, changeStatus: true)
-            }
-            .rotationEffect(.degrees(degrees))
-            .offset(x: xOffset, y: yOffset)
-            .animation(.snappy, value: xOffset)
-            .gesture(
-                DragGesture(minimumDistance: 20)
-                    .onChanged(onDragChanged)
-                    .onEnded(onDragEnded)
-            )
-            .onReceive(viewModel.$swipeAction) { onRecieveSwipeAction($0) }
+        CardView(model: model) {
+            swipeLeft(changeStatus: true)
         }
+        .rotationEffect(.degrees(degrees))
+        .offset(x: xOffset, y: yOffset)
+        .animation(.snappy, value: xOffset)
+        .animation(.snappy, value: yOffset)
+        .gesture(
+            DragGesture(minimumDistance: 20)
+                .onChanged(onDragChanged)
+                .onEnded(onDragEnded)
+        )
     }
 }
 
@@ -40,36 +38,21 @@ private extension SwipeableCardView {
         degrees = 0
     }
     
-    private func swipeRight() {
+    private func swipeRight(changeStatus: Bool = false) {
         withAnimation(.snappy(duration: 1)) {
             xOffset = 500
             degrees = 12
         } completion: {
-            viewModel.removeCard(model: model)
+            viewModel.removeCard(model: model, changeStatus: changeStatus)
         }
     }
     
-    private func swipeLeft() {
+    private func swipeLeft(changeStatus: Bool = false) {
         withAnimation(.snappy(duration: 1)) {
             xOffset = -500
             degrees = -12
         } completion: {
-            viewModel.removeCard(model: model)
-        }
-    }
-    
-    private func onRecieveSwipeAction(_ action: SwipeAction?) {
-        guard let action = action else { return }
-        
-        let topCard = viewModel.visibleCardModels.first?.card
-        
-        if topCard?.id == model.card.id {
-            switch action {
-                case .left:
-                    swipeLeft()
-                case .right:
-                    swipeRight()
-            }
+            viewModel.removeCard(model: model, changeStatus: changeStatus)
         }
     }
 }

@@ -13,14 +13,14 @@ struct FlipablePhraseView: View {
     var body: some View {
         if viewModel.showPhraseView {
             PlayableTextView(viewModel: viewModel)
-        }
-        if viewModel.showTranslationView, let translation = viewModel.translation {
-            Text(translation)
-                .font(.title2)
-                .onTapGesture {
-                    viewModel.switchMode()
-                }
-                .padding()
+        } else {
+            if viewModel.showTranslationView, let translation = viewModel.translation {
+                Text(translation)
+                    .font(.title2)
+                    .onTapGesture {
+                        viewModel.switchMode()
+                    }
+            }
         }
     }
 }

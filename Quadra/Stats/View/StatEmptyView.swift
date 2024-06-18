@@ -24,7 +24,8 @@ struct StatEmptyView: View {
                     mode: .view)
                 .frame(
                     width: SizeConstants.cardWith / 2,
-                    height: SizeConstants.cardHeigh / 2)
+                    height: SizeConstants.cardHeigh / 2
+                )
                 Spacer()
             }
             if let text = viewModel.getStatDataState().instructionSecondPart {
@@ -33,7 +34,8 @@ struct StatEmptyView: View {
                 DummyCardStackView()
                     .frame(
                         width: SizeConstants.cardWith / 2,
-                        height: SizeConstants.cardHeigh / 2)
+                        height: SizeConstants.cardHeigh / 2
+                    )
             }
         }
         .background(.element)

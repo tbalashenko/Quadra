@@ -15,7 +15,6 @@ struct ChartLineToggleView: View {
             Toggle(ChartLine.allCases[index].rawValue, isOn: toggleBindings[index])
                 .tint(ChartLine.allCases[index].color.opacity(0.3))
         }
-        .styleListSection()
     }
 }
 

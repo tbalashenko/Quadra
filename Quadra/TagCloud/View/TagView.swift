@@ -12,19 +12,17 @@ struct TagView: View {
     var foregroundColor: Color {
         item.isSelected ? (Color(hex: item.color).isDark ? .white : .black) : .black
     }
-    var withShadow: Bool = true
     var action: (() -> Void)?
     
     var body: some View {
         Text(item.title)
             .font(.caption)
+            .foregroundColor(foregroundColor)
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             .lineLimit(1)
             .background(item.isSelected ? Color(hex: item.color) : Color.offWhiteGray)
             .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
-            .foregroundColor(foregroundColor)
-            .if(withShadow) { $0.northWestShadow() }
             .onTapGesture {
                 action?()
                 item.action?()

@@ -48,25 +48,32 @@ final class CardsViewModel: ObservableObject {
     }
     
     func updateCards() async {
-        isLoading = true
+        if CardService.shared.cards.isEmpty { return }
         
-        await Task.detached {
-            let filteredCards = CardService.shared.cards
-                .filter { $0.isReadyToRepeat }
-                .map { CardModel(card: $0, mode: .repetition) }
-            
-            await MainActor.run {
-                self.cardModels = filteredCards
-                self.loadVisibleCards()
-                self.showConfetti = false
-                self.cardsShown = 0
-                self.totalNumberOfCards = filteredCards.count
+        await MainActor.run {
+            withAnimation {
+                self.isLoading = true
             }
-        }.value
+        }
         
-        try? await Task.sleep(for: .milliseconds(240))
-        
-        isLoading = false
+        Task.detached {
+                    let filteredCards = CardService.shared.cards
+                        .filter { $0.isReadyToRepeat }
+                        .map { CardModel(card: $0, mode: .repetition) }
+                    
+                    await MainActor.run {
+                        self.cardModels = filteredCards
+                        self.loadVisibleCards()
+                        self.showConfetti = false
+                        self.cardsShown = 0
+                        self.totalNumberOfCards = filteredCards.count
+                        
+                        // Perform loading state change with animation on the main thread
+                        withAnimation {
+                            self.isLoading = false
+                        }
+                    }
+                }
     }
     
     func loadVisibleCards() {
@@ -76,7 +83,6 @@ final class CardsViewModel: ObservableObject {
     func removeCard(model: CardModel, changeStatus: Bool = false) {
         if changeStatus {
             model.changeStatus()
-            swipeAction = .left
         }
         
         cardModels.removeAll { $0.id == model.id }

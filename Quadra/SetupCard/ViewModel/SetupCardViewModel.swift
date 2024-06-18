@@ -5,31 +5,41 @@
 //  Created by Tatyana Balashenko on 27/05/2024.
 //
 
-import Foundation
 import SwiftUI
+import Combine
 
 final class SetupCardViewModel: ObservableObject {
     @Published var cardModel: CardModel?
     @Published var tagCloudItems = [TagCloudItem]()
     
+    @Published var image: Image?
+    @Published var croppedImage: Image?
     @Published var phraseToRemember = AttributedString()
     @Published var translation = AttributedString()
     @Published var transcription = ""
     
-    @Published var newSourceText = "" {
-        didSet { updateTagCloudItems() }
-    }
+    @Published var newSourceText = ""
     
-    var selectedSources = [CardSource]()
+    @Published var selectedSources = [CardSource]()
     let mode: SetupCardViewMode
     private let sourceService = CardSourceService.shared
     private let cardService = CardService.shared
     
     var hasChanged: Bool {
-        phraseToRemember != cardModel?.card.convertedPhraseToRemember
-        || translation != cardModel?.card.convertedTranslation
-        || transcription != cardModel?.card.transcription
+        switch mode {
+            case .edit(model: _):
+                return phraseToRemember != cardModel?.card.convertedPhraseToRemember
+                || translation != cardModel?.card.convertedTranslation
+                || transcription != cardModel?.card.transcription
+                
+            case .create:
+                return !String(phraseToRemember.characters).isEmpty
+                || !String(translation.characters).isEmpty
+                || !transcription.isEmpty
+        }
     }
+    
+    private var cancellables = Set<AnyCancellable>()
     
     init(mode: SetupCardViewMode) {
         self.mode = mode
@@ -42,9 +52,19 @@ final class SetupCardViewModel: ObservableObject {
             if let sources = model.card.sources?.allObjects as? [CardSource] {
                 selectedSources = sources
             }
+            image = model.card.convertedImage
+            croppedImage = model.card.convertedCroppedImage
         }
-        
-        updateTagCloudItems()
+        observeNewSourceTextChanges()
+
+    }
+    
+    func observeNewSourceTextChanges() {
+        $newSourceText
+            .sink { [weak self] _ in
+                self?.updateTagCloudItems()
+            }
+            .store(in: &cancellables)
     }
     
     func updateTagCloudItems() {
@@ -74,12 +94,12 @@ final class SetupCardViewModel: ObservableObject {
         } else {
             selectedSources.append(source)
         }
-        updateTagCloudItems()
     }
     
     @MainActor
-    func saveCard(image: Image?) {
+    func saveCard() {
         let image = image?.convert(scale: SettingsManager.shared.imageScale)
+        let croppedImage = croppedImage?.convert(scale: ImageScale.percent100)
         
         switch mode {
             case .create:
@@ -88,13 +108,14 @@ final class SetupCardViewModel: ObservableObject {
                         phraseToRemember: phraseToRemember,
                         translation: translation,
                         transcription: transcription,
+                        croppedImageData: croppedImage?.pngData(), 
                         imageData: image?.pngData(),
                         sources: selectedSources
                     )
                 } catch {
                     print("Error saving card: \(error.localizedDescription)")
                 }
-            case .edit(let model):
+            case .edit(_):
                 do {
                     guard let cardModel = cardModel else { return }
                     
@@ -112,17 +133,31 @@ final class SetupCardViewModel: ObservableObject {
         }
     }
     
+    @MainActor
     func saveSource(color: Color) {
         let hashTagTitle = "#" + newSourceText.replacingOccurrences(of: "#", with: "")
+        newSourceText = ""
         
         do {
             let source = try sourceService.saveSource(title: hashTagTitle, color: color.toHex())
             selectedSources.append(source)
-            newSourceText = ""
             updateTagCloudItems()
         } catch {
             print("Error saving source: \(error.localizedDescription)")
         }
+    }
+    
+    func formatAndSetPhrase(_ text: String, string: inout AttributedString) {
+        let updatedAttributes: [NSAttributedString.Key: Any] = [
+            .backgroundColor: UIColor.clear,
+            .font: UIFont.systemFont(ofSize: 18),
+            .foregroundColor: UIColor.black
+        ]
+        
+        let attributedString = NSMutableAttributedString(string: text)
+        attributedString.addAttributes(updatedAttributes, range: NSRange(location: 0, length: attributedString.length))
+        
+        string = AttributedString(attributedString)
     }
 }
 

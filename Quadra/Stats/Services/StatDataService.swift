@@ -64,13 +64,13 @@ class StatDataService: ObservableObject {
         repeatedItemsCounter: Int? = nil,
         addedItemsCounter: Int? = nil,
         deletedItemsCounter: Int? = nil) throws {
-            if let repeatedItemsCounter = repeatedItemsCounter {
+            if let repeatedItemsCounter {
                 statData.repeatedItemsCounter = repeatedItemsCounter
             }
-            if let addedItemsCounter = addedItemsCounter {
+            if let addedItemsCounter {
                 statData.addedItemsCounter = addedItemsCounter
             }
-            if let deletedItemsCounter = deletedItemsCounter {
+            if let deletedItemsCounter {
                 statData.deletedItemsCounter = deletedItemsCounter
             }
             
@@ -78,6 +78,7 @@ class StatDataService: ObservableObject {
             
             do {
                 try dataController.container.viewContext.save()
+                
                 guard let statDataToChangeIndex = self.statData.firstIndex(where: { $0.date == statData.date }) else { return }
                 
                 self.statData[statDataToChangeIndex] = statData

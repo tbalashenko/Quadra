@@ -43,19 +43,6 @@ extension View {
 }
 
 extension View {
-    func hideKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-    }
-    
-    func styleListSection() -> some View {
-        self
-            .backgroundStyle(Color.element)
-            .listRowSeparator(.hidden)
-            .listRowBackground(Color.element)
-    }
-}
-
-extension View {
     @ViewBuilder
     func `if`<Content: View>(_ condition: Bool, content: (Self) -> Content) -> some View {
         if condition {
@@ -63,5 +50,30 @@ extension View {
         } else {
             self
         }
+    }
+    
+    func frame(size: CGSize, alignment: Alignment = .center) -> some View {
+        self.frame(width: size.width, height: size.height,  alignment: alignment)
+    }
+    
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+    
+    func haptic(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
+        UIImpactFeedbackGenerator(style: style).impactOccurred()
+    }
+}
+
+extension View {
+    public func popup<PopupContent: View>(
+        isPresented: Binding<Bool>,
+        view: @escaping () -> PopupContent
+    ) -> some View {
+        self.modifier(
+            Popup(
+                isPresented: isPresented,
+                view: view)
+        )
     }
 }

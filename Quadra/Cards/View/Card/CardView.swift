@@ -16,21 +16,17 @@ struct CardView: View {
     var body: some View {
         ZStack {
             Color.element.ignoresSafeArea()
-            ScrollView(.vertical) {
+            VStack {
                 CardHeaderView(model: model) { action?() }
-                    .frame(
-                        width: SizeConstants.cardWith,
-                        height: SizeConstants.cardWith * SettingsManager.shared.aspectRatio.ratio
-                    )
+                    .frame(size: SizeConstants.imageSize)
+                    .padding(.bottom)
                 FlipablePhraseView(viewModel: PhraseViewModel(cardModel: model))
                 if model.showAdditionalInfo {
                     AdditionalnfoView(viewModel: AdditionalnfoViewModel(model: model))
                 }
+                Spacer()
             }
-            .frame(
-                width: SizeConstants.cardWith,
-                height: SizeConstants.cardHeigh
-            )
+            .frame(size: SizeConstants.cardSize)
             .background(.element)
             .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
             .southEastShadow()
@@ -52,7 +48,8 @@ struct CardView: View {
                 NavigationStack {
                     SetupCardView(
                         viewModel: SetupCardViewModel(mode: .edit(model: model)),
-                        showSetupCardView: $showSetupCardView)
+                        showSetupCardView: $showSetupCardView
+                    )
                 }
             }
             .id(id)

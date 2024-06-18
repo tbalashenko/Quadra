@@ -35,10 +35,7 @@ public struct UserDefaultsManager {
     }
     
     public static func objectForKey(_ defaultName: String) -> AnyObject? {
-        if let name = UserDefaults.standard.object(forKey: defaultName){
-            return name as AnyObject
-        }
-        return nil
+        return UserDefaults.standard.object(forKey: defaultName) as? AnyObject
     }
 }
 
@@ -49,4 +46,5 @@ struct UserDefaultsKeys {
     static let showConfetti = "showConfetti"
     static let showChartTab = "showChartTab"
     static let highlighterPalette = "highlighterPalette"
+    static let showProgress = "showProgress"
 }

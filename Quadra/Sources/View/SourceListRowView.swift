@@ -20,10 +20,7 @@ struct SourceListRowView: View {
                     viewModel.saveChanges()
                 }
             ))
-            .frame(
-                width: SizeConstants.buttonImageHeighWidth,
-                height: SizeConstants.buttonImageHeighWidth
-            )
+            .frame(size: SizeConstants.smallButtonImageSize)
             .northWestShadow()
             
             if isEditing {
@@ -63,7 +60,7 @@ struct SourceListRowView: View {
         .padding()
         .background(
             Color.element
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
             .northWestShadow()
         )
         .listRowBackground(Color.element)

@@ -13,6 +13,7 @@ final class SettingsViewModel: ObservableObject {
     @Published var selectedImageScale: ImageScale
     @Published var showConfetti: Bool
     @Published var highlighterPalette: HighlighterPalette
+    @Published var showProgress: Bool
     
     let settingsManager = SettingsManager.shared
     
@@ -22,6 +23,7 @@ final class SettingsViewModel: ObservableObject {
         selectedImageScale = settingsManager.imageScale
         showConfetti = settingsManager.showConfetti
         highlighterPalette = settingsManager.highliterPalette
+        showProgress = settingsManager.showProgress
     }
     
     func save() {
@@ -30,6 +32,7 @@ final class SettingsViewModel: ObservableObject {
             aspectRatio: selectedRatio,
             imageScale: selectedImageScale,
             showConfetti: showConfetti,
-            highliterPalette: highlighterPalette)
+            highliterPalette: highlighterPalette, 
+            showProgress: showProgress)
     }
 }

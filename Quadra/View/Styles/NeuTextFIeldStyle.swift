@@ -38,7 +38,7 @@ struct NeuTextFieldStyle: TextFieldStyle {
                         .shadow(.inner(color: .highlight, radius: 3, x: -3, y: -3))
                         .shadow(.inner(color: .shadow, radius: 3, x: 3, y: 3))
                 )
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
         }
     }
 }

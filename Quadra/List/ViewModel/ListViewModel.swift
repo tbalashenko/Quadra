@@ -10,14 +10,14 @@ import Combine
 
 final class ListViewModel: ObservableObject {
     @Published var model = FilterableListModel()
-    @Published var filteredCards: [Status: [Card]] = [:]
+    @Published var filteredCards: [CardStatus: [Card]] = [:]
     @Published var searchText: String = ""
     @Published var isSearchPresented: Bool = false
     
     private var cancellables = Set<AnyCancellable>()
     
-    var sortedStatuses: [Status] {
-        return Status.allStatuses.filter { filteredCards.keys.contains($0) }
+    var sortedStatuses: [CardStatus] {
+        return CardStatus.allStatuses.filter { filteredCards.keys.contains($0) }
     }
     
     init() {
@@ -48,11 +48,11 @@ final class ListViewModel: ObservableObject {
                     
                     return textMatch && statusMatches && sourceMatches && dateRangeMatches && archiveTagMatches
                 }
-            self.filteredCards = Dictionary(grouping: cards, by: { $0.status })
+            self.filteredCards = Dictionary(grouping: cards, by: { $0.cardStatus })
         }
     }
     
-    func delete(at offsets: IndexSet, from status: Status) {
+    func delete(at offsets: IndexSet, from status: CardStatus) {
         guard let index = offsets.first else { return }
         
         if let cards = filteredCards[status] {
@@ -107,10 +107,10 @@ extension ListViewModel {
     }
     
     private func checkStatusMatches(card: Card) -> Bool {
-        if model.selectedStatuses == Status.allStatuses || model.selectedStatuses.isEmpty {
+        if model.selectedStatuses == CardStatus.allStatuses || model.selectedStatuses.isEmpty {
             return true
         } else {
-            return model.selectedStatuses.map { $0.id }.contains(card.status.id)
+            return model.selectedStatuses.map { $0.id }.contains(card.cardStatus.id)
         }
     }
     

@@ -16,12 +16,8 @@ struct TagLayout: Layout {
         var height: CGFloat = 0
         let rows = generateRows(maxWidth, proposal, subviews)
         
-        for (index, row) in rows.enumerated() {
-            if index == (rows.count - 1) {
-                height += row.maxHeight(proposal)
-            } else {
-                height += row.maxHeight(proposal) + spacing
-            }
+        for (_, row) in rows.enumerated() {
+            height += row.maxHeight(proposal) + spacing
         }
         
         return .init(width: maxWidth, height: height)
@@ -52,7 +48,6 @@ struct TagLayout: Layout {
             for view in row  {
                 let viewSize = view.sizeThatFits(proposal)
                 view.place(at: origin, proposal: proposal)
-                /// Updaing Origin X
                 origin.x += (viewSize.width + spacing)
             }
             

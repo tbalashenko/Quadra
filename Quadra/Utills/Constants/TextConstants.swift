@@ -22,6 +22,7 @@ struct TextConstants {
     static let languageAndVoice = "Language and Voice"
     static let animation = "Animation"
     static let showConfetti = "Show Confetti"
+    static let showProgress = "Show Progress Bar"
     static let manageSources = "Manage Sources"
     static let textFormatting = "Text Formatting"
     static let voice = "Voice"
@@ -41,6 +42,10 @@ struct TextConstants {
     static let lastRepetition = "Last repetition:"
     static let warning = "Warning"
     static let thatsItForToday = "That's it for today, but you can add new cards"
+    static let enterWord = "Enter the word you want to remember and tap the search button."
+    static let noSamplePhrases = "Sorry, we didn't find any good example for you"
+    static let copied = "Copied!"
+    static let pasted = "Pasted!"
     
     static let noCards = "no cards"
     static let oneCard = "1 card"
@@ -56,6 +61,10 @@ struct TextConstants {
     static let settings = "Settings"
     static let other = "Other"
     static let statistics = "Statistics"
+    static let testFeatures = "Test Features"
+    static let getSample = "Get a sample phrase"
+    static let cropImage = "Crop Image"
+    
     
     //Buttons
     static let reset = "Reset"

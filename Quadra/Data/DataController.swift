@@ -25,8 +25,8 @@ class DataController: ObservableObject {
                                               forKey: NSPersistentHistoryTrackingKey)
         persistentStoreDescriptions.setOption(true as NSNumber,
                                               forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
-        container.loadPersistentStores { description, error in
-            if let error = error {
+        container.loadPersistentStores { _, error in
+            if let error {
                 print("Core Data failed to load: \(error.localizedDescription)")
             }
         }

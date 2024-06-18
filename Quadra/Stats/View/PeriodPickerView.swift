@@ -17,7 +17,6 @@ struct PeriodPickerView: View {
             }
         }
         .pickerStyle(.menu)
-        .styleListSection()
     }
 }
 

@@ -35,7 +35,7 @@ struct SkeletonView: View {
         LinearGradient (colors: gradientColors,
                         startPoint: startPoint,
                         endPoint: endPoint)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
         .onAppear {
             withAnimation(.easeInOut(duration: 1).repeatForever(autoreverses: false)) {
                 startPoint = .init(x: 1, y: 1)

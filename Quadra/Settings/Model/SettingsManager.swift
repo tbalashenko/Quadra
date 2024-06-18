@@ -34,6 +34,10 @@ final class SettingsManager {
         return HighlighterPalette(rawValue: rawValue) ?? .pale
     }
     
+    public var showProgress: Bool {
+        UserDefaultsManager.boolForKey(UserDefaultsKeys.showProgress) ?? true
+    }
+    
     private init() { }
     
     public func save(
@@ -41,12 +45,14 @@ final class SettingsManager {
         aspectRatio: AspectRatio,
         imageScale: ImageScale,
         showConfetti: Bool,
-        highliterPalette: HighlighterPalette
+        highliterPalette: HighlighterPalette,
+        showProgress: Bool
     ) {
         UserDefaultsManager.saveObject(voice.identifier, forKey: UserDefaultsKeys.textToSpeechVoiceIdentifier)
         UserDefaultsManager.saveObject(aspectRatio.rawValue, forKey: UserDefaultsKeys.aspectRatio)
         UserDefaultsManager.saveObject(imageScale.rawValue, forKey: UserDefaultsKeys.imageScale)
         UserDefaultsManager.saveObject(showConfetti, forKey: UserDefaultsKeys.showConfetti)
         UserDefaultsManager.saveObject(highliterPalette.rawValue, forKey: UserDefaultsKeys.highlighterPalette)
+        UserDefaultsManager.saveObject(showProgress, forKey: UserDefaultsKeys.showProgress)
     }
 }

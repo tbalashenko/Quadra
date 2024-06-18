@@ -20,10 +20,7 @@ struct CardStackView: View {
                         viewModel: viewModel,
                         model: model
                     )
-                    .frame(
-                        width: SizeConstants.cardWith,
-                        height: SizeConstants.cardHeigh
-                    )
+                    .frame(size: SizeConstants.cardSize)
                 }
             }
         }
@@ -35,8 +32,5 @@ struct CardStackView: View {
 
 #Preview {
     CardStackView(viewModel: CardsViewModel())
-        .frame(
-            width: SizeConstants.cardWith,
-            height: SizeConstants.cardHeigh
-        )
+        .frame(size: SizeConstants.cardSize)
 }

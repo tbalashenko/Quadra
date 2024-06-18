@@ -9,23 +9,14 @@ import SwiftUI
 
 struct SetupCardSourceView: View {
     @ObservedObject var viewModel: SetupCardViewModel
-    @StateObject var tagCloudViewModel: TagCloudViewModel
-    
-    init(viewModel: SetupCardViewModel) {
-        self._viewModel = ObservedObject(wrappedValue: viewModel)
-        self._tagCloudViewModel = StateObject(wrappedValue: TagCloudViewModel(items: viewModel.tagCloudItems, isSelectable: true, max: 10))
-    }
     
     var body: some View {
         GroupBox(TextConstants.sources) {
             AddNewSourceView(viewModel: viewModel)
-            TagCloudView(viewModel: tagCloudViewModel)
+            TagCloudView(viewModel: TagCloudViewModel(items: viewModel.tagCloudItems, isSelectable: true))
             
         }
-        .applyFormStyle()
-        .onReceive(viewModel.$tagCloudItems) { newItems in
-            tagCloudViewModel.items = newItems
-        }
+        .groupBoxStyle(PlainGroupBoxStyle())
     }
 }
 

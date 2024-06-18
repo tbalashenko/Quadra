@@ -9,17 +9,17 @@ import Foundation
 import SwiftUI
 import CoreData
 
-final public class Status: NSObject, NSCoding, NSSecureCoding {
+final public class CardStatus: NSObject, NSCoding, NSSecureCoding {
     public let id: Int
     let title: String
     let color: String
 
-    public static let allStatuses = [Status.input, Status.thisWeek, Status.thisMonth, Status.archive]
+    public static let allStatuses = [CardStatus.input, CardStatus.thisWeek, CardStatus.thisMonth, CardStatus.archive]
 
-    public static let input = Status(id: 0, title: TextConstants.input, color: Color.Green.ashGray)
-    public static let thisWeek = Status(id: 1, title: TextConstants.thisWeek, color: Color.yellowIris)
-    public static let thisMonth = Status(id: 2, title: TextConstants.thisMonth, color: Color.accentOrange)
-    public static let archive = Status(id: 3, title: TextConstants.archive, color: Color.spanishGray)
+    public static let input = CardStatus(id: 0, title: TextConstants.input, color: Color.Green.ashGray)
+    public static let thisWeek = CardStatus(id: 1, title: TextConstants.thisWeek, color: Color.yellowIris)
+    public static let thisMonth = CardStatus(id: 2, title: TextConstants.thisMonth, color: Color.accentOrange)
+    public static let archive = CardStatus(id: 3, title: TextConstants.archive, color: Color.spanishGray)
     
     public static var supportsSecureCoding: Bool { return true }
 
@@ -48,7 +48,7 @@ final public class Status: NSObject, NSCoding, NSSecureCoding {
     
     //MARK: - Equitable
     public override func isEqual(_ object: Any?) -> Bool {
-        guard let other = object as? Status else { return false }
+        guard let other = object as? CardStatus else { return false }
         
         return self.id == other.id
     }
@@ -61,7 +61,7 @@ final public class Status: NSObject, NSCoding, NSSecureCoding {
 
 public class StatusTransformer: ValueTransformer {
     public override func transformedValue(_ value: Any?) -> Any? {
-        guard let status = value as? Status else { return nil }
+        guard let status = value as? CardStatus else { return nil }
 
         do {
             let data = try NSKeyedArchiver.archivedData(withRootObject: status, requiringSecureCoding: true)
@@ -75,7 +75,7 @@ public class StatusTransformer: ValueTransformer {
         guard let data = value as? Data else { return nil }
 
         do {
-            let status =  try NSKeyedUnarchiver.unarchivedObject(ofClass: Status.self, from: data)
+            let status =  try NSKeyedUnarchiver.unarchivedObject(ofClass: CardStatus.self, from: data)
             return status
         } catch {
             return nil
@@ -84,4 +84,4 @@ public class StatusTransformer: ValueTransformer {
 }
 
 //MARK: - Identifiable
-extension Status: Identifiable { }
+extension CardStatus: Identifiable { }

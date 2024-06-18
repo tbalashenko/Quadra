@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 final class FilterableListModel: ObservableObject {
-    @Published var selectedStatuses = [Status]()
+    @Published var selectedStatuses = [CardStatus]()
     @Published var selectedSources = [CardSource]()
     @Published var selectedArchiveTags = [CardArchiveTag]()
     @Published var fromDate = Date()
@@ -41,7 +41,7 @@ final class FilterableListModel: ObservableObject {
         setupDates()
     }
     
-    func toggleStatusSelection(status: Status) {
+    func toggleStatusSelection(status: CardStatus) {
         toggleItem(item: status, in: &selectedStatuses)
     }
     

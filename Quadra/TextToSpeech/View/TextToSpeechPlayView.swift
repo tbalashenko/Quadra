@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TextToSpeechPlayView: View {
     @StateObject var viewModel: TextToSpeechViewModel
-    var buttonSize: TextToSpeechPlayView.size = .small
+    var buttonSize: Size = .small
     
     var body: some View {
         Button(action: {
@@ -17,31 +17,22 @@ struct TextToSpeechPlayView: View {
         }, label: {
             Image(systemName: viewModel.isSpeaking ? "stop.fill" : "play.fill")
                 .resizable()
-                .frame(width: buttonSize.width, height: buttonSize.height)
+                .frame(size: buttonSize.size)
                 .foregroundStyle(Color.accentColor)
         })
     }
 }
 
 extension TextToSpeechPlayView {
-    enum size {
+    enum Size {
         case small, medium
         
-        var width: CGFloat {
+        var size: CGSize {
             switch self {
                 case .small:
-                    12
+                    CGSize(width: 12, height: 12)
                 case .medium:
-                    22
-            }
-        }
-        
-        var height: CGFloat {
-            switch self {
-                case .small:
-                    12
-                case .medium:
-                    22
+                    CGSize(width: 22, height: 22)
             }
         }
     }

@@ -14,25 +14,22 @@ struct AddNewSourceView: View {
     var body: some View {
         HStack {
             ColorPicker("", selection: $sourceColor)
-                .frame(
-                    width: SizeConstants.buttonImageHeighWidth,
-                    height: SizeConstants.buttonImageHeighWidth
-                )
+                .frame(size: SizeConstants.mediumButtonImageSize)
                 .northWestShadow()
             
             TextField(TextConstants.addSource, text: $viewModel.newSourceText)
                 .textFieldStyle(NeuTextFieldStyle(text: $viewModel.newSourceText))
-                .padding(.horizontal)
+                .padding(.horizontal, 4)
             Button(action: {
                 if !viewModel.newSourceText.isEmpty {
-                    hideKeyboard()
                     viewModel.saveSource(color: sourceColor)
+                    hideKeyboard()
                     sourceColor = .morningBlue
                 }
             }, label: {
                 Image(systemName: "plus")
             })
-            .buttonStyle(NeuButtonStyle(width: 38, height: 38))
+            .buttonStyle(NeuButtonStyle(size: SizeConstants.mediumButtonImageSize))
             .disabled(viewModel.newSourceText.isEmpty)
         }
     }

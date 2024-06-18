@@ -14,18 +14,16 @@ struct NeuButtonStyle: ButtonStyle {
         case roundedRectangle
     }
     
-    var width: CGFloat = SizeConstants.buttonImageHeighWidth
-    var height: CGFloat = SizeConstants.buttonImageHeighWidth
     var color = Color.element
-    
+    var size: CGSize = SizeConstants.smallButtonImageSize
     var form: NeuButtonStyleForm = .capsule
 
     func makeBody(configuration: Self.Configuration)
     -> some View {
-        let shape = form == .capsule ? AnyShape(Capsule()) : AnyShape(RoundedRectangle(cornerRadius: 8))
+        let shape = form == .capsule ? AnyShape(Capsule()) : AnyShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
         
         configuration.label
-            .frame(width: width, height: height)
+            .frame(size: size)
             .scaleEffect(configuration.isPressed ? 0.98 : 1)
             .background(
                 shape

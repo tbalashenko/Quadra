@@ -12,18 +12,27 @@ struct CardHeaderView: View {
     var action: (() -> ())?
     
     var body: some View {
-        ZStack {
-            if let image = model.card.convertedImage {
-                CardHeaderImageView(image: image)
-            } else {
-                EmptyView()
+        GeometryReader { geometry in
+            ZStack {
+                if let image = model.card.convertedImage, let croppedImage = model.card.convertedCroppedImage {
+                    CardHeaderImageView(image: image, croppedImage: croppedImage)
+                } else {
+                    EmptyView()
+                }
+                if model.showInfoButton {
+                    AlignableTransparentButton(alignment: .topTrailing) {
+                        Image(systemName: "info.circle.fill")
+                            .smallButtonImage()
+                    } action: {
+                        model.showAdditionalInfo.toggle()
+                    }
+                }
+                if model.showMoveToButton {
+                    MoveToButton(model: model, action: action)
+                }
             }
-            if model.showInfoButton {
-                InfoButton(model: model)
-            }
-            if model.showMoveToButton {
-                MoveToButton(model: model, action: action)
-            }
+            .frame(size: geometry.size)
+            .drawingGroup()
         }
     }
 }

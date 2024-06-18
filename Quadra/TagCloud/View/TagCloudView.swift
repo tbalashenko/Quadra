@@ -13,7 +13,7 @@ struct TagCloudView: View {
     var body: some View {
         ScrollView {
             TagLayout() {
-                ForEach(viewModel.displayedItems) { item in
+                ForEach(viewModel.displayedItems, id: \.id) { item in
                     TagView(item: item) {
                         if viewModel.isSelectable {
                             item.isSelected.toggle()

@@ -30,7 +30,7 @@ final class FilterViewModel: ObservableObject {
     private func setupStatusTags() {
         statusTags.removeAll()
         
-        Status.allStatuses.forEach { status in
+        CardStatus.allStatuses.forEach { status in
             let item = TagCloudItem(
                 isSelected: model.selectedStatuses.contains(status),
                 id: UUID(uuidString: status.title) ?? UUID(),

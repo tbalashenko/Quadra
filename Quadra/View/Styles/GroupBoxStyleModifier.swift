@@ -6,17 +6,3 @@
 //
 
 import SwiftUI
-
-struct GroupBoxStyleModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .styleListSection()
-            .groupBoxStyle(PlainGroupBoxStyle())
-    }
-}
-
-extension View {
-    func applyFormStyle() -> some View {
-        self.modifier(GroupBoxStyleModifier())
-    }
-}

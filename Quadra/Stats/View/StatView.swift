@@ -27,18 +27,6 @@ struct StatView: View {
             if StatDataService.shared.statData.count < 3 {
                 StatEmptyView()
                     .environmentObject(viewModel)
-#if DEBUG
-                    .toolbar {
-                        ToolbarItem {
-                            Button(action: {
-                                viewModel.addRandomData()
-                                viewModel.fetchStatData(fromDate: selectedPeriod.fromDate)
-                            }) {
-                                Image(systemName: "plus.circle.fill")
-                            }
-                        }
-                    }
-#endif
             } else {
                 ChartView(
                     selectedPeriod: $selectedPeriod,

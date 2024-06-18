@@ -14,6 +14,14 @@ struct OtherView: View {
                 NavigationLink(TextConstants.settings) {
                     SettingsView()
                 }
+                Section(TextConstants.testFeatures) {
+                    NavigationLink(TextConstants.getSample) {
+                        SamplePhrasesView()
+                    }
+                    Button("Add random cards") {
+                        RandomDataService.shared.addRandomData()
+                    }
+                }
             }
             .scrollContentBackground(.hidden)
             .background(Color.element)

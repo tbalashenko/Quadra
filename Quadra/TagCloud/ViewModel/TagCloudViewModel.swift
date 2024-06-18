@@ -26,7 +26,7 @@ final class TagCloudViewModel: ObservableObject {
     }
     
     private func setupDisplayedItems() {
-        if let max = max {
+        if let max {
             displayedItems = Array(items.prefix(max))
         } else {
             displayedItems = items

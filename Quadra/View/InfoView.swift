@@ -45,9 +45,7 @@ struct InfoView: View {
                 } label: {
                     Label(TextConstants.howToUseApp, systemImage: "info.circle")
                 }
-                .buttonStyle(NeuButtonStyle(
-                    width: SizeConstants.buttonWith,
-                    height: SizeConstants.buttonHeigh))
+                .buttonStyle(NeuButtonStyle(size: SizeConstants.plainButtonSize))
                 Spacer()
                     .frame(height: 16)
                 
@@ -59,9 +57,7 @@ struct InfoView: View {
                     } label: {
                         Label(TextConstants.restart, systemImage: "repeat.circle")
                     }
-                    .buttonStyle(NeuButtonStyle(
-                        width: SizeConstants.buttonWith,
-                        height: SizeConstants.buttonHeigh))
+                    .buttonStyle(NeuButtonStyle(size: SizeConstants.plainButtonSize))
                 }
             }
             

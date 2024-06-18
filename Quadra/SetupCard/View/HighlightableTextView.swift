@@ -19,7 +19,8 @@ struct HighlightableTextView: View {
                 UITextViewRepresentable(
                     text: $text,
                     pallete: palette,
-                    calculatedHeight: $dynamicHeight)
+                    calculatedHeight: $dynamicHeight
+                )
                 .padding(.leading, 16)
                 .padding(.trailing, 32)
                 .background(
@@ -27,7 +28,7 @@ struct HighlightableTextView: View {
                         .shadow(.inner(color: .highlight, radius: 3, x: -3, y: -3))
                         .shadow(.inner(color: .shadow, radius: 3, x: 3, y: 3))
                 )
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
                 .frame(minHeight: dynamicHeight, maxHeight: dynamicHeight)
                 if !text.characters.isEmpty {
                     HStack {
@@ -103,6 +104,35 @@ fileprivate struct UITextViewRepresentable: UIViewRepresentable {
         func textViewDidEndEditing(_ textView: UITextView) {
             _text.wrappedValue = AttributedString(textView.attributedText)
         }
+        
+        func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+            if text == "\n" {
+                textView.resignFirstResponder()
+                return false
+            }
+            
+            if let pasteboardString = UIPasteboard.general.string, text == pasteboardString {
+                let plainText = NSMutableAttributedString(string: pasteboardString)
+                let updatedAttributes: [NSAttributedString.Key: Any] = [
+                    .backgroundColor: UIColor.clear,
+                    .font: UIFont.systemFont(ofSize: 18),
+                    .foregroundColor: UIColor.black
+                ]
+                
+                let fullRange = NSRange(location: 0, length: plainText.length)
+                plainText.addAttributes(updatedAttributes, range: fullRange)
+                
+                let mutableAttributedText = NSMutableAttributedString(attributedString: textView.attributedText)
+                mutableAttributedText.replaceCharacters(in: range, with: plainText)
+                textView.attributedText = mutableAttributedText
+                
+                _text.wrappedValue = AttributedString(plainText)
+                UITextViewRepresentable.recalculateHeight(view: textView, result: $calculatedHeight)
+                
+                return false
+            }
+            return true
+        }
     }
 }
 
@@ -116,7 +146,8 @@ fileprivate class HighlightableUITextView: UITextView {
         self.isScrollEnabled = false
         self.autocorrectionType = .no
         self.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        #warning("change when I will be doing something with font")
+        self.returnKeyType = .done
+#warning("change when I will be doing something with font")
         self.font = .systemFont(ofSize: 18)
     }
     
@@ -156,7 +187,7 @@ fileprivate class HighlightableUITextView: UITextView {
                     self.textStorage.beginEditing()
                     self.textStorage.setAttributes(updatedAttributes, range: range)
                     self.textStorage.endEditing()
-                    if let delegate = self.delegate {
+                    if let delegate {
                         delegate.textViewDidChange?(self)
                     }
                 })
@@ -170,13 +201,14 @@ fileprivate class HighlightableUITextView: UITextView {
             
             let updatedAttributes: [NSAttributedString.Key: Any] = [
                 .backgroundColor: UIColor.clear,
-                .font: UIFont.systemFont(ofSize: 18)
+                .font: UIFont.systemFont(ofSize: 18),
+                .foregroundColor: UIColor.black
             ]
             
             self.textStorage.beginEditing()
             self.textStorage.setAttributes(updatedAttributes, range: range)
             self.textStorage.endEditing()
-            if let delegate = self.delegate {
+            if let delegate {
                 delegate.textViewDidChange?(self)
             }
         }

@@ -12,31 +12,19 @@ struct MoveToButton: View {
     var action: (() -> ())?
     
     var body: some View {
-        VStack {
+        AlignableTransparentButton(alignment: .topLeading) {
             HStack {
-                Button(action: {
-                    action?()
-                }) {
-                    HStack {
-                        Text("→").bold()
-                        TagView(
-                            item: TagCloudItem(
-                                isSelected: true,
-                                id: UUID(),
-                                title: model.card.getNewStatus.title,
-                                color: model.card.getNewStatus.color,
-                                action: { action?() }
-                            ),
-                            withShadow: false
-                        )
-                    }
-                }
-                .padding(4)
-                .buttonStyle(.transparentButtonStyle)
-                Spacer()
+                Text("→").bold()
+                TagView(
+                    item: TagCloudItem(
+                        isSelected: true,
+                        id: UUID(),
+                        title: model.card.getNewStatus.title,
+                        color: model.card.getNewStatus.color
+                    )
+                )
             }
-            Spacer()
-        }
+        } action: { action?() }
     }
 }
 

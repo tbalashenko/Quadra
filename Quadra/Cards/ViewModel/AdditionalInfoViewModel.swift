@@ -24,15 +24,16 @@ final class AdditionalnfoViewModel: ObservableObject {
     
     init(model: CardModel) {
         self.cardModel = model
-        self.updateProperties(from: model)
+        updateProperties(from: model)
         prepareAdditionalInfo(for: model.card)
-        self.setupBindings()
+        setupBindings()
     }
     
     private func setupBindings() {
         cardModel.objectWillChange
             .sink { [weak self] _ in
                 guard let self = self else { return }
+                
                 self.updateProperties(from: self.cardModel)
             }
             .store(in: &cancellables)
@@ -49,7 +50,7 @@ final class AdditionalnfoViewModel: ObservableObject {
     func prepareTags(for card: Card) {
         tags.removeAll()
         
-        if card.status.id == 3, let tag = card.archiveTag {
+        if card.cardStatus.id == 3, let tag = card.archiveTag {
             let archiveTag = TagCloudItem(
                 isSelected: true,
                 id: tag.id,
@@ -61,9 +62,9 @@ final class AdditionalnfoViewModel: ObservableObject {
         
         let statusTag = TagCloudItem(
             isSelected: true,
-            id: UUID(uuidString: card.status.title) ?? UUID(),
-            title: card.status.title,
-            color: card.status.color)
+            id: UUID(uuidString: card.cardStatus.title) ?? UUID(),
+            title: card.cardStatus.title,
+            color: card.cardStatus.color)
         
         tags.append(statusTag)
         

@@ -15,4 +15,10 @@ extension Image {
         renderer.scale = scale.rawValue
         return renderer.uiImage
     }
+    
+    func smallButtonImage() -> some View {
+        self
+            .resizable()
+            .frame(size: SizeConstants.smallButtonImageSize)
+    }
 }

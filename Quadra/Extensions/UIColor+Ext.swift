@@ -8,6 +8,26 @@
 import UIKit
 
 extension UIColor {
+    private enum Light {
+        static let black = UIColor(hex: "0x212121")
+        static let white = UIColor(hex: "0xFFFFFF")
+    }
+    
+    private enum Dark {
+        static let black = UIColor(hex: "0x1F1F1F")
+        static let white = UIColor(hex: "0xFFFFFF")
+    }
+    
+    //dynamic colors
+    static let black = UIColor(light: Light.black, dark: Dark.white)
+    static let white = UIColor(light: Light.white, dark: Dark.black)
+    
+    convenience init(light: UIColor, dark: UIColor) {
+        self.init { $0.userInterfaceStyle == .dark ? dark : light }
+    }
+}
+
+extension UIColor {
     enum HighliterPale {
         static let calmingMint = UIColor(hex: "#C6E5DA")
         static let teaGreen = UIColor(hex: "#C6E5CD")

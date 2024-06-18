@@ -15,6 +15,7 @@ struct ListRowView: View {
             Text(AttributedString(card.phraseToRemember))
                 .padding()
             Spacer()
+#warning("cropped image")
             if let data = card.image,
                let uiImage = UIImage(data: data) {
                 Image(uiImage: uiImage)
@@ -22,11 +23,11 @@ struct ListRowView: View {
                     .scaledToFill()
                     .frame(width: 88, height: 88)
                     .background(Color.element)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
             }
         }
         .background(Color.element
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
             .northWestShadow()
         )
     }

@@ -11,42 +11,43 @@ struct SetupCardView: View {
     @StateObject var viewModel: SetupCardViewModel
     @Binding var showSetupCardView: Bool
     
-    @State var image: Image?
-    @State var sourceColor = Color.morningBlue
-    @State private var isAlertShowing = false
+    @State private var showAlert = false
+    @State var showPopup: Bool = false
     
     var body: some View {
-        List {
-            PhotoPickerView(image: $image)
-                .styleListSection()
-                .frame(
-                    width: SizeConstants.photoPickerWidth,
-                    height: SizeConstants.photoPickerWidth * SettingsManager.shared.aspectRatio.ratio
-                )
-            SetupCardPhraseView(viewModel: viewModel)
+        ScrollView {
+            PhotoPickerView(image: $viewModel.image, croppedImage: $viewModel.croppedImage)
+                .frame(size: SizeConstants.imageSize)
+            SetupCardPhraseView(viewModel: viewModel, showPastedPopup: $showPopup)
             SetupCardSourceView(viewModel: viewModel)
         }
-        .listStyle(.plain)
-        .scrollContentBackground(.hidden)
-        .background(Color.element)
+        .background {
+            Color.element
+                .ignoresSafeArea()
+        }
         .interactiveDismissDisabled(true)
-        .onAppear { setup() }
         .alert(
             TextConstants.warning,
-            isPresented: $isAlertShowing,
+            isPresented: $showAlert,
             actions: {
                 Button(TextConstants.yes) { showSetupCardView = false }
                 Button(TextConstants.no, role: .cancel) { }
             },
             message: { Text(TextConstants.closeWithoutSavingHelp) }
         )
+        .popup(isPresented: $showPopup) {
+            CustomPopup(
+                text: TextConstants.pasted,
+                showPopup: $showPopup
+            )
+        }
         .navigationTitle(viewModel.mode.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button(TextConstants.save) {
                     hideKeyboard()
-                    viewModel.saveCard(image: image)
+                    viewModel.saveCard()
                     showSetupCardView = false
                 }
                 .disabled(viewModel.phraseToRemember.characters.isEmpty)
@@ -54,19 +55,12 @@ struct SetupCardView: View {
             ToolbarItem(placement: .cancellationAction) {
                 Button(TextConstants.cancel) {
                     if viewModel.hasChanged {
-                        isAlertShowing = true
+                        showAlert = true
                     } else {
                         showSetupCardView = false
                     }
                 }
             }
-        }
-    }
-    
-    private func setup() {
-        if let imageData = viewModel.cardModel?.card.image,
-           let uiImage = UIImage(data: imageData) {
-            image = Image(uiImage: uiImage)
         }
     }
 }
