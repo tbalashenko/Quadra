@@ -112,6 +112,7 @@
 		A0B21A872BF524A6008EAAD1 /* CardSourceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B21A862BF524A6008EAAD1 /* CardSourceService.swift */; };
 		A0B21A8B2BF524FB008EAAD1 /* SourceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B21A8A2BF524FB008EAAD1 /* SourceViewModel.swift */; };
 		A0B21AA82BFCFE1E008EAAD1 /* CardStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B21AA72BFCFE1E008EAAD1 /* CardStackView.swift */; };
+		A0B3515D2C29D75700FAD55E /* PasteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B3515C2C29D75700FAD55E /* PasteButton.swift */; };
 		A0BC329A2C1455650006BF39 /* FilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0BC32992C1455650006BF39 /* FilterViewModel.swift */; };
 		A0BC329E2C1462C20006BF39 /* CreationDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0BC329D2C1462C20006BF39 /* CreationDateView.swift */; };
 		A0BC32A62C172F5E0006BF39 /* DictionaryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0BC32A52C172F5E0006BF39 /* DictionaryResponse.swift */; };
@@ -237,6 +238,7 @@
 		A0B21A862BF524A6008EAAD1 /* CardSourceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSourceService.swift; sourceTree = "<group>"; };
 		A0B21A8A2BF524FB008EAAD1 /* SourceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceViewModel.swift; sourceTree = "<group>"; };
 		A0B21AA72BFCFE1E008EAAD1 /* CardStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStackView.swift; sourceTree = "<group>"; };
+		A0B3515C2C29D75700FAD55E /* PasteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteButton.swift; sourceTree = "<group>"; };
 		A0BC32992C1455650006BF39 /* FilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewModel.swift; sourceTree = "<group>"; };
 		A0BC329D2C1462C20006BF39 /* CreationDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreationDateView.swift; sourceTree = "<group>"; };
 		A0BC32A52C172F5E0006BF39 /* DictionaryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryResponse.swift; sourceTree = "<group>"; };
@@ -586,6 +588,7 @@
 				A023FEF32BAB114B00FAB13C /* AlignableTransparentButton.swift */,
 				A08723B62C2072250000CB8C /* Popup.swift */,
 				A08723B82C20838B0000CB8C /* CopyButton.swift */,
+				A0B3515C2C29D75700FAD55E /* PasteButton.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -1119,6 +1122,7 @@
 				A023FEF02BAA22ED00FAB13C /* TagView.swift in Sources */,
 				A0C3F9F92C29861C00E188B0 /* FilterService.swift in Sources */,
 				A0F940712BC9D84F00424690 /* SourceListRowView.swift in Sources */,
+				A0B3515D2C29D75700FAD55E /* PasteButton.swift in Sources */,
 				A0B21A8B2BF524FB008EAAD1 /* SourceViewModel.swift in Sources */,
 				A05EFA222BBDF122000460A3 /* OtherView.swift in Sources */,
 				A01D2A742BB4C4CA00AE1790 /* ListRowView.swift in Sources */,

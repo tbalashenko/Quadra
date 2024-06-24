@@ -150,9 +150,7 @@ final class SetupCardViewModel: ObservableObject {
     }
 
     
-    func formatAndSetPhrase(_ text: [String], string: inout AttributedString) {
-        guard let text = text.first else { return }
-        
+    func formatAndSetPhrase(_ text: String, string: inout AttributedString) {
         let updatedAttributes: [NSAttributedString.Key: Any] = [
             .backgroundColor: UIColor.clear,
             .font: UIFont.systemFont(ofSize: 18),

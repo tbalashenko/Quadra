@@ -15,32 +15,28 @@ struct SetupCardPhraseView: View {
         Section(TextConstants.phraseToRemember) {
             HStack {
                 HighlightableTextView(text: $viewModel.phraseToRemember)
-                PasteButton(payloadType: String.self) { strings in
+                PasteButton { string in
                     Task {
                         await MainActor.run {
-                            viewModel.formatAndSetPhrase(strings, string: &viewModel.phraseToRemember)
+                            viewModel.formatAndSetPhrase(string, string: &viewModel.phraseToRemember)
                             showPastedPopup = true
                         }
                     }
                 }
-                .buttonBorderShape(.capsule)
-                .labelStyle(.iconOnly)
             }
         }
 
         Section(TextConstants.translation) {
             HStack {
                 HighlightableTextView(text: $viewModel.translation)
-                PasteButton(payloadType: String.self) { strings in
+                PasteButton { string in
                     Task {
                         await MainActor.run {
-                            viewModel.formatAndSetPhrase(strings, string: &viewModel.translation)
+                            viewModel.formatAndSetPhrase(string, string: &viewModel.translation)
                             showPastedPopup = true
                         }
                     }
                 }
-                .buttonBorderShape(.capsule)
-                .labelStyle(.iconOnly)
             }
         }
 
@@ -55,18 +51,14 @@ struct SetupCardPhraseView: View {
                     hideKeyboard()
                 }
                 .submitLabel(.done)
-                PasteButton(payloadType: String.self) { strings in
+                PasteButton { string in
                     Task {
                         await MainActor.run {
-                            guard let text = strings.first else { return }
-                            
-                            viewModel.transcription = text
+                            viewModel.transcription = string
                             showPastedPopup = true
                         }
                     }
                 }
-                .buttonBorderShape(.capsule)
-                .labelStyle(.iconOnly)
             }
         }
     }
