@@ -2,12 +2,13 @@
 //  CardArchiveTag+CoreDataProperties.swift
 //  Quadra
 //
-//  Created by Tatyana Balashenko on 16/05/2024.
+//  Created by Tatyana Balashenko on 19/06/2024.
 //
 //
 
 import Foundation
 import CoreData
+
 
 extension CardArchiveTag {
 
@@ -19,7 +20,6 @@ extension CardArchiveTag {
     @NSManaged public var id: UUID
     @NSManaged public var title: String
     @NSManaged public var cards: NSSet?
-
 }
 
 // MARK: Generated accessors for cards
@@ -36,9 +36,6 @@ extension CardArchiveTag {
 
     @objc(removeCards:)
     @NSManaged public func removeFromCards(_ values: NSSet)
-
 }
 
-extension CardArchiveTag: Identifiable {
-
-}
+extension CardArchiveTag: Identifiable { }

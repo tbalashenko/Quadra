@@ -9,32 +9,28 @@ import SwiftUI
 import SpriteKit
 
 struct ConfettiView: View {
-    @Binding var isShown: Bool
-    var timeInS: Double
+    @Binding var isPresented: Bool
+    private var currentOpacity: CGFloat { isPresented ? 1 : 0 }
 
     var body: some View {
         GeometryReader { geometry in
-            if isShown {
-                SpriteView(
-                    scene: ParticleScene(size: geometry.size),
-                    options: [.allowsTransparency]
-                )
-                .ignoresSafeArea()
-                .background(Color.clear)
-                .transition(.opacity)
-                .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + timeInS) {
-                        isShown = false
-                    }
+            SpriteView(
+                scene: ParticleScene(size: geometry.size),
+                options: [.allowsTransparency]
+            )
+            .simultaneousGesture(
+                TapGesture().onEnded {
+                    isPresented = false
                 }
-                .onDisappear {
-                    isShown = false
-                }
-            }
+            )
+            .ignoresSafeArea()
+            .background(Color.clear)
+            .opacity(currentOpacity)
+            .animation(.easeInOut, value: currentOpacity)
         }
     }
 }
 
 #Preview {
-    ConfettiView(isShown: .constant(true), timeInS: 2)
+    ConfettiView(isPresented: .constant(true))
 }

@@ -2,7 +2,7 @@
 //  StatData+CoreDataClass.swift
 //  Quadra
 //
-//  Created by Tatyana Balashenko on 16/05/2024.
+//  Created by Tatyana Balashenko on 19/06/2024.
 //
 //
 

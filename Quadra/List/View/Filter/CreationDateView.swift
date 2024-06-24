@@ -9,21 +9,22 @@ import SwiftUI
 
 struct CreationDateView: View {
     @ObservedObject var viewModel: FilterViewModel
+    @ObservedObject var filterService = FilterService.shared
 
     var body: some View {
-        GroupBox(TextConstants.creationDate) {
+        Group {
             DatePicker(TextConstants.from,
-                       selection: $viewModel.model.fromDate,
-                       in: viewModel.model.minDate...viewModel.model.toDate,
+                       selection: $filterService.fromDate,
+                       in: filterService.minDate...filterService.toDate,
                        displayedComponents: [.date])
-            .datePickerStyle(.compact)
+            
             DatePicker(TextConstants.to,
-                       selection: $viewModel.model.toDate,
-                       in: viewModel.model.fromDate...viewModel.model.maxDate,
+                       selection: $filterService.toDate,
+                       in: filterService.fromDate...filterService.maxDate,
                        displayedComponents: [.date])
-            .datePickerStyle(.compact)
         }
-        .groupBoxStyle(PlainGroupBoxStyle())
+        .datePickerStyle(.compact)
+        .font(.system(size: 16))
     }
 }
 

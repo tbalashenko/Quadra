@@ -33,38 +33,33 @@ final class InfoViewModel: ObservableObject {
 
 struct InfoView: View {
     @StateObject var viewModel = InfoViewModel()
-    @Binding var showConfetti: Bool
     var onAction: (() -> Void)?
-
+    
     var body: some View {
-        ZStack {
-            ConfettiView(isShown: $showConfetti, timeInS: 4)
-            VStack {
+        VStack {
+            Button {
+                
+            } label: {
+                Label(TextConstants.howToUseApp, systemImage: "info.circle")
+            }
+            .buttonStyle(NeuButtonStyle(size: SizeConstants.plainButtonSize))
+            Spacer()
+                .frame(height: 16)
+            
+            Text(viewModel.getHint())
+            
+            if viewModel.isReadyToRepeat {
                 Button {
-
+                    onAction?()
                 } label: {
-                    Label(TextConstants.howToUseApp, systemImage: "info.circle")
+                    Label(TextConstants.restart, systemImage: "repeat.circle")
                 }
                 .buttonStyle(NeuButtonStyle(size: SizeConstants.plainButtonSize))
-                Spacer()
-                    .frame(height: 16)
-
-                Text(viewModel.getHint())
-
-                if viewModel.isReadyToRepeat {
-                    Button {
-                        onAction?()
-                    } label: {
-                        Label(TextConstants.restart, systemImage: "repeat.circle")
-                    }
-                    .buttonStyle(NeuButtonStyle(size: SizeConstants.plainButtonSize))
-                }
             }
-
         }
     }
 }
 
 #Preview {
-    InfoView(showConfetti: .constant(true))
+    InfoView()
 }

@@ -38,4 +38,22 @@ struct SizeConstants {
     static var imageWith: CGFloat = UIScreen.main.bounds.width - 2 * horizontalPadding
 
     static let horizontalPadding: CGFloat = 32
+    static let listHorizontalPadding: CGFloat = 16
+    
+    static var listImageSize: CGSize {
+        CGSize(width: listImageWidth, height: listImageHeigh)
+    }
+    
+    static let listImageHeigh: CGFloat = 88
+    
+    static var listImageWidth: CGFloat {
+        listImageHeigh / SettingsManager.shared.aspectRatio.ratio
+    }
+    
+    static var listImageFullSize: CGSize {
+        CGSize(width: listRowWidth, height: listRowWidth * SettingsManager.shared.aspectRatio.ratio)
+    }
+    
+    static var listRowWidth: CGFloat = UIScreen.main.bounds.width - 16
+    
 }

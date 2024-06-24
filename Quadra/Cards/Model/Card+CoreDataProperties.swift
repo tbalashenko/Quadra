@@ -2,12 +2,13 @@
 //  Card+CoreDataProperties.swift
 //  Quadra
 //
-//  Created by Tatyana Balashenko on 16/05/2024.
+//  Created by Tatyana Balashenko on 19/06/2024.
 //
 //
 
 import Foundation
 import CoreData
+
 
 extension Card {
 
@@ -16,20 +17,19 @@ extension Card {
     }
 
     @NSManaged public var additionTime: Date
-    @NSManaged public var id: UUID
-    @NSManaged public var image: Data?
+    @NSManaged public var cardStatus: Int
     @NSManaged public var croppedImage: Data?
+    @NSManaged public var id: UUID?
+    @NSManaged public var image: Data?
     @NSManaged public var isArchived: Bool
     @NSManaged public var lastRepetition: Date?
     @NSManaged public var lastTimeStatusChanged: Date?
     @NSManaged public var phraseToRemember: NSAttributedString
-    @NSManaged public var repetitionCounter: Int
-    @NSManaged public var cardStatus: CardStatus
+    @NSManaged public var repetitionCounter: Int64
     @NSManaged public var transcription: String?
     @NSManaged public var translation: NSAttributedString?
-    @NSManaged public var sources: NSSet?
     @NSManaged public var archiveTag: CardArchiveTag?
-
+    @NSManaged public var sources: NSSet?
 }
 
 // MARK: Generated accessors for sources
@@ -49,6 +49,4 @@ extension Card {
 
 }
 
-extension Card: Identifiable {
-
-}
+extension Card : Identifiable { }

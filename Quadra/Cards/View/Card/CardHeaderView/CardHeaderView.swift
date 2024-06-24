@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CardHeaderView: View {
-    @ObservedObject var model: CardModel
+    @EnvironmentObject var model: CardModel
     var action: (() -> Void)?
 
     var body: some View {
@@ -28,7 +28,8 @@ struct CardHeaderView: View {
                     }
                 }
                 if model.showMoveToButton {
-                    MoveToButton(model: model, action: action)
+                    MoveToButton(action: action)
+                        .environmentObject(model)
                 }
             }
             .frame(size: geometry.size)

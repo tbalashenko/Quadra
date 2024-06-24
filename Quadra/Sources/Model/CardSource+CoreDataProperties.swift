@@ -2,12 +2,13 @@
 //  CardSource+CoreDataProperties.swift
 //  Quadra
 //
-//  Created by Tatyana Balashenko on 16/05/2024.
+//  Created by Tatyana Balashenko on 19/06/2024.
 //
 //
 
 import Foundation
 import CoreData
+
 
 extension CardSource {
 
@@ -39,6 +40,6 @@ extension CardSource {
 
 }
 
-extension CardSource: Identifiable {
+extension CardSource : Identifiable {
 
 }

@@ -10,11 +10,13 @@ import SwiftUI
 @main
 struct QuadraApp: App {
     @State private var selectedTab = 0
+    @StateObject private var cardsViewModel = CardsViewModel()
 
     var body: some Scene {
         WindowGroup {
             TabView(selection: $selectedTab) {
                 ContentView()
+                    .environmentObject(cardsViewModel)
                     .tabItem { Image(systemName: "repeat") }
                     .tag(0)
                 ListView()

@@ -67,6 +67,7 @@ struct ChartLinesView: View {
                 }
             }
         }
+        .background(Color.element)
         .chartForegroundStyleScale([
             ChartLine.totalNumber.rawValue: ChartLine.totalNumber.color,
             ChartLine.added.rawValue: ChartLine.added.color,

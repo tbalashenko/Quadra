@@ -13,48 +13,52 @@ struct SamplePhrasesView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading) {
-                    HStack {
-                        TextField("", text: $viewModel.searchText, axis: .vertical)
-                            .textFieldStyle(NeuTextFieldStyle(text: $viewModel.searchText))
-                        Button(
-                            action: {
-                                viewModel.fetchDefinition()
-                            }, label: {
-                                Image(systemName: "magnifyingglass.circle.fill")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .foregroundColor(Color.accentColor)
+            ZStack {
+                Color.element
+                    .ignoresSafeArea()
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            TextField("", text: $viewModel.searchText, axis: .vertical)
+                                .textFieldStyle(NeuTextFieldStyle(text: $viewModel.searchText))
+                            Button(
+                                action: {
+                                    viewModel.fetchDefinition()
+                                }, label: {
+                                    Image(systemName: "magnifyingglass.circle.fill")
+                                        .smallButtonImage()
+                                        .foregroundColor(Color.accentColor)
+                                }
+                            )
+                            .buttonStyle(NeuButtonStyle())
+                        }
+                        Text(TextConstants.enterWord)
+                            .foregroundColor(.secondary)
+                            .font(.footnote)
+                        Divider()
+                        if viewModel.showError {
+                            Text(TextConstants.noSamplePhrases)
+                        }
+                    }
+                    .padding(.horizontal, SizeConstants.horizontalPadding)
+                    ForEach(viewModel.samples, id: \.self) { sampleText in
+                        HStack {
+                            Text(sampleText)
+                            Spacer()
+                            CopyButton(text: sampleText) {
+                                showCopiedPopup = true
                             }
-                        )
-                        .buttonStyle(NeuButtonStyle())
+                        }
                     }
-                    Text(TextConstants.enterWord)
-                        .foregroundColor(.secondary)
-                        .font(.footnote)
-                    Divider()
-                    if viewModel.showError {
-                        Text(TextConstants.noSamplePhrases)
-                    }
+                    .padding(.horizontal, SizeConstants.horizontalPadding)
                 }
-                .padding(.horizontal, 32)
-                ForEach(viewModel.samples, id: \.self) { sampleText in
-                    HStack {
-                        Text(sampleText)
-                        Spacer()
-                        CopyPasteButton(mode: .copy(sampleText), showPopup: $showCopiedPopup)
-                    }
+                .popup(isPresented: $showCopiedPopup) {
+                    CustomPopup(
+                        text: TextConstants.copied,
+                        showPopup: $showCopiedPopup
+                    )
                 }
-                .padding(.horizontal, 32)
             }
-            .popup(isPresented: $showCopiedPopup) {
-                CustomPopup(
-                    text: TextConstants.copied,
-                    showPopup: $showCopiedPopup
-                )
-            }
-            .background(Color.element)
             .navigationTitle(TextConstants.getSample)
         }
     }

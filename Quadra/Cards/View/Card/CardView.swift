@@ -8,21 +8,21 @@
 import SwiftUI
 
 struct CardView: View {
-    @State var id = UUID()
-    @ObservedObject var model: CardModel
+    @EnvironmentObject var model: CardModel
     @State private var showSetupCardView = false
     var action: (() -> Void)?
-
+    
     var body: some View {
         ZStack {
             Color.element.ignoresSafeArea()
             VStack {
-                CardHeaderView(model: model) { action?() }
+                CardHeaderView() { action?() }
+                    .environmentObject(model)
                     .frame(size: SizeConstants.imageSize)
                     .padding(.bottom)
-                FlipablePhraseView(viewModel: PhraseViewModel(cardModel: model))
+                FlipablePhraseView(model: model)
                 if model.showAdditionalInfo {
-                    AdditionalnfoView(viewModel: AdditionalnfoViewModel(model: model))
+                    AdditionalnfoView(model: model)
                 }
                 Spacer()
             }
@@ -41,18 +41,14 @@ struct CardView: View {
                     }
                 }
             }
-            .sheet(
-                isPresented: $showSetupCardView,
-                onDismiss: { id = UUID() }
-            ) {
+            .sheet(isPresented: $showSetupCardView) {
                 NavigationStack {
                     SetupCardView(
-                        viewModel: SetupCardViewModel(mode: .edit(model: model)),
+                        viewModel: SetupCardViewModel(mode: .edit, cardModel: model),
                         showSetupCardView: $showSetupCardView
                     )
                 }
             }
-            .id(id)
         }
     }
 }

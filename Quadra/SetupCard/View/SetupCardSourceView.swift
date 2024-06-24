@@ -11,12 +11,10 @@ struct SetupCardSourceView: View {
     @ObservedObject var viewModel: SetupCardViewModel
 
     var body: some View {
-        GroupBox(TextConstants.sources) {
+        Section(TextConstants.sources) {
             AddNewSourceView(viewModel: viewModel)
             TagCloudView(viewModel: TagCloudViewModel(items: viewModel.tagCloudItems, isSelectable: true))
-
         }
-        .groupBoxStyle(PlainGroupBoxStyle())
     }
 }
 

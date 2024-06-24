@@ -10,16 +10,20 @@ import SwiftUI
 struct SetupCardView: View {
     @StateObject var viewModel: SetupCardViewModel
     @Binding var showSetupCardView: Bool
-
+    
     @State private var showAlert = false
     @State var showPopup: Bool = false
-
+    var onDismiss: ((Bool) -> Void)?
+    
     var body: some View {
-        ScrollView {
+        List {
             PhotoPickerView(image: $viewModel.image, croppedImage: $viewModel.croppedImage)
-                .frame(size: SizeConstants.imageSize)
+                .center()
+                .customListRow()
             SetupCardPhraseView(viewModel: viewModel, showPastedPopup: $showPopup)
+                .customListRow()
             SetupCardSourceView(viewModel: viewModel)
+                .customListRow()
         }
         .background {
             Color.element
@@ -30,7 +34,10 @@ struct SetupCardView: View {
             TextConstants.warning,
             isPresented: $showAlert,
             actions: {
-                Button(TextConstants.yes) { showSetupCardView = false }
+                Button(TextConstants.yes) {
+                    showSetupCardView = false
+                    onDismiss?(false)
+                }
                 Button(TextConstants.no, role: .cancel) { }
             },
             message: { Text(TextConstants.closeWithoutSavingHelp) }
@@ -41,6 +48,7 @@ struct SetupCardView: View {
                 showPopup: $showPopup
             )
         }
+        .customListStyle()
         .navigationTitle(viewModel.mode.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -49,6 +57,7 @@ struct SetupCardView: View {
                     hideKeyboard()
                     viewModel.saveCard()
                     showSetupCardView = false
+                    onDismiss?(true)
                 }
                 .disabled(viewModel.phraseToRemember.characters.isEmpty)
             }
@@ -58,6 +67,7 @@ struct SetupCardView: View {
                         showAlert = true
                     } else {
                         showSetupCardView = false
+                        onDismiss?(false)
                     }
                 }
             }

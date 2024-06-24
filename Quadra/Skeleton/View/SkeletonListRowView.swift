@@ -33,9 +33,8 @@ struct SkeletonListRowView: View {
     List {
         ForEach(0..<10) { _ in
             SkeletonListRowView()
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.element)
+                .customListRow()
         }
     }
-    .listStyle(.plain)
+    .customListStyle()
 }

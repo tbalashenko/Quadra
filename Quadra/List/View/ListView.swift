@@ -6,55 +6,42 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ListView: View {
-    @StateObject var viewModel = ListViewModel()
-
+    @ObservedObject var viewModel = ListViewModel()
+    
     var body: some View {
         NavigationStack {
             List {
-                ForEach(viewModel.sortedStatuses, id: \.id) { status in
-                    if let cards = viewModel.filteredCards[status] {
+                ForEach(CardStatus.allCases, id: \.id) { status in
+                    if let cards = viewModel.filteredCards[status], !cards.isEmpty {
                         Section(header: Text(status.title)) {
                             ForEach(cards, id: \.id) { card in
-                                ListRowView(card: card)
-                                    .listRowSeparator(.hidden)
-                                    .listRowBackground(Color.element)
-                                    .background(
-                                        NavigationLink(
-                                            "",
-                                            destination: CardView(
-                                                model: CardModel(
-                                                    card: card,
-                                                    mode: .view
-                                                )
-                                            )
-                                            .toolbarTitleDisplayMode(.inline)
-                                            .toolbar(.hidden, for: .tabBar)
-                                        )
-                                        .opacity(0)
-                                    )
+                                ListRowView()
+                                    .customListRow()
+                                    .environmentObject(CardModel(card: card, mode: .view))
                             }
-                            .onDelete { viewModel.delete(at: $0, from: status) }
+                            .onDelete { indexSet in
+                                for index in indexSet {
+                                    viewModel.delete(card: cards[index])
+                                }
+                            }
                         }
                     }
                 }
             }
-            .listStyle(.plain)
-            .background(Color.element)
-            .if(viewModel.isSearchPresented) {
-                $0.searchable(
-                    text: $viewModel.searchText,
-                    placement: .navigationBarDrawer(displayMode: .automatic)
-                )
-            }
-            .toolbarBackground(.element, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
+            .searchable(
+                text: $viewModel.searchText,
+                placement: .navigationBarDrawer(displayMode: .automatic)
+            )
+            .customListStyle()
             .navigationTitle(TextConstants.yourPhrases)
+            .toolbar(.visible, for: .tabBar)
             .toolbar {
                 ToolbarItem {
                     NavigationLink(
-                        destination: FilterView(viewModel: FilterViewModel(model: viewModel.model))
+                        destination: FilterView(viewModel: FilterViewModel())
                             .toolbar(.hidden, for: .tabBar)) {
                                 Label(TextConstants.filter, systemImage: "line.3.horizontal.decrease.circle.fill")
                             }

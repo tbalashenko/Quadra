@@ -63,6 +63,18 @@ extension View {
     func haptic(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
         UIImpactFeedbackGenerator(style: style).impactOccurred()
     }
+    
+    func customListRow() -> some View {
+        self.modifier(CustomListRowModifier())
+    }
+    
+    func customListStyle() -> some View {
+        self.modifier(CustomListModifier())
+    }
+    
+    func center() -> some View {
+        self.modifier(CenterModifier())
+    }
 }
 
 extension View {
@@ -75,5 +87,34 @@ extension View {
                 isPresented: isPresented,
                 view: view)
         )
+    }
+}
+
+struct CustomListRowModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.element)
+    }
+}
+
+struct CustomListModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .contentMargins(.leading, 0, for: .scrollIndicators)
+            .background(Color.element)
+            .listStyle(.inset)
+            .scrollContentBackground(.hidden)
+    }
+}
+
+struct CenterModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        HStack {
+            Spacer()
+            content
+            Spacer()
+        }
+        .background(Color.element)
     }
 }

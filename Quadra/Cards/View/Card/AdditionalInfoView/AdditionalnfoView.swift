@@ -8,28 +8,31 @@
 import SwiftUI
 
 struct AdditionalnfoView: View {
-    @State var viewModel: AdditionalnfoViewModel
+    @ObservedObject var model: CardModel
 
     var body: some View {
         VStack(alignment: .center) {
-            if viewModel.showTranscription {
-                Text(viewModel.transcripton)
+            if let transcripton = model.card.formattedTranscription {
+                Text(transcripton)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
-                    .padding(.vertical)
+                    .padding(.vertical, 8)
+                    .font(.body)
             }
             HStack {
                 VStack(alignment: .leading, spacing: 6) {
-                    ForEach(viewModel.additionalInfo, id: \.self) { info in
+                    ForEach(model.additionalInfo, id: \.self) { info in
                         StyledText(description: info.description, value: info.value)
                     }
                 }
                 Spacer()
             }
+            .padding(.top, model.card.formattedTranscription != nil ? 0 : 8)
             TagCloudView(
                 viewModel: TagCloudViewModel(
-                    items: viewModel.tags,
-                    isSelectable: false)
+                    items: model.tags,
+                    isSelectable: false
+                )
             )
         }
         .padding(.horizontal)

@@ -8,29 +8,25 @@
 import SwiftUI
 
 struct CardStackView: View {
-    @StateObject var viewModel: CardsViewModel
-
+    @EnvironmentObject var viewModel: CardsViewModel
+    
     var body: some View {
         ZStack(alignment: .center) {
-            if viewModel.isLoading {
-                SkeletonCardView()
-            } else {
-                ForEach(viewModel.visibleCardModels) { model in
-                    SwipeableCardView(
-                        viewModel: viewModel,
-                        model: model
-                    )
-                    .frame(size: SizeConstants.cardSize)
+            if !viewModel.isLoading {
+                ForEach(viewModel.visibleCardModels, id: \.id) { model in
+                    SwipeableCardView()
+                        .environmentObject(viewModel)
+                        .environmentObject(model)
+                        .frame(size: SizeConstants.cardSize)
                 }
             }
         }
-        .onDisappear {
-            viewModel.showConfetti = false
-        }
     }
+        
 }
 
 #Preview {
-    CardStackView(viewModel: CardsViewModel())
+    CardStackView()
+        .environmentObject(CardsViewModel())
         .frame(size: SizeConstants.cardSize)
 }

@@ -8,6 +8,7 @@
 import SwiftUI
 import Combine
 
+@MainActor
 final class SetupCardViewModel: ObservableObject {
     @Published var cardModel: CardModel?
     @Published var tagCloudItems = [TagCloudItem]()
@@ -41,19 +42,21 @@ final class SetupCardViewModel: ObservableObject {
 
     private var cancellables = Set<AnyCancellable>()
 
-    init(mode: SetupCardViewMode) {
+    init(mode: SetupCardViewMode, cardModel: CardModel? = nil) {
         self.mode = mode
-
-        if case .edit(let model) = mode {
-            self.cardModel = model
-            phraseToRemember = AttributedString(model.card.phraseToRemember)
-            translation = AttributedString(model.card.translation ?? NSAttributedString(string: ""))
-            transcription = model.card.transcription ?? ""
-            if let sources = model.card.sources?.allObjects as? [CardSource] {
+        
+        if let cardModel {
+            self.cardModel = cardModel
+            phraseToRemember = cardModel.card.convertedPhraseToRemember
+            if let translation = cardModel.card.convertedTranslation {
+                self.translation = translation
+            }
+            transcription = cardModel.card.transcription ?? ""
+            if let sources = cardModel.card.sources?.allObjects as? [CardSource] {
                 selectedSources = sources
             }
-            image = model.card.convertedImage
-            croppedImage = model.card.convertedCroppedImage
+            image = cardModel.card.convertedImage
+            croppedImage = cardModel.card.convertedCroppedImage
         }
         observeNewSourceTextChanges()
 
@@ -124,7 +127,8 @@ final class SetupCardViewModel: ObservableObject {
                         phraseToRemember: phraseToRemember,
                         translation: translation,
                         transcription: transcription,
-                        imageData: image?.pngData(),
+                        imageData: image?.pngData(), 
+                        croppedImageData: croppedImage?.pngData(),
                         sources: Array(selectedSources)
                     )
                 } catch {
@@ -135,19 +139,20 @@ final class SetupCardViewModel: ObservableObject {
 
     @MainActor
     func saveSource(color: Color) {
-        let hashTagTitle = "#" + newSourceText.replacingOccurrences(of: "#", with: "")
-        newSourceText = ""
-
         do {
-            let source = try sourceService.saveSource(title: hashTagTitle, color: color.toHex())
+            let source = try sourceService.saveSource(title: newSourceText, color: color.toHex())
             selectedSources.append(source)
             updateTagCloudItems()
+            newSourceText = ""
         } catch {
             print("Error saving source: \(error.localizedDescription)")
         }
     }
 
-    func formatAndSetPhrase(_ text: String, string: inout AttributedString) {
+    
+    func formatAndSetPhrase(_ text: [String], string: inout AttributedString) {
+        guard let text = text.first else { return }
+        
         let updatedAttributes: [NSAttributedString.Key: Any] = [
             .backgroundColor: UIColor.clear,
             .font: UIFont.systemFont(ofSize: 18),
@@ -164,7 +169,7 @@ final class SetupCardViewModel: ObservableObject {
 extension SetupCardViewModel {
     enum SetupCardViewMode {
         case create
-        case edit(model: CardModel)
+        case edit
 
         var navigationTitle: String {
             switch self {

@@ -16,7 +16,6 @@ struct AddNewSourceView: View {
             ColorPicker("", selection: $sourceColor)
                 .frame(size: SizeConstants.mediumButtonImageSize)
                 .northWestShadow()
-
             TextField(TextConstants.addSource, text: $viewModel.newSourceText)
                 .textFieldStyle(NeuTextFieldStyle(text: $viewModel.newSourceText))
                 .padding(.horizontal, 4)

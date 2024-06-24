@@ -10,14 +10,14 @@ import CoreData
 import SpriteKit
 
 struct ContentView: View {
-    @StateObject var viewModel = CardsViewModel()
-
+    @EnvironmentObject var viewModel: CardsViewModel
     @State private var showSetupCardView = false
 
     var body: some View {
         NavigationStack {
             ZStack {
-                CardStackView(viewModel: viewModel)
+                CardStackView()
+                    .environmentObject(viewModel)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color.element, ignoresSafeAreaEdges: .all)
                     .toolbar {
@@ -25,7 +25,7 @@ struct ContentView: View {
                             Button(action: {
                                 showSetupCardView = true
                             }) {
-                                Label("Add Item", systemImage: "plus.circle.fill")
+                                Image(systemName: "plus.circle.fill")
                             }
                         }
                     }
@@ -42,25 +42,24 @@ struct ContentView: View {
                             }
                         }
                     }
-                    .sheet(isPresented: $showSetupCardView, onDismiss: updateCards) {
+                    .sheet(isPresented: $showSetupCardView) {
                         NavigationStack {
                             SetupCardView(
                                 viewModel: SetupCardViewModel(mode: .create),
-                                showSetupCardView: $showSetupCardView)
+                                showSetupCardView: $showSetupCardView) { cardWasAdded in
+                                    if cardWasAdded { viewModel.prepareCards() }
+                                }
                         }
                     }
-                if !viewModel.isLoading, viewModel.showInfoView {
-                    InfoView(showConfetti: $viewModel.showConfetti) {
-                       updateCards()
-                    }
+                if viewModel.showInfoView {
+                    InfoView { viewModel.prepareCards()  }
                 }
             }
-        }
-    }
+            .overlay { SkeletonCardView(isPresented: $viewModel.isLoading) }
+            .overlay { ConfettiView(isPresented: $viewModel.showConfetti) }
+            .onAppear { viewModel.prepareCards(resetNonShownCards: false) }
+            .onDisappear { viewModel.clear() }
 
-    func updateCards() {
-        Task {
-            await viewModel.updateCards()
         }
     }
 }

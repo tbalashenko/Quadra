@@ -14,24 +14,27 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(TextConstants.languageAndVoice) {
-                  VoicePickerView(viewModel: viewModel)
-                }
-                Section(TextConstants.images) {
-                  ImageSettingsView(viewModel: viewModel)
-                }
-                Section(TextConstants.animation) {
-                    Toggle(TextConstants.showConfetti, isOn: $viewModel.showConfetti)
-                    Toggle(TextConstants.showProgress, isOn: $viewModel.showProgress)
-                }
-                Section(TextConstants.manageSources) {
-                    NavigationLink(TextConstants.sources) {
-                        SourcesView()
+                Group {
+                    Section(TextConstants.languageAndVoice) {
+                        VoicePickerView(viewModel: viewModel)
+                    }
+                    Section(TextConstants.images) {
+                        ImageSettingsView(viewModel: viewModel)
+                    }
+                    Section(TextConstants.animation) {
+                        Toggle(TextConstants.showConfetti, isOn: $viewModel.showConfetti)
+                        Toggle(TextConstants.showProgress, isOn: $viewModel.showProgress)
+                    }
+                    Section(TextConstants.manageSources) {
+                        NavigationLink(TextConstants.sources) {
+                            SourcesView()
+                        }
+                    }
+                    Section(TextConstants.textFormatting) {
+                        HighlighterPaletteView(viewModel: viewModel)
                     }
                 }
-                Section(TextConstants.textFormatting) {
-                    HighlighterPaletteView(viewModel: viewModel)
-                }
+                .listRowBackground(Color.highlight)
             }
             .scrollContentBackground(.hidden)
             .background(Color.element)

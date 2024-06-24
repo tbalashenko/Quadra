@@ -35,7 +35,7 @@ struct SourceListRowView: View {
                         isEditing = false
                     } label: {
                         Image(systemName: "checkmark.circle.fill")
-                            .resizable()
+                            .smallButtonImage()
                             .foregroundStyle(viewModel.editableTitle.isEmpty ? Color.Green.isabelline : Color.Green.darkSeaGreen)
                     }
                     .buttonStyle(NeuButtonStyle())
@@ -43,9 +43,10 @@ struct SourceListRowView: View {
 
                     Button {
                         isEditing = false
+                        viewModel.resetChanges()
                     } label: {
                         Image(systemName: "xmark.circle.fill")
-                            .resizable()
+                            .smallButtonImage()
                             .foregroundStyle(Color.puce)
                     }
                     .buttonStyle(NeuButtonStyle())
@@ -63,8 +64,7 @@ struct SourceListRowView: View {
             .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
             .northWestShadow()
         )
-        .listRowBackground(Color.element)
-        .listRowSeparator(.hidden)
+        .customListRow()
     }
 }
 

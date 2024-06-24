@@ -8,26 +8,25 @@
 import SwiftUI
 
 struct SwipeableCardView: View {
-    @ObservedObject var viewModel: CardsViewModel
-    @ObservedObject var model: CardModel
-
+    @EnvironmentObject var viewModel: CardsViewModel
+    @EnvironmentObject var model: CardModel
+    
     @State private var xOffset: CGFloat = .zero
     @State private var yOffset: CGFloat = .zero
     @State private var degrees: Double = 0
-
+    
     var body: some View {
-        CardView(model: model) {
-            swipeLeft(changeStatus: true)
-        }
-        .rotationEffect(.degrees(degrees))
-        .offset(x: xOffset, y: yOffset)
-        .animation(.snappy, value: xOffset)
-        .animation(.snappy, value: yOffset)
-        .gesture(
-            DragGesture(minimumDistance: 20)
-                .onChanged(onDragChanged)
-                .onEnded(onDragEnded)
-        )
+        CardView() { swipeLeft(changeStatus: true) }
+            .environmentObject(model)
+            .rotationEffect(.degrees(degrees))
+            .offset(x: xOffset, y: yOffset)
+            .animation(.snappy, value: xOffset)
+            .animation(.snappy, value: yOffset)
+            .gesture(
+                DragGesture(minimumDistance: 20)
+                    .onChanged(onDragChanged)
+                    .onEnded(onDragEnded)
+            )
     }
 }
 

@@ -67,7 +67,7 @@ extension Card {
             return .archive
         }
 
-        return cardStatus
+        return CardStatus(rawValue: cardStatus) ?? .input
     }
 
     /// - Throughout the day (several times as new phrases are added) →  inbox  + Source tag   +
@@ -84,7 +84,7 @@ extension Card {
         let firstSunday = Date().firstSunday(after: lastRepetitionDate)
         let isLastRepetitionDateToday = lastRepetitionDate.isDateToday()
 
-        switch cardStatus.id {
+        switch cardStatus {
                 // input, should be repeatet throughout the day
             case 0:
                 return true
@@ -137,7 +137,7 @@ extension Card {
     var needMoveToThisMonth: Bool {
         if let date = lastTimeStatusChanged, date.isDateToday() || isArchived { return false }
 
-        if cardStatus.id == 0 || cardStatus.id == 1, let date = Date().firstSunday(after: additionTime), date <= Date() {
+        if cardStatus == 0 || cardStatus == 1, let date = Date().firstSunday(after: additionTime), date <= Date() {
             return true
         }
 
@@ -147,10 +147,20 @@ extension Card {
     var needMoveToThisWeek: Bool {
         if let date = lastTimeStatusChanged, date.isDateToday() || isArchived { return false }
 
-        if cardStatus.id == 0, Date().isNextDay(from: additionTime) {
+        if cardStatus == 0, Date().isNextDay(from: additionTime) {
             return true
         }
 
         return false
+    }
+    
+    // MARK: - Equatable
+    public static func == (lhs: Card, rhs: Card) -> Bool {
+        return lhs.id == rhs.id &&
+        lhs.phraseToRemember == rhs.phraseToRemember &&
+        lhs.translation == rhs.translation &&
+        lhs.transcription == rhs.transcription &&
+        lhs.sources == rhs.sources &&
+        lhs.cardStatus == rhs.cardStatus
     }
 }

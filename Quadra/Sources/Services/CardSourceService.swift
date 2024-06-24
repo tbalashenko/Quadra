@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreData
-import SwiftUI
 
 final class CardSourceService: ObservableObject {
     @Published var sources = [CardSource]()
@@ -34,20 +33,16 @@ final class CardSourceService: ObservableObject {
     }
 
     func saveSource(title: String, color: String) throws -> CardSource {
+        let hashTagTitle = "#" + title.replacingOccurrences(of: "#", with: "")
         let source = CardSource(context: dataController.container.viewContext)
-        source.title = title
+        source.title = hashTagTitle
         source.color = color
         source.id = UUID()
 
         do {
             try dataController.container.viewContext.save()
 
-            do {
-                sources = try fetchSources()
-            } catch {
-                print("Error fetching archiveTags \(error.localizedDescription)")
-            }
-
+            sources.append(source)
             return source
         } catch {
             throw DataServiceError.saveFailed(description: "Failed to save source: \(error.localizedDescription)")
@@ -55,34 +50,28 @@ final class CardSourceService: ObservableObject {
     }
 
     func editSource(source: CardSource, title: String, color: String) throws {
-        source.title = title
+        let hashTagTitle = "#" + title.replacingOccurrences(of: "#", with: "")
+        source.title = hashTagTitle
         source.color = color
 
         do {
             try dataController.container.viewContext.save()
-
-            do {
-                sources = try fetchSources()
-            } catch {
-                print("Error fetching archiveTags \(error.localizedDescription)")
-            }
+            
+            if let index = sources.firstIndex(where: { $0.id == source.id }) { sources[index] = source }
         } catch {
             throw DataServiceError.saveFailed(description: "Failed to save changes to source: \(error.localizedDescription)")
         }
     }
 
     func deleteSource(source: CardSource) throws {
-        dataController.container.viewContext.delete(source)
-
+        let context = dataController.container.viewContext
+        
         do {
-            try dataController.container.viewContext.save()
-
-            do {
-                sources = try fetchSources()
-            } catch {
-                print("Error fetching archiveTags \(error.localizedDescription)")
-            }
+            context.delete(source)
+            self.sources.removeAll(where: { $0.id == source.id })
+            try context.save()
         } catch {
+            context.rollback()
             throw DataServiceError.saveFailed(description: "Failed to delete source: \(error.localizedDescription)")
         }
     }

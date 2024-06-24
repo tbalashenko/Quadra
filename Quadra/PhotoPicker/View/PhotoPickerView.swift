@@ -21,33 +21,39 @@ struct PhotoPickerView: View {
                 .scaledToFill()
                 .frame(size: SizeConstants.imageSize)
                 .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
+            
             PhotosPicker(
                 selection: $photosPickerItem,
-                matching: .images) {
-                    Label(TextConstants.selectPhoto, systemImage: "photo")
-                        .foregroundStyle(.black)
-                        .padding(10)
-                        .background {
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(.white.opacity(0.6))
-                        }
+                matching: .images
+            ) {
+                Label(TextConstants.selectPhoto, systemImage: "photo")
+                    .foregroundStyle(.black)
+                    .padding(10)
+                    .background {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(.white.opacity(0.6))
+                    }
+            }
+            
+            if croppedImage != nil {
+                AlignableTransparentButton(
+                    alignment: .topTrailing
+                ) {
+                    Image(systemName: "trash")
+                        .smallButtonImage()
+                } action: {
+                    clearImages()
                 }
-            if let croppedImage {
+                
                 AlignableTransparentButton(
-                    alignment: .topTrailing) {
-                        Image(systemName: "trash")
-                            .smallButtonImage()
-                    } action: {
-                        self.croppedImage = nil
-                        self.image = nil
-                    }
-                AlignableTransparentButton(
-                    alignment: .topLeading) {
-                        Image(systemName: "crop")
-                            .smallButtonImage()
-                    } action: {
-                        showEditingView.toggle()
-                    }
+                    alignment: .topLeading
+                ) {
+                    Image(systemName: "crop")
+                        .smallButtonImage()
+                        
+                } action: {
+                    showEditingView.toggle()
+                }
             }
         }
         .frame(size: SizeConstants.imageSize)
@@ -58,7 +64,11 @@ struct PhotoPickerView: View {
             if let image {
                 CropView(image: image) { croppedImage, _ in
                     if let croppedImage {
-                        self.croppedImage = croppedImage
+                        Task {
+                            await MainActor.run {
+                                self.croppedImage = croppedImage
+                            }
+                        }
                     }
                 }
             }
@@ -71,13 +81,23 @@ struct PhotoPickerView: View {
                 let data = try? await photosPickerItem?.loadTransferable(type: Data.self),
                 let uiImage = UIImage(data: data)
             else {
-                image = nil
-                croppedImage = nil
+                clearImages()
                 return
             }
+            
+            await MainActor.run {
+                image = Image(uiImage: uiImage)
+                croppedImage = Image(uiImage: uiImage)
+            }
+        }
+    }
 
-            image = Image(uiImage: uiImage)
-            croppedImage = Image(uiImage: uiImage)
+    func clearImages() {
+        Task {
+            await MainActor.run {
+                self.croppedImage = nil
+                self.image = nil
+            }
         }
     }
 }

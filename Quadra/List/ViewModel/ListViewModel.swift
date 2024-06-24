@@ -9,86 +9,18 @@ import Foundation
 import Combine
 
 final class ListViewModel: ObservableObject {
-    @Published var model = FilterableListModel()
     @Published var filteredCards: [CardStatus: [Card]] = [:]
     @Published var searchText: String = ""
-    @Published var isSearchPresented: Bool = false
-
+    
     private var cancellables = Set<AnyCancellable>()
-
-    var sortedStatuses: [CardStatus] {
-        return CardStatus.allStatuses.filter { filteredCards.keys.contains($0) }
-    }
-
+    private let service = FilterService.shared
+    
     init() {
-        filterCards()
-        observeChanges()
-
-        $filteredCards
-            .map { !$0.values.isEmpty }
-            .assign(to: &$isSearchPresented)
+        observeCardServiceChanges()
+        observeSearchTextChanges()
+        observeFilterServiceChanges()
     }
-
-    func observeChanges() {
-            observeFilterableModelChanges()
-            observeSearchTextChanges()
-            observeCardServiceChanges()
-        }
-
-    func filterCards() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            let cards = CardService.shared.cards
-                .filter { card in
-                    let textMatch = self.checkTextMatch(card: card)
-                    let statusMatches = self.checkStatusMatches(card: card)
-                    let sourceMatches = self.checkSourceMatches(card: card)
-                    let dateRangeMatches = self.checkDateRangeMatches(card: card)
-                    let archiveTagMatches = self.checkArchiveTagMatches(card: card)
-
-                    return textMatch && statusMatches && sourceMatches && dateRangeMatches && archiveTagMatches
-                }
-            self.filteredCards = Dictionary(grouping: cards, by: { $0.cardStatus })
-        }
-    }
-
-    func delete(at offsets: IndexSet, from status: CardStatus) {
-        guard let index = offsets.first else { return }
-
-        if let cards = filteredCards[status] {
-            let card = cards[index]
-            do {
-                try CardService.shared.delete(card: card)
-            } catch {
-                print("Error deleting card \(error.localizedDescription)")
-            }
-        }
-    }
-}
-
-extension ListViewModel {
-    private func observeFilterableModelChanges() {
-        Publishers.CombineLatest4(
-            model.$selectedStatuses,
-            model.$selectedSources,
-            model.$selectedArchiveTags,
-            model.$fromDate
-        )
-        .combineLatest(model.$toDate)
-        .sink { [weak self] _ in
-            self?.filterCards()
-        }
-        .store(in: &cancellables)
-    }
-
-    private func observeSearchTextChanges() {
-        $searchText
-            .sink { [weak self] _ in
-                self?.filterCards()
-            }
-            .store(in: &cancellables)
-    }
-
+    
     private func observeCardServiceChanges() {
         CardService.shared.$cards
             .sink { [weak self] _ in
@@ -96,7 +28,60 @@ extension ListViewModel {
             }
             .store(in: &cancellables)
     }
+    
+    private func observeSearchTextChanges() {
+        $searchText
+            .sink { [weak self] _ in
+                self?.filterCards()
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func observeFilterServiceChanges() {
+        Publishers.CombineLatest4(
+            service.$selectedStatuses,
+            service.$selectedSources,
+            service.$selectedArchiveTags,
+            service.$fromDate
+        )
+        .combineLatest(service.$toDate)
+        .sink { [weak self] _ in
+            self?.filterCards()
+        }
+        .store(in: &cancellables)
+    }
+    
+    private func filterCards() {
+        Task {
+            await MainActor.run { [weak self] in
+                guard let self = self else { return }
+                
+                let filteredCards = CardService.shared.cards
+                    .filter { !$0.isFault || !$0.isDeleted}
+                    .filter { card in
+                        let textMatch = self.checkTextMatch(card: card)
+                        let statusMatches = self.checkStatusMatches(card: card)
+                        let sourceMatches = self.checkSourceMatches(card: card)
+                        let dateRangeMatches = self.checkDateRangeMatches(card: card)
+                        let archiveTagMatches = self.checkArchiveTagMatches(card: card)
+                        
+                        return textMatch && statusMatches && sourceMatches && dateRangeMatches && archiveTagMatches
+                    }
+                self.filteredCards = Dictionary(grouping: filteredCards, by: { CardStatus(rawValue: $0.cardStatus) ?? .input })
+            }
+        }
+    }
+    
+    func delete(card: Card) {
+        do {
+            try CardService.shared.delete(card: card)
+        } catch {
+            print("Error deleting card \(error.localizedDescription)")
+        }
+    }
+}
 
+extension ListViewModel {
     private func checkTextMatch(card: Card) -> Bool {
         if searchText.isEmpty || card.stringPhraseToRemember.lowercased().contains(searchText.lowercased()) {
             return true
@@ -105,38 +90,38 @@ extension ListViewModel {
         }
         return false
     }
-
+    
     private func checkStatusMatches(card: Card) -> Bool {
-        if model.selectedStatuses == CardStatus.allStatuses || model.selectedStatuses.isEmpty {
+        if FilterService.shared.selectedStatuses == CardStatus.allCases || FilterService.shared.selectedStatuses.isEmpty {
             return true
         } else {
-            return model.selectedStatuses.map { $0.id }.contains(card.cardStatus.id)
+            return FilterService.shared.selectedStatuses.map { $0.id }.contains(card.cardStatus)
         }
     }
-
+    
     private func checkSourceMatches(card: Card) -> Bool {
-        if model.selectedSources.isEmpty {
+        if FilterService.shared.selectedSources.isEmpty {
             return true
         } else if let sources = card.sources?.allObjects as? [CardSource] {
-            return sources.contains(where: { model.selectedSources.contains($0) })
+            return sources.contains(where: { FilterService.shared.selectedSources.contains($0) })
         }
-
+        
         return false
     }
-
+    
     private func checkDateRangeMatches(card: Card) -> Bool {
-        let fromDateComparison = Calendar.current.compare(model.fromDate, to: card.additionTime, toGranularity: .day)
-        let toDateComparison = Calendar.current.compare(model.toDate, to: card.additionTime, toGranularity: .day)
+        let fromDateComparison = Calendar.current.compare(FilterService.shared.fromDate, to: card.additionTime, toGranularity: .day)
+        let toDateComparison = Calendar.current.compare(FilterService.shared.toDate, to: card.additionTime, toGranularity: .day)
         return fromDateComparison != .orderedDescending && toDateComparison != .orderedAscending
     }
-
+    
     private func checkArchiveTagMatches(card: Card) -> Bool {
-        if model.selectedArchiveTags.isEmpty {
+        if FilterService.shared.selectedArchiveTags.isEmpty {
             return true
         } else if let archiveTag = card.archiveTag {
-            return model.selectedArchiveTags.contains(archiveTag)
+            return FilterService.shared.selectedArchiveTags.contains(archiveTag)
         }
-
+        
         return false
     }
 }

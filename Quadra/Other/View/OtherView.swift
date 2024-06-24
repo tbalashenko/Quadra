@@ -11,17 +11,21 @@ struct OtherView: View {
     var body: some View {
         NavigationStack {
             List {
-                NavigationLink(TextConstants.settings) {
-                    SettingsView()
-                }
-                Section(TextConstants.testFeatures) {
-                    NavigationLink(TextConstants.getSample) {
-                        SamplePhrasesView()
+                Group {
+                    NavigationLink(TextConstants.settings) {
+                        SettingsView()
                     }
-                    Button("Add random cards") {
-                        RandomDataService.shared.addRandomData()
+                    
+                    Section(TextConstants.testFeatures) {
+                        NavigationLink(TextConstants.getSample) {
+                            SamplePhrasesView()
+                        }
+                        Button("Add random cards") {
+                            RandomDataService.shared.addRandomData()
+                        }
                     }
                 }
+                .listRowBackground(Color.highlight)
             }
             .scrollContentBackground(.hidden)
             .background(Color.element)

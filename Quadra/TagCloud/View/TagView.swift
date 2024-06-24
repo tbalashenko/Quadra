@@ -21,7 +21,7 @@ struct TagView: View {
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             .lineLimit(1)
-            .background(item.isSelected ? Color(hex: item.color) : Color.offWhiteGray)
+            .background(item.isSelected ? Color(hex: item.color) : Color.silverSand)
             .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
             .onTapGesture {
                 action?()
@@ -31,5 +31,6 @@ struct TagView: View {
 }
 
 #Preview {
-    TagView(item: MockData.tagCloudItems.first!)
+    TagCloudView(viewModel: TagCloudViewModel(items: MockData.tagCloudItems, isSelectable: true))
+        .background(Color.element)
 }

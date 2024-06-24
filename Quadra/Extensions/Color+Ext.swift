@@ -34,7 +34,7 @@ extension Color {
 
     struct Month {
         static var january = Color(hex: "#98A1C5")
-        static var february = Color(hex: "#BCBFBE")
+        static var february = Color(hex: "#6c7371")
         static var march = Color(hex: "#B2D669")
         static var april = Color(hex: "#E9A4A1")
         static var may = Color(hex: "#CBD3C8")

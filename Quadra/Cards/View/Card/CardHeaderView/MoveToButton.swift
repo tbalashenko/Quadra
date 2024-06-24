@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MoveToButton: View {
-    @ObservedObject var model: CardModel
+    @EnvironmentObject var model: CardModel
     var action: (() -> Void)?
 
     var body: some View {
@@ -20,7 +20,7 @@ struct MoveToButton: View {
                         isSelected: true,
                         id: UUID(),
                         title: model.card.getNewStatus.title,
-                        color: model.card.getNewStatus.color
+                        color: model.card.getNewStatus.color.toHex()
                     )
                 )
             }

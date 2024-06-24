@@ -47,7 +47,7 @@ class CardService: ObservableObject {
     ) throws {
         let context = dataController.container.viewContext
         let card = Card(context: context)
-
+        
         card.phraseToRemember = NSAttributedString(phraseToRemember)
         if let translation {
             card.translation =  NSAttributedString(translation)
@@ -59,12 +59,12 @@ class CardService: ObservableObject {
             card.addToSources($0)
             $0.addToCards(card)
         }
-        card.cardStatus = .input
+        card.cardStatus = 0
         card.id = UUID()
         card.additionTime = additionDate
-
+        
         var tag: CardArchiveTag?
-
+        
         do {
             if let archiveTag = try ArchiveTagService.shared.getArchiveTag(date: additionDate) {
                 tag = archiveTag
@@ -72,20 +72,20 @@ class CardService: ObservableObject {
         } catch {
             throw DataServiceError.saveFailed(description: "Failed to save tag: \(error.localizedDescription)")
         }
-
+        
         do {
             try dataController.container.viewContext.save()
             if let tag {
                 tag.addToCards(card)
             }
-
+            
             cards.append(card)
             if incrementAddedItemsCounter { StatDataService.shared.incrementAddedItemsCounter() }
         } catch {
             throw DataServiceError.saveFailed(description: "Failed to save card: \(error.localizedDescription)")
         }
     }
-
+    
     func editCard(
         card: Card,
         phraseToRemember: AttributedString,
@@ -107,7 +107,7 @@ class CardService: ObservableObject {
             card.addToSources($0)
             $0.addToCards(card)
         }
-
+        
         do {
             try dataController.container.viewContext.save()
             if let index = cards.firstIndex(where: { $0.id == card.id }) { cards[index] = card }
@@ -115,31 +115,42 @@ class CardService: ObservableObject {
             throw DataServiceError.saveFailed(description: "Failed to save card: \(error.localizedDescription)")
         }
     }
-
+    
     func incrementCounter(card: Card) throws {
-        card.repetitionCounter += 1
-        card.lastRepetition = Date()
-
-        do {
-            try dataController.container.viewContext.save()
-            if let index = cards.firstIndex(where: { $0.id == card.id }) { cards[index] = card }
-        } catch {
-            throw DataServiceError.saveFailed(description: "Failed to save card: \(error.localizedDescription)")
+        let context = dataController.container.viewContext
+        
+        context.performAndWait {
+            card.repetitionCounter += 1
+            card.lastRepetition = Date()
+            
+            do {
+                try context.save()
+                if let index = cards.firstIndex(where: { $0.id == card.id }) {
+                    DispatchQueue.main.async {
+                        self.cards[index].repetitionCounter = card.repetitionCounter
+                        self.cards[index].lastRepetition = card.lastRepetition
+                    }
+                }
+                StatDataService.shared.incrementRepeatedItemsCounter()
+            } catch {
+                context.rollback()
+                print("Failed to save card: \(error.localizedDescription)")
+            }
         }
     }
-
+    
     func setNewStatus(card: Card) {
         if card.needMoveToThisWeek {
-            card.cardStatus = .thisWeek
+            card.cardStatus = 1
         } else if card.needMoveToThisMonth {
-            card.cardStatus = .thisMonth
+            card.cardStatus = 2
         } else if card.needMoveToArchive {
-            card.cardStatus = .archive
+            card.cardStatus = 3
             card.isArchived = true
         }
-
+        
         card.lastTimeStatusChanged = Date()
-
+        
         do {
             try dataController.container.viewContext.save()
             if let index = cards.firstIndex(where: { $0.id == card.id }) { cards[index] = card }
@@ -147,16 +158,17 @@ class CardService: ObservableObject {
             print("Failed to save context: \(error)")
         }
     }
-
+    
     func delete(card: Card) throws {
-        dataController.container.viewContext.delete(card)
+        let context = dataController.container.viewContext
+        context.delete(card)
         if let index = cards.firstIndex(where: { $0.id == card.id }) { cards.remove(at: index) }
 
         do {
-            try dataController.container.viewContext.save()
-
+            try context.save()
             StatDataService.shared.incrementDeletedItemsCounter()
         } catch {
+            context.rollback()
             throw DataServiceError.saveFailed(description: "Failed to delete card: \(error.localizedDescription)")
         }
     }

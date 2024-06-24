@@ -8,19 +8,19 @@
 import SwiftUI
 
 struct PlayableTextView: View {
-    @ObservedObject var viewModel: PhraseViewModel
+    @ObservedObject var model: CardModel
+    var action: (() -> Void)?
 
     var body: some View {
         HStack(spacing: 12) {
-            TextToSpeechPlayView(viewModel: TextToSpeechViewModel(text: viewModel.textToSpeech))
-            Text(viewModel.phrase)
+            TextToSpeechPlayView(viewModel: TextToSpeechViewModel(text: model.card.stringPhraseToRemember))
+            Text(model.card.convertedPhraseToRemember)
                 .font(.title2)
                 .bold()
                 .onTapGesture {
-                    viewModel.switchMode()
+                    action?()
                 }
         }
-        .padding(.horizontal)
     }
 }
 

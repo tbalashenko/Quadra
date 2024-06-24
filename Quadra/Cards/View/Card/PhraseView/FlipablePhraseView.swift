@@ -8,18 +8,29 @@
 import SwiftUI
 
 struct FlipablePhraseView: View {
-    @StateObject var viewModel: PhraseViewModel
-
+    @ObservedObject var model: CardModel
+    @State private var showPhraseView = true
+    
     var body: some View {
-        if viewModel.showPhraseView {
-            PlayableTextView(viewModel: viewModel)
+        if showPhraseView {
+            PlayableTextView(model: model) {
+                if model.card.convertedTranslation != nil {
+                    withAnimation {
+                        showPhraseView.toggle()
+                    }
+                }
+            }
+            .padding(.horizontal)
         } else {
-            if viewModel.showTranslationView, let translation = viewModel.translation {
+            if let translation = model.card.convertedTranslation {
                 Text(translation)
                     .font(.title2)
                     .onTapGesture {
-                        viewModel.switchMode()
+                        withAnimation {
+                            showPhraseView.toggle()
+                        }
                     }
+                    .padding(.horizontal)
             }
         }
     }

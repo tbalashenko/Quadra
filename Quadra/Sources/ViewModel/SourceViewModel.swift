@@ -12,16 +12,32 @@ final class SourceViewModel: ObservableObject {
     @Published var editableTitle: String = ""
     @Published var compoundTitle: String = ""
     @Published var color: String = ""
+    private var titleCopy: String = ""
 
     let sourceService = CardSourceService.shared
 
     init(source: CardSource) {
         self.source = source
         self.editableTitle = source.title
+        self.titleCopy = source.title
         self.compoundTitle = getTitle(for: source)
         self.color = source.color
     }
 
+    func saveChanges() {
+        do {
+            try sourceService.editSource(source: source, title: editableTitle, color: color)
+            titleCopy = source.title
+        } catch {
+            print("Failed to save source: \(error.localizedDescription)")
+        }
+        compoundTitle = getTitle(for: source)
+    }
+    
+    func resetChanges() {
+        editableTitle = titleCopy
+    }
+    
     /// Generates a title for the source based on the count of cards.
     /// - Parameter source: The card source.
     /// - Returns: The formatted title string.
@@ -38,14 +54,5 @@ final class SourceViewModel: ObservableObject {
             default:
                 return "\(source.title) - \(cardsCount) \(TextConstants.cards)"
         }
-    }
-
-    func saveChanges() {
-        do {
-            try sourceService.editSource(source: source, title: editableTitle, color: color)
-        } catch {
-            print("Failed to save source: \(error.localizedDescription)")
-        }
-        compoundTitle = getTitle(for: source)
     }
 }

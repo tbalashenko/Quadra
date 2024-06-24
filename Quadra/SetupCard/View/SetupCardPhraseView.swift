@@ -12,29 +12,39 @@ struct SetupCardPhraseView: View {
     @Binding var showPastedPopup: Bool
 
     var body: some View {
-        GroupBox(TextConstants.phraseToRemember) {
+        Section(TextConstants.phraseToRemember) {
             HStack {
                 HighlightableTextView(text: $viewModel.phraseToRemember)
-                CopyPasteButton(
-                    mode: .paste { viewModel.formatAndSetPhrase($0, string: &viewModel.phraseToRemember) },
-                    showPopup: $showPastedPopup
-                )
+                PasteButton(payloadType: String.self) { strings in
+                    Task {
+                        await MainActor.run {
+                            viewModel.formatAndSetPhrase(strings, string: &viewModel.phraseToRemember)
+                            showPastedPopup = true
+                        }
+                    }
+                }
+                .buttonBorderShape(.capsule)
+                .labelStyle(.iconOnly)
             }
         }
-        .groupBoxStyle(PlainGroupBoxStyle())
 
-        GroupBox(TextConstants.translation) {
+        Section(TextConstants.translation) {
             HStack {
                 HighlightableTextView(text: $viewModel.translation)
-                CopyPasteButton(
-                    mode: .paste { viewModel.formatAndSetPhrase($0, string: &viewModel.translation) },
-                    showPopup: $showPastedPopup
-                )
+                PasteButton(payloadType: String.self) { strings in
+                    Task {
+                        await MainActor.run {
+                            viewModel.formatAndSetPhrase(strings, string: &viewModel.translation)
+                            showPastedPopup = true
+                        }
+                    }
+                }
+                .buttonBorderShape(.capsule)
+                .labelStyle(.iconOnly)
             }
         }
-        .groupBoxStyle(PlainGroupBoxStyle())
 
-        GroupBox(TextConstants.transcription) {
+        Section(TextConstants.transcription) {
             HStack {
                 TextField(
                     "",
@@ -45,13 +55,20 @@ struct SetupCardPhraseView: View {
                     hideKeyboard()
                 }
                 .submitLabel(.done)
-                CopyPasteButton(
-                    mode: .paste { viewModel.transcription = $0 },
-                    showPopup: $showPastedPopup
-                )
+                PasteButton(payloadType: String.self) { strings in
+                    Task {
+                        await MainActor.run {
+                            guard let text = strings.first else { return }
+                            
+                            viewModel.transcription = text
+                            showPastedPopup = true
+                        }
+                    }
+                }
+                .buttonBorderShape(.capsule)
+                .labelStyle(.iconOnly)
             }
         }
-        .groupBoxStyle(PlainGroupBoxStyle())
     }
 }
     // #Preview {

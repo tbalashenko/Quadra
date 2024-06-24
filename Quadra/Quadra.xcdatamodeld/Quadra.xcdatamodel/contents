@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23173.10" systemVersion="24A5264n" minimumToolsVersion="Xcode 15.0" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="24A5264n" minimumToolsVersion="Xcode 15.0" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Card" representedClassName="Card" syncable="YES">
         <attribute name="additionTime" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="cardStatus" attributeType="Transformable" valueTransformerName="StatusTransformer" customClassName=".CardStatus"/>
+        <attribute name="cardStatus" attributeType="Integer 64" valueTransformerName="StatusTransformer" defaultValueString="0" usesScalarValueType="YES" customClassName=".CardStatus"/>
         <attribute name="croppedImage" optional="YES" attributeType="Binary"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="image" optional="YES" attributeType="Binary" valueTransformerName="ImageTransformer" customClassName="NSImage"/>

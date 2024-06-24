@@ -15,19 +15,20 @@ struct ChartView: View {
     var body: some View {
         GeometryReader { geometry in
             List {
-                ChartLinesView(
-                    viewModel: viewModel,
-                    selectedPeriod: $selectedPeriod)
+                Group {
+                    ChartLinesView(
+                        viewModel: viewModel,
+                        selectedPeriod: $selectedPeriod)
                     .frame(height: geometry.size.width)
                     .onChange(of: selectedPeriod) { viewModel.fetchStatData(fromDate: selectedPeriod.fromDate) }
                     .onAppear { viewModel.fetchStatData(fromDate: selectedPeriod.fromDate) }
-                PeriodPickerView(selectedPeriod: $selectedPeriod)
-                ChartLineToggleView(toggleBindings: toggleBindings)
+                    PeriodPickerView(selectedPeriod: $selectedPeriod)
+                    ChartLineToggleView(toggleBindings: toggleBindings)
+                }
+                .listRowBackground(Color.element)
             }
-            .listStyle(.plain)
+            .customListStyle()
             .navigationTitle(TextConstants.statistics)
-            .scrollContentBackground(.hidden)
-            .background(Color.element)
         }
     }
 }

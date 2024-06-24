@@ -9,11 +9,15 @@ import SwiftUI
 
 struct SkeletonCardView: View {
     @Environment(\.colorScheme) var colorScheme
-
+    @Binding var isPresented: Bool
+    
     var imageColor: Color {
         colorScheme == .light ? Color.lightGray : Color.spanishGray
     }
-
+    
+    private var currentOpacity: CGFloat { isPresented ? 1 : 0 }
+    
+    
     var body: some View {
         VStack {
             ZStack(alignment: .center) {
@@ -21,7 +25,7 @@ struct SkeletonCardView: View {
                 VStack {
                     HStack {
                         SkeletonView()
-                            .frame(width: 150, height: 38)
+                            .frame(width: 125, height: 38)
                         Spacer()
                         SkeletonView()
                             .frame(width: 38, height: 38)
@@ -50,9 +54,11 @@ struct SkeletonCardView: View {
         .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
         .southEastShadow()
         .frame(size: SizeConstants.cardSize)
+        .opacity(currentOpacity)
+        .animation(.easeInOut, value: currentOpacity)
     }
 }
 
 #Preview {
-    SkeletonCardView()
+    SkeletonCardView(isPresented: .constant(true))
 }

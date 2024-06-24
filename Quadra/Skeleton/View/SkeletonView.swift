@@ -29,11 +29,13 @@ struct SkeletonView: View {
 
     @State var startPoint: UnitPoint = .init(x: -1.8, y: -1)
     @State var endPoint: UnitPoint = .init(x: 0, y: 0)
-
+    
     var body: some View {
-        LinearGradient(colors: gradientColors,
-                        startPoint: startPoint,
-                        endPoint: endPoint)
+        LinearGradient(
+            colors: gradientColors,
+            startPoint: startPoint,
+            endPoint: endPoint
+        )
         .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
         .onAppear {
             withAnimation(.easeInOut(duration: 1).repeatForever(autoreverses: false)) {

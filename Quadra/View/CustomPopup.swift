@@ -20,6 +20,14 @@ struct CustomPopup: View {
             .cornerRadius(SizeConstants.cornerRadius)
             .zIndex(1)
             .northWestShadow()
+            .onChange(of: showPopup) { _, showPopup in
+                if showPopup {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.showPopup = false
+                    }
+                }
+            }
+
     }
 }
 

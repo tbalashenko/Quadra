@@ -19,6 +19,7 @@ extension Image {
     func smallButtonImage() -> some View {
         self
             .resizable()
+            .scaledToFit()
             .frame(size: SizeConstants.smallButtonImageSize)
     }
 }

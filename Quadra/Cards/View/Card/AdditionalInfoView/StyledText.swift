@@ -15,11 +15,13 @@ struct StyledText: View {
         HStack {
             Text(description)
                 .bold()
+                .font(.system(size: 16))
             Text(value)
+                .font(.system(size: 16))
         }
     }
 }
 
 #Preview {
-    StyledText(description: "Test", value: "Test1")
+    StyledText(description: "Added", value: Date().formatDate())
 }

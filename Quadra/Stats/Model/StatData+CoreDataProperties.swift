@@ -2,12 +2,13 @@
 //  StatData+CoreDataProperties.swift
 //  Quadra
 //
-//  Created by Tatyana Balashenko on 16/05/2024.
+//  Created by Tatyana Balashenko on 19/06/2024.
 //
 //
 
 import Foundation
 import CoreData
+
 
 extension StatData {
 
@@ -15,14 +16,14 @@ extension StatData {
         return NSFetchRequest<StatData>(entityName: "StatData")
     }
 
-    @NSManaged public var date: Date
     @NSManaged public var addedItemsCounter: Int
+    @NSManaged public var date: Date
     @NSManaged public var deletedItemsCounter: Int
     @NSManaged public var repeatedItemsCounter: Int
     @NSManaged public var totalNumberOfCards: Int
 
 }
 
-extension StatData: Identifiable {
+extension StatData : Identifiable {
 
 }
