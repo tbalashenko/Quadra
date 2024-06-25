@@ -12,7 +12,11 @@ struct PasteButton: View {
 
     var body: some View {
         Button {
-            action?(UIPasteboard.general.string ?? "")
+            Task {
+                await MainActor.run {
+                    action?(UIPasteboard.general.string ?? "")
+                }
+            }
         } label: {
             Image(systemName: "doc.on.clipboard")
                 .smallButtonImage()

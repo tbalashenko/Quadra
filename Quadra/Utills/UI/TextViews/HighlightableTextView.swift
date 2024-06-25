@@ -12,9 +12,10 @@ struct HighlightableTextView: View {
     @State private var showingPlaceholder = true
     @Binding var text: AttributedString
     let palette = SettingsManager.shared.highliterPalette
+    var pasteButtonAction: ((String) -> Void)?
 
     var body: some View {
-        HStack(spacing: 8) {
+        HStack {
             ZStack {
                 UITextViewRepresentable(
                     text: $text,
@@ -46,6 +47,7 @@ struct HighlightableTextView: View {
                     .zIndex(1)
                 }
             }
+            PasteButton { pasteButtonAction?($0) }
         }
     }
 }

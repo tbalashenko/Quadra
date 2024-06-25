@@ -8,38 +8,29 @@
 import SwiftUI
 
 struct SetupCardView: View {
-    @StateObject var viewModel: SetupCardViewModel
+    @ObservedObject var viewModel: SetupCardViewModel
     @Binding var showSetupCardView: Bool
-    
+    @State private var showPopup = false
     @State private var showAlert = false
-    @State var showPopup: Bool = false
     var onDismiss: ((Bool) -> Void)?
     
     var body: some View {
         List {
-            PhotoPickerView(image: $viewModel.image, croppedImage: $viewModel.croppedImage)
-                .center()
-                .customListRow()
-            SetupCardPhraseView(viewModel: viewModel, showPastedPopup: $showPopup)
-                .customListRow()
-            SetupCardSourceView(viewModel: viewModel)
-                .customListRow()
-        }
-        .background {
-            Color.element
-                .ignoresSafeArea()
+            Group {
+                PhotoPickerView(viewModel: viewModel)
+                imageUrlSection()
+                phraseToRememberSection()
+                translationSection()
+                transcriptionSection()
+                sourcesSection()
+            }
+            .customListRow()
         }
         .interactiveDismissDisabled(true)
         .alert(
             TextConstants.warning,
             isPresented: $showAlert,
-            actions: {
-                Button(TextConstants.yes) {
-                    showSetupCardView = false
-                    onDismiss?(false)
-                }
-                Button(TextConstants.no, role: .cancel) { }
-            },
+            actions: { alertActions() },
             message: { Text(TextConstants.closeWithoutSavingHelp) }
         )
         .popup(isPresented: $showPopup) {
@@ -52,29 +43,98 @@ struct SetupCardView: View {
         .navigationTitle(viewModel.mode.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button(TextConstants.save) {
-                    hideKeyboard()
-                    viewModel.saveCard()
-                    showSetupCardView = false
-                    onDismiss?(true)
-                }
-                .disabled(viewModel.phraseToRemember.characters.isEmpty)
-            }
-            ToolbarItem(placement: .cancellationAction) {
-                Button(TextConstants.cancel) {
-                    if viewModel.hasChanged {
-                        showAlert = true
-                    } else {
-                        showSetupCardView = false
-                        onDismiss?(false)
+            ToolbarItem(placement: .confirmationAction) { saveButton() }
+            ToolbarItem(placement: .cancellationAction) { cancelButton() }
+        }
+    }
+    
+    @ViewBuilder
+    private func imageUrlSection() -> some View {
+        if viewModel.showImageUrlSection {
+            Section(TextConstants.imageUrl) {
+                TextFieldWithFlipableButton(
+                    text: $viewModel.url,
+                    additionalButtonImage: Image(systemName: "square.and.arrow.down"),
+                    additionalButtonAction: { viewModel.downloadImage() },
+                    pasteButtonAction: {
+                        viewModel.url = $0
+                        showPopup = true
                     }
+                )
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func phraseToRememberSection() -> some View {
+        Section(TextConstants.phraseToRemember) {
+            HighlightableTextView(text: $viewModel.phraseToRemember) {
+                viewModel.formatAndSetPhrase($0, string: &viewModel.phraseToRemember)
+                showPopup = true
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func translationSection() -> some View {
+        Section(TextConstants.translation) {
+            HighlightableTextView(text: $viewModel.translation) {
+                viewModel.formatAndSetPhrase($0, string: &viewModel.translation)
+                showPopup = true
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func transcriptionSection() -> some View {
+        Section(TextConstants.transcription) {
+            TextFieldWithFlipableButton(
+                text: $viewModel.transcription,
+                pasteButtonAction: {
+                    viewModel.transcription = $0
+                    showPopup = true
                 }
+            )
+        }
+    }
+    
+    @ViewBuilder
+    private func sourcesSection() -> some View {
+        Section(TextConstants.sources) {
+            AddNewSourceView(viewModel: viewModel)
+            TagCloudView(viewModel: TagCloudViewModel(items: viewModel.tagCloudItems, isSelectable: true))
+        }
+    }
+    
+    @ViewBuilder
+    private func alertActions() -> some View {
+        Button(TextConstants.yes) {
+            showSetupCardView = false
+            onDismiss?(false)
+        }
+        Button(TextConstants.no, role: .cancel) { }
+    }
+    
+    @ViewBuilder
+    private func saveButton() -> some View {
+        Button(TextConstants.save) {
+            hideKeyboard()
+            viewModel.saveCard()
+            showSetupCardView = false
+            onDismiss?(true)
+        }
+        .disabled(viewModel.phraseToRemember.characters.isEmpty)
+    }
+    
+    @ViewBuilder
+    private func cancelButton() -> some View {
+        Button(TextConstants.cancel) {
+            if viewModel.hasChanged {
+                showAlert = true
+            } else {
+                showSetupCardView = false
+                onDismiss?(false)
             }
         }
     }
 }
-
-// #Preview {
-//    CreateCardView(showSetupCardView: .constant(true))
-// }

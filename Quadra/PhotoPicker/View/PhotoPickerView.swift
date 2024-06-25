@@ -9,73 +9,105 @@ import SwiftUI
 import PhotosUI
 
 struct PhotoPickerView: View {
-    @State var photosPickerItem: PhotosPickerItem?
-    @Binding var image: Image?
-    @Binding var croppedImage: Image?
-    @State var showEditingView: Bool = false
-
+    @ObservedObject var viewModel: SetupCardViewModel
+    
+    @State private var photosPickerItem: PhotosPickerItem?
+    @State private var showEditingView: Bool = false
+    
     var body: some View {
         ZStack(alignment: .center) {
-            croppedImage?
-                .resizable()
-                .scaledToFill()
-                .frame(size: SizeConstants.imageSize)
-                .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
+            croppedImageView()
             
-            PhotosPicker(
-                selection: $photosPickerItem,
-                matching: .images
-            ) {
-                Label(TextConstants.selectPhoto, systemImage: "photo")
-                    .foregroundStyle(.black)
-                    .padding(10)
-                    .background {
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(.white.opacity(0.6))
-                    }
+            VStack {
+                photoPicker()
+                urlViewButton()
             }
             
-            if croppedImage != nil {
-                AlignableTransparentButton(
-                    alignment: .topTrailing
-                ) {
-                    Image(systemName: "trash")
-                        .smallButtonImage()
-                } action: {
-                    clearImages()
-                }
-                
-                AlignableTransparentButton(
-                    alignment: .topLeading
-                ) {
-                    Image(systemName: "crop")
-                        .smallButtonImage()
-                        
-                } action: {
-                    showEditingView.toggle()
-                }
+            if viewModel.croppedImage != nil {
+                trashButton()
+                cropButton()
             }
         }
         .frame(size: SizeConstants.imageSize)
-        .onChange(of: photosPickerItem) {
-            setImage()
+        .center()
+        .onChange(of: photosPickerItem) { setImage() }
+        .fullScreenCover(isPresented: $showEditingView) { cropView() }
+    }
+    
+    @ViewBuilder
+    private func croppedImageView() -> some View {
+        viewModel.croppedImage?
+            .resizable()
+            .scaledToFill()
+            .frame(size: SizeConstants.imageSize)
+            .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
+    }
+    
+    @ViewBuilder
+    private func photoPicker() -> some View {
+        PhotosPicker(
+            selection: $photosPickerItem,
+            matching: .images
+        ) {
+            Label(TextConstants.selectPhoto, systemImage: "photo")
         }
-        .fullScreenCover(isPresented: $showEditingView) {
-            if let image {
-                CropView(image: image) { croppedImage, _ in
-                    if let croppedImage {
-                        Task {
-                            await MainActor.run {
-                                self.croppedImage = croppedImage
-                            }
+        .buttonStyle(TransparentButtonStyle())
+    }
+    
+    @ViewBuilder
+    private func urlViewButton() -> some View {
+        if !viewModel.showImageUrlSection {
+            Button {
+                withAnimation {
+                    viewModel.showImageUrlSection = true
+                }
+            } label: {
+                Label(TextConstants.enterImageURL, systemImage: "link")
+            }
+            .buttonStyle(TransparentButtonStyle())
+        }
+    }
+    
+    @ViewBuilder
+    private func trashButton() -> some View {
+        AlignableTransparentButton(
+            alignment: .topTrailing
+        ) {
+            Image(systemName: "trash")
+                .smallButtonImage()
+        } action: {
+            clearImages()
+        }
+    }
+    
+    @ViewBuilder
+    private func cropButton() -> some View {
+        AlignableTransparentButton(
+            alignment: .topLeading
+        ) {
+            Image(systemName: "crop")
+                .smallButtonImage()
+        } action: {
+            showEditingView.toggle()
+        }
+    }
+    
+    @ViewBuilder
+    private func cropView() -> some View {
+        if let image = viewModel.image {
+            CropView(image: image) { croppedImage, _ in
+                if let croppedImage {
+                    Task {
+                        await MainActor.run {
+                            viewModel.croppedImage = croppedImage
                         }
                     }
                 }
             }
         }
     }
-
-    func setImage() {
+    
+    private func setImage() {
         Task {
             guard
                 let data = try? await photosPickerItem?.loadTransferable(type: Data.self),
@@ -86,22 +118,22 @@ struct PhotoPickerView: View {
             }
             
             await MainActor.run {
-                image = Image(uiImage: uiImage)
-                croppedImage = Image(uiImage: uiImage)
+                viewModel.image = Image(uiImage: uiImage)
+                viewModel.croppedImage = Image(uiImage: uiImage)
             }
         }
     }
-
-    func clearImages() {
+    
+    private func clearImages() {
         Task {
             await MainActor.run {
-                self.croppedImage = nil
-                self.image = nil
+                viewModel.croppedImage = nil
+                viewModel.image = nil
             }
         }
     }
 }
 
-#Preview {
-    PhotoPickerView(image: .constant(nil), croppedImage: .constant(nil))
-}
+//#Preview {
+//    PhotoPickerView(image: .constant(nil), croppedImage: .constant(nil))
+//}

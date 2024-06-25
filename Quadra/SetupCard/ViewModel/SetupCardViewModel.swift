@@ -12,36 +12,37 @@ import Combine
 final class SetupCardViewModel: ObservableObject {
     @Published var cardModel: CardModel?
     @Published var tagCloudItems = [TagCloudItem]()
-
+    
     @Published var image: Image?
     @Published var croppedImage: Image?
+    @Published var showImageUrlSection = false
     @Published var phraseToRemember = AttributedString()
     @Published var translation = AttributedString()
     @Published var transcription = ""
-
+    @Published var url = ""
     @Published var newSourceText = ""
-
+    
     @Published var selectedSources = [CardSource]()
     let mode: SetupCardViewMode
     private let sourceService = CardSourceService.shared
     private let cardService = CardService.shared
-
+    
     var hasChanged: Bool {
         switch mode {
             case .edit:
                 return phraseToRemember != cardModel?.card.convertedPhraseToRemember
                 || translation != cardModel?.card.convertedTranslation
                 || transcription != cardModel?.card.transcription
-
+                
             case .create:
                 return !String(phraseToRemember.characters).isEmpty
                 || !String(translation.characters).isEmpty
                 || !transcription.isEmpty
         }
     }
-
+    
     private var cancellables = Set<AnyCancellable>()
-
+    
     init(mode: SetupCardViewMode, cardModel: CardModel? = nil) {
         self.mode = mode
         
@@ -59,9 +60,9 @@ final class SetupCardViewModel: ObservableObject {
             croppedImage = cardModel.card.convertedCroppedImage
         }
         observeNewSourceTextChanges()
-
+        
     }
-
+    
     func observeNewSourceTextChanges() {
         $newSourceText
             .sink { [weak self] _ in
@@ -69,16 +70,10 @@ final class SetupCardViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-
+    
     func updateTagCloudItems() {
         tagCloudItems = sourceService.sources
-            .filter { source in
-                if newSourceText.isEmpty {
-                    return true
-                } else {
-                    return source.title.localizedCaseInsensitiveContains(newSourceText)
-                }
-            }
+            .filter { newSourceText.isEmpty ? true : $0.title.localizedCaseInsensitiveContains(newSourceText) }
             .map { source in
                 TagCloudItem(
                     isSelected: selectedSources.contains(source),
@@ -90,7 +85,32 @@ final class SetupCardViewModel: ObservableObject {
                 }
             }
     }
-
+    
+    func downloadImage() {
+        guard let url = URL(string: url) else { return }
+        
+        URLSession.shared.dataTaskPublisher(for: url)
+            .map { $0.data }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                    case .failure(let error):
+                        print("Failed to download image: \(error)")
+                    case .finished:
+                        break
+                }
+            }, receiveValue: { data in
+                guard let uiImage = UIImage(data: data) else {
+                    print("Failed to create UIImage from data")
+                    return
+                }
+                
+                self.image = Image(uiImage: uiImage)
+                self.croppedImage = Image(uiImage: uiImage)
+            })
+            .store(in: &self.cancellables)
+    }
+    
     private func toggleSourceSelection(source: CardSource) {
         if selectedSources.contains(source) {
             selectedSources.removeAll { $0.id == source.id }
@@ -98,12 +118,12 @@ final class SetupCardViewModel: ObservableObject {
             selectedSources.append(source)
         }
     }
-
+    
     @MainActor
     func saveCard() {
         let image = image?.convert(scale: SettingsManager.shared.imageScale)
         let croppedImage = croppedImage?.convert(scale: ImageScale.percent100)
-
+        
         switch mode {
             case .create:
                 do {
@@ -121,13 +141,13 @@ final class SetupCardViewModel: ObservableObject {
             case .edit:
                 do {
                     guard let cardModel = cardModel else { return }
-
+                    
                     try cardService.editCard(
                         card: cardModel.card,
                         phraseToRemember: phraseToRemember,
                         translation: translation,
                         transcription: transcription,
-                        imageData: image?.pngData(), 
+                        imageData: image?.pngData(),
                         croppedImageData: croppedImage?.pngData(),
                         sources: Array(selectedSources)
                     )
@@ -136,7 +156,7 @@ final class SetupCardViewModel: ObservableObject {
                 }
         }
     }
-
+    
     @MainActor
     func saveSource(color: Color) {
         do {
@@ -148,7 +168,7 @@ final class SetupCardViewModel: ObservableObject {
             print("Error saving source: \(error.localizedDescription)")
         }
     }
-
+    
     
     func formatAndSetPhrase(_ text: String, string: inout AttributedString) {
         let updatedAttributes: [NSAttributedString.Key: Any] = [
@@ -156,10 +176,10 @@ final class SetupCardViewModel: ObservableObject {
             .font: UIFont.systemFont(ofSize: 18),
             .foregroundColor: UIColor.black
         ]
-
+        
         let attributedString = NSMutableAttributedString(string: text)
         attributedString.addAttributes(updatedAttributes, range: NSRange(location: 0, length: attributedString.length))
-
+        
         string = AttributedString(attributedString)
     }
 }
@@ -168,7 +188,7 @@ extension SetupCardViewModel {
     enum SetupCardViewMode {
         case create
         case edit
-
+        
         var navigationTitle: String {
             switch self {
                 case .create:

@@ -92,9 +92,7 @@
 		A0983B452BC55A3E009A3CCB /* AspectRatio.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0983B442BC55A3E009A3CCB /* AspectRatio.swift */; };
 		A09C7D392BBC8EB500CBF01F /* TextToSpeechPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09C7D382BBC8EB500CBF01F /* TextToSpeechPlayView.swift */; };
 		A09D81182C04BC8B00ADFF20 /* SetupCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D81172C04BC8B00ADFF20 /* SetupCardViewModel.swift */; };
-		A09D811C2C04BD1D00ADFF20 /* SetupCardPhraseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D811B2C04BD1D00ADFF20 /* SetupCardPhraseView.swift */; };
 		A09D811E2C04BDD800ADFF20 /* GroupBoxStyleModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D811D2C04BDD800ADFF20 /* GroupBoxStyleModifier.swift */; };
-		A09D81202C04C0F900ADFF20 /* SetupCardSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D811F2C04C0F900ADFF20 /* SetupCardSourceView.swift */; };
 		A09D81222C04E8DD00ADFF20 /* TextConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D81212C04E8DD00ADFF20 /* TextConstants.swift */; };
 		A0AC3A022BA9AB4C006DA5DA /* CardStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AC3A012BA9AB4C006DA5DA /* CardStatus.swift */; };
 		A0B21A622BF3CEF0008EAAD1 /* CardService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B21A612BF3CEF0008EAAD1 /* CardService.swift */; };
@@ -113,6 +111,7 @@
 		A0B21A8B2BF524FB008EAAD1 /* SourceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B21A8A2BF524FB008EAAD1 /* SourceViewModel.swift */; };
 		A0B21AA82BFCFE1E008EAAD1 /* CardStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B21AA72BFCFE1E008EAAD1 /* CardStackView.swift */; };
 		A0B3515D2C29D75700FAD55E /* PasteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B3515C2C29D75700FAD55E /* PasteButton.swift */; };
+		A0B3515F2C2B4F4100FAD55E /* TextFieldWithFlipableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B3515E2C2B4F4100FAD55E /* TextFieldWithFlipableButton.swift */; };
 		A0BC329A2C1455650006BF39 /* FilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0BC32992C1455650006BF39 /* FilterViewModel.swift */; };
 		A0BC329E2C1462C20006BF39 /* CreationDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0BC329D2C1462C20006BF39 /* CreationDateView.swift */; };
 		A0BC32A62C172F5E0006BF39 /* DictionaryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0BC32A52C172F5E0006BF39 /* DictionaryResponse.swift */; };
@@ -218,9 +217,7 @@
 		A0983B442BC55A3E009A3CCB /* AspectRatio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectRatio.swift; sourceTree = "<group>"; };
 		A09C7D382BBC8EB500CBF01F /* TextToSpeechPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextToSpeechPlayView.swift; sourceTree = "<group>"; };
 		A09D81172C04BC8B00ADFF20 /* SetupCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCardViewModel.swift; sourceTree = "<group>"; };
-		A09D811B2C04BD1D00ADFF20 /* SetupCardPhraseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCardPhraseView.swift; sourceTree = "<group>"; };
 		A09D811D2C04BDD800ADFF20 /* GroupBoxStyleModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupBoxStyleModifier.swift; sourceTree = "<group>"; };
-		A09D811F2C04C0F900ADFF20 /* SetupCardSourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCardSourceView.swift; sourceTree = "<group>"; };
 		A09D81212C04E8DD00ADFF20 /* TextConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextConstants.swift; sourceTree = "<group>"; };
 		A0AC3A012BA9AB4C006DA5DA /* CardStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStatus.swift; sourceTree = "<group>"; };
 		A0B21A612BF3CEF0008EAAD1 /* CardService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardService.swift; sourceTree = "<group>"; };
@@ -239,6 +236,7 @@
 		A0B21A8A2BF524FB008EAAD1 /* SourceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceViewModel.swift; sourceTree = "<group>"; };
 		A0B21AA72BFCFE1E008EAAD1 /* CardStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStackView.swift; sourceTree = "<group>"; };
 		A0B3515C2C29D75700FAD55E /* PasteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteButton.swift; sourceTree = "<group>"; };
+		A0B3515E2C2B4F4100FAD55E /* TextFieldWithFlipableButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithFlipableButton.swift; sourceTree = "<group>"; };
 		A0BC32992C1455650006BF39 /* FilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewModel.swift; sourceTree = "<group>"; };
 		A0BC329D2C1462C20006BF39 /* CreationDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreationDateView.swift; sourceTree = "<group>"; };
 		A0BC32A52C172F5E0006BF39 /* DictionaryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryResponse.swift; sourceTree = "<group>"; };
@@ -585,10 +583,9 @@
 		A08723B52C20720F0000CB8C /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				A023FEF32BAB114B00FAB13C /* AlignableTransparentButton.swift */,
+				A0B351612C2B4FBB00FAD55E /* TextViews */,
+				A0B351602C2B4F9F00FAD55E /* Buttons */,
 				A08723B62C2072250000CB8C /* Popup.swift */,
-				A08723B82C20838B0000CB8C /* CopyButton.swift */,
-				A0B3515C2C29D75700FAD55E /* PasteButton.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -646,11 +643,8 @@
 		A09D81152C04BC6900ADFF20 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				A0901B4E2BD687EB00B9713D /* HighlightableTextView.swift */,
-				A01E18EC2BA78DD000A03412 /* SetupCardView.swift */,
-				A09D811B2C04BD1D00ADFF20 /* SetupCardPhraseView.swift */,
-				A09D811F2C04C0F900ADFF20 /* SetupCardSourceView.swift */,
 				A088250C2C078927006458A1 /* AddNewSourceView.swift */,
+				A01E18EC2BA78DD000A03412 /* SetupCardView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -907,6 +901,25 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
+		A0B351602C2B4F9F00FAD55E /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				A023FEF32BAB114B00FAB13C /* AlignableTransparentButton.swift */,
+				A08723B82C20838B0000CB8C /* CopyButton.swift */,
+				A0B3515C2C29D75700FAD55E /* PasteButton.swift */,
+			);
+			path = Buttons;
+			sourceTree = "<group>";
+		};
+		A0B351612C2B4FBB00FAD55E /* TextViews */ = {
+			isa = PBXGroup;
+			children = (
+				A0901B4E2BD687EB00B9713D /* HighlightableTextView.swift */,
+				A0B3515E2C2B4F4100FAD55E /* TextFieldWithFlipableButton.swift */,
+			);
+			path = TextViews;
+			sourceTree = "<group>";
+		};
 		A0BC32952C14550C0006BF39 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
@@ -1116,7 +1129,6 @@
 				A023FEEE2BAA216800FAB13C /* TagCloudView.swift in Sources */,
 				A0B21A7B2BF512E5008EAAD1 /* VoicePickerView.swift in Sources */,
 				A03E93742BAA175400B6E381 /* NeuButtonStyle.swift in Sources */,
-				A09D811C2C04BD1D00ADFF20 /* SetupCardPhraseView.swift in Sources */,
 				A05EFA1C2BBD7D2D000460A3 /* UserDefaultsManager.swift in Sources */,
 				A097836E2C23166900DB3827 /* CardArchiveTag+CoreDataProperties.swift in Sources */,
 				A023FEF02BAA22ED00FAB13C /* TagView.swift in Sources */,
@@ -1126,7 +1138,7 @@
 				A0B21A8B2BF524FB008EAAD1 /* SourceViewModel.swift in Sources */,
 				A05EFA222BBDF122000460A3 /* OtherView.swift in Sources */,
 				A01D2A742BB4C4CA00AE1790 /* ListRowView.swift in Sources */,
-				A09D81202C04C0F900ADFF20 /* SetupCardSourceView.swift in Sources */,
+				A0B3515F2C2B4F4100FAD55E /* TextFieldWithFlipableButton.swift in Sources */,
 				A07B38AE2BC046A000943F0E /* SkeletonCardView.swift in Sources */,
 				A01E18A82BA3211300A03412 /* Quadra.xcdatamodeld in Sources */,
 				A097836F2C23166900DB3827 /* CardSource+CoreDataClass.swift in Sources */,

@@ -10,28 +10,21 @@ import SwiftUI
 struct SamplePhrasesView: View {
     @StateObject var viewModel = SamplePhrasesViewModel()
     @State private var showCopiedPopup = false
-
+    
     var body: some View {
         NavigationStack {
-            ZStack {
-                Color.element
-                    .ignoresSafeArea()
-                ScrollView {
+            List {
+                Section {
                     VStack(alignment: .leading) {
-                        HStack {
-                            TextField("", text: $viewModel.searchText, axis: .vertical)
-                                .textFieldStyle(NeuTextFieldStyle(text: $viewModel.searchText))
-                            Button(
-                                action: {
-                                    viewModel.fetchDefinition()
-                                }, label: {
-                                    Image(systemName: "magnifyingglass.circle.fill")
-                                        .smallButtonImage()
-                                        .foregroundColor(Color.accentColor)
-                                }
-                            )
-                            .buttonStyle(NeuButtonStyle())
-                        }
+                        TextFieldWithFlipableButton(
+                            text: $viewModel.searchText,
+                            additionalButtonImage: Image(systemName: "magnifyingglass.circle.fill"),
+                            additionalButtonAction: { viewModel.fetchDefinition() },
+                            pasteButtonAction: {
+                                viewModel.searchText = $0
+                                showCopiedPopup = true
+                            }
+                        )
                         Text(TextConstants.enterWord)
                             .foregroundColor(.secondary)
                             .font(.footnote)
@@ -40,7 +33,6 @@ struct SamplePhrasesView: View {
                             Text(TextConstants.noSamplePhrases)
                         }
                     }
-                    .padding(.horizontal, SizeConstants.horizontalPadding)
                     ForEach(viewModel.samples, id: \.self) { sampleText in
                         HStack {
                             Text(sampleText)
@@ -50,17 +42,19 @@ struct SamplePhrasesView: View {
                             }
                         }
                     }
-                    .padding(.horizontal, SizeConstants.horizontalPadding)
                 }
-                .popup(isPresented: $showCopiedPopup) {
-                    CustomPopup(
-                        text: TextConstants.copied,
-                        showPopup: $showCopiedPopup
-                    )
-                }
+                .customListRow()
+            }
+            .customListStyle()
+            .popup(isPresented: $showCopiedPopup) {
+                CustomPopup(
+                    text: TextConstants.copied,
+                    showPopup: $showCopiedPopup
+                )
             }
             .navigationTitle(TextConstants.getSample)
         }
+        
     }
 }
 

@@ -8,6 +8,7 @@
 import Foundation
 
 struct TextConstants {
+    static let imageUrl = "Image URL"
     static let phraseToRemember = "Phrase to remember*"
     static let translation = "Translation"
     static let transcription = "Transcription"
@@ -68,6 +69,7 @@ struct TextConstants {
     // Buttons
     static let reset = "Reset"
     static let selectPhoto = "Select Photo"
+    static let enterImageURL = "Enter an Image URL"
     static let save = "Save"
     static let cancel = "Cancel"
     static let yes = "Yes"

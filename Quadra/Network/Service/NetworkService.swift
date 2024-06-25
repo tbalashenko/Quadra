@@ -6,11 +6,13 @@
 //
 
 import Foundation
+import UIKit
 
 enum APIError: Error {
     case invalidURL
     case requestFailed
     case decodingFailed
+    case imageDownloadFailed
 }
 
 class NetworkService {
@@ -19,6 +21,11 @@ class NetworkService {
     private init() {}
 
     func request<T: Decodable>(urlString: String, completion: @escaping (Result<T, APIError>) -> Void) {
+        guard isValidURL(urlString: urlString) else {
+            completion(.failure(.invalidURL))
+            return
+        }
+
         guard let url = URL(string: urlString) else {
             completion(.failure(.invalidURL))
             return
@@ -45,4 +52,13 @@ class NetworkService {
 
         task.resume()
     }
+
+    func isValidURL(urlString: String) -> Bool {
+        guard let url = URL(string: urlString) else {
+            return false
+        }
+
+        return UIApplication.shared.canOpenURL(url)
+    }
 }
+
