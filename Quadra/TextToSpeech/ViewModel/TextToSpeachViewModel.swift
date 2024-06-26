@@ -10,22 +10,16 @@ import AVFoundation
 
 class TextToSpeechViewModel: NSObject, ObservableObject {
     @Published var isSpeaking: Bool = false
-    private let voice: Voice
-    private let text: String
     private let synthesizer = AVSpeechSynthesizer()
 
-    init(text: String, voice: Voice? = nil) {
-        self.text = text
-        self.voice = voice ?? SettingsManager.shared.voice
-    }
-
-    func speak() {
+    func speak(text: String, voice: Voice? = nil) {
         guard !synthesizer.isSpeaking else {
             stopSpeaking()
             return
         }
-
+        
         let utterance = AVSpeechUtterance(string: text)
+        let voice = voice ?? SettingsManager.shared.voice
         utterance.voice = AVSpeechSynthesisVoice(identifier: voice.identifier)
         synthesizer.delegate = self
         synthesizer.speak(utterance)

@@ -23,14 +23,17 @@ struct FlipablePhraseView: View {
             .padding(.horizontal)
         } else {
             if let translation = model.card.convertedTranslation {
-                Text(translation)
-                    .font(.title2)
-                    .onTapGesture {
-                        withAnimation {
-                            showPhraseView.toggle()
+                DynamicHeightScrollView(maxHeight: SizeConstants.cardHeigh/3) {
+                    Text(translation)
+                        .font(.title2)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .onTapGesture {
+                            withAnimation {
+                                showPhraseView.toggle()
+                            }
                         }
-                    }
-                    .padding(.horizontal)
+                        .padding(.horizontal)
+                }
             }
         }
     }

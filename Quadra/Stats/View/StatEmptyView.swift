@@ -20,7 +20,7 @@ struct StatEmptyView: View {
                     .foregroundColor(.accent)
                 DummyCardView(
                     viewModel: DummyCardsViewModel(),
-                    model: DummyCardModel(item: MockData.cards[0]),
+                    model: DummyCardModel(item: MockData.mockedCards[0]),
                     mode: .view)
                 .frame(
                     width: SizeConstants.cardWith / 2,

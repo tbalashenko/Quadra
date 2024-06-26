@@ -10,20 +10,23 @@ import SwiftUI
 struct PlayableTextView: View {
     @ObservedObject var model: CardModel
     var action: (() -> Void)?
-
+    
     var body: some View {
-        HStack(spacing: 12) {
-            TextToSpeechPlayView(viewModel: TextToSpeechViewModel(text: model.card.stringPhraseToRemember))
-            Text(model.card.convertedPhraseToRemember)
-                .font(.title2)
-                .bold()
-                .onTapGesture {
-                    action?()
-                }
+        HStack(alignment: .center, spacing: 12) {
+            TextToSpeechPlayView(text: model.card.stringPhraseToRemember)
+            DynamicHeightScrollView(maxHeight: SizeConstants.cardHeigh/3) {
+                Text(model.card.convertedPhraseToRemember)
+                    .font(.title2)
+                    .bold()
+                    .fixedSize(horizontal: false, vertical: true)
+                    .onTapGesture {
+                        action?()
+                    }
+            }
         }
     }
 }
 
-// #Preview {
-//    PlayableTextView()
-// }
+#Preview {
+    PlayableTextView(model: CardModel(card: MockData.cards.first!, mode: .repetition))
+}

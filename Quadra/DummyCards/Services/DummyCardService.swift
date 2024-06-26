@@ -9,7 +9,7 @@ import Foundation
 
 struct DummyCardService {
     func fetchCardModels() async throws -> [DummyCardModel] {
-        let cards = MockData.cards
+        let cards = MockData.mockedCards
         return cards.map { DummyCardModel(item: $0) }
     }
 }

@@ -21,10 +21,8 @@ struct VoicePickerView: View {
             HStack {
                 Text(viewModel.selectedVoice.samplePhrase)
                 TextToSpeechPlayView(
-                    viewModel: TextToSpeechViewModel(
-                        text: viewModel.selectedVoice.samplePhrase,
-                        voice: viewModel.selectedVoice
-                    )
+                    text: viewModel.selectedVoice.samplePhrase,
+                    voice: viewModel.selectedVoice
                 )
             }
         }

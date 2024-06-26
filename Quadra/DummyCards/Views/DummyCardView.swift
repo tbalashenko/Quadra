@@ -138,6 +138,6 @@ private extension DummyCardView {
 #Preview {
     DummyCardView(
         viewModel: DummyCardsViewModel(),
-        model: DummyCardModel(item: MockData.cards[0]))
+        model: DummyCardModel(item: MockData.mockedCards[0]))
     .frame(size: SizeConstants.cardSize)
 }

@@ -41,10 +41,14 @@ struct ListView: View {
             .toolbar {
                 ToolbarItem {
                     NavigationLink(
-                        destination: FilterView(viewModel: FilterViewModel())
-                            .toolbar(.hidden, for: .tabBar)) {
-                                Label(TextConstants.filter, systemImage: "line.3.horizontal.decrease.circle.fill")
-                            }
+                        destination: FilterView()
+                            .toolbar(.hidden, for: .tabBar)
+                    ) {
+                        Image(systemName: "line.3.horizontal.decrease.circle.fill")
+                            .smallButtonImage()
+                            .foregroundStyle(Color.accentColor)
+                    }
+                    .buttonStyle(NeuButtonStyle())
                 }
             }
         }

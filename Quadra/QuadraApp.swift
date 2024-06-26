@@ -17,7 +17,7 @@ struct QuadraApp: App {
             TabView(selection: $selectedTab) {
                 ContentView()
                     .environmentObject(cardsViewModel)
-                    .tabItem { Image(systemName: "repeat") }
+                    .tabItem { Image(systemName: "book.pages") }
                     .tag(0)
                 ListView()
                     .tabItem { Image(systemName: "list.bullet") }
