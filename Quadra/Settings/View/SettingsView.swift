@@ -33,8 +33,12 @@ struct SettingsView: View {
                     Section(TextConstants.textFormatting) {
                         HighlighterPaletteView(viewModel: viewModel)
                     }
+                    
+                    Section(TextConstants.notifications) {
+                        NotificationsView(viewModel: viewModel)
+                    }
                 }
-                .listRowBackground(Color.highlight)
+                .listRowBackground(Color.dynamicGray)
             }
             .scrollContentBackground(.hidden)
             .background(Color.element)
@@ -45,6 +49,9 @@ struct SettingsView: View {
                         dismiss()
                     }
                 }
+            }
+            .onAppear {
+                viewModel.checkNotificationPermission()
             }
             .toolbar(.hidden, for: .tabBar)
             .navigationBarTitle(TextConstants.settings)

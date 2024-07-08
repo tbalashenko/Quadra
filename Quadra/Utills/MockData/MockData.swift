@@ -12,7 +12,7 @@ struct MockData {
         let context = DataController.shared.container.viewContext
         
         return [
-            Card(context: context, additionTime: Date(), cardStatus: 0, phraseToRemember: NSAttributedString("That sounds really fun, but I'm not sure if I can.")),
+            Card(context: context, additionTime: Date(), cardStatus: 3, phraseToRemember: NSAttributedString("That sounds really fun, but I'm not sure if I can.")),
             Card(context: context, additionTime: Date(), cardStatus: 0, phraseToRemember: NSAttributedString("Do you feel like coming along?")),
             Card(context: context, additionTime: Date(), cardStatus: 0, phraseToRemember: NSAttributedString("Under no circumstances!")),
             Card(context: context, additionTime: Date(), cardStatus: 0, phraseToRemember: NSAttributedString("That's not how I see it.")),

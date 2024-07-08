@@ -28,8 +28,18 @@ struct CardHeaderView: View {
                     }
                 }
                 if model.showMoveToButton {
-                    MoveToButton(action: action)
-                        .environmentObject(model)
+                    MoveToButton(
+                        title: model.card.getNewStatus.title,
+                        color: model.card.getNewStatus.color,
+                        action: action
+                    )
+                }
+                if model.showBackToInputButton {
+                    MoveToButton(
+                        title: CardStatus.input.title,
+                        color: CardStatus.input.color,
+                        action: action
+                    )
                 }
             }
             .frame(size: geometry.size)

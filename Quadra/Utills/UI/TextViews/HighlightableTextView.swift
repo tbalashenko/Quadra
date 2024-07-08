@@ -11,43 +11,47 @@ struct HighlightableTextView: View {
     @State private var dynamicHeight: CGFloat = 100
     @State private var showingPlaceholder = true
     @Binding var text: AttributedString
-    let palette = SettingsManager.shared.highliterPalette
+    var error: String
+    let palette = SettingsService.highliterPalette
     var pasteButtonAction: ((String) -> Void)?
 
     var body: some View {
-        HStack {
-            ZStack {
-                UITextViewRepresentable(
-                    text: $text,
-                    pallete: palette,
-                    calculatedHeight: $dynamicHeight
-                )
-                .padding(.leading, 16)
-                .padding(.trailing, 32)
-                .background(
-                    Color.element
-                        .shadow(.inner(color: .highlight, radius: 3, x: -3, y: -3))
-                        .shadow(.inner(color: .shadow, radius: 3, x: 3, y: 3))
-                )
-                .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
-                .frame(minHeight: dynamicHeight, maxHeight: dynamicHeight)
-                if !text.characters.isEmpty {
-                    HStack {
-                        Spacer()
-                        Button {
-                            text = ""
-                        } label: {
-                            Image(systemName: "multiply.circle.fill")
-                                .resizable()
-                                .foregroundColor(.secondary)
+        VStack(alignment: .leading) {
+            HStack {
+                ZStack {
+                    UITextViewRepresentable(
+                        text: $text,
+                        pallete: palette,
+                        calculatedHeight: $dynamicHeight
+                    )
+                    .padding(.leading, 16)
+                    .padding(.trailing, 32)
+                    .background(
+                        Color.element
+                            .shadow(.inner(color: .highlight, radius: 3, x: -3, y: -3))
+                            .shadow(.inner(color: .shadow, radius: 3, x: 3, y: 3))
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
+                    .frame(minHeight: dynamicHeight, maxHeight: dynamicHeight)
+                    if !text.characters.isEmpty {
+                        HStack {
+                            Spacer()
+                            Button {
+                                text = ""
+                            } label: {
+                                Image(systemName: "multiply.circle.fill")
+                                    .resizable()
+                                    .foregroundColor(.secondary)
+                            }
+                            .buttonStyle(NeuButtonStyle())
                         }
-                        .buttonStyle(NeuButtonStyle())
+                        .padding(.horizontal, 4)
+                        .zIndex(1)
                     }
-                    .padding(.horizontal, 4)
-                    .zIndex(1)
                 }
+                PasteButton { pasteButtonAction?($0) }
             }
-            PasteButton { pasteButtonAction?($0) }
+            ErrorView(error: error)
         }
     }
 }

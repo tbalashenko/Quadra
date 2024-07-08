@@ -21,7 +21,7 @@ class NetworkService {
     private init() {}
 
     func request<T: Decodable>(urlString: String, completion: @escaping (Result<T, APIError>) -> Void) {
-        guard isValidURL(urlString: urlString) else {
+        guard isValidUrl(urlString: urlString) else {
             completion(.failure(.invalidURL))
             return
         }
@@ -53,7 +53,7 @@ class NetworkService {
         task.resume()
     }
 
-    func isValidURL(urlString: String) -> Bool {
+    func isValidUrl(urlString: String) -> Bool {
         guard let url = URL(string: urlString) else {
             return false
         }

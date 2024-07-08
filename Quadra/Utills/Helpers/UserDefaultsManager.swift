@@ -7,34 +7,38 @@
 
 import Foundation
 
-public struct UserDefaultsManager {
-    public static func removeObject(key: String) {
+struct UserDefaultsManager {
+    static func removeObject(key: String) {
         UserDefaults.standard.removeObject(forKey: key)
         UserDefaults.standard.synchronize()
     }
 
-    public static func saveObject(_ object: Any?, forKey defaultName: String) {
+    static func saveObject(_ object: Any?, forKey defaultName: String) {
         UserDefaults.standard.set(object, forKey: defaultName)
         UserDefaults.standard.synchronize()
     }
 
-    public static func integerForKey(_ defaultName: String) -> Int? {
+    static func integerForKey(_ defaultName: String) -> Int? {
         return UserDefaults.standard.object(forKey: defaultName) as? Int
     }
 
-    public static func doubleForKey(_ defaultName: String) -> Double? {
+    static func doubleForKey(_ defaultName: String) -> Double? {
         return UserDefaults.standard.object(forKey: defaultName) as? Double
     }
 
-    public static func boolForKey(_ defaultName: String) -> Bool? {
+    static func boolForKey(_ defaultName: String) -> Bool? {
         return UserDefaults.standard.object(forKey: defaultName) as? Bool
     }
+    
+    static func dateForKey(_ defaultName: String) -> Date? {
+        return UserDefaults.standard.object(forKey: defaultName) as? Date
+    }
 
-    public static func stringForKey(_ defaultName: String) -> String? {
+    static func stringForKey(_ defaultName: String) -> String? {
         return UserDefaults.standard.string(forKey: defaultName)
     }
 
-    public static func objectForKey(_ defaultName: String) -> AnyObject? {
+    static func objectForKey(_ defaultName: String) -> AnyObject? {
         return UserDefaults.standard.object(forKey: defaultName) as? AnyObject
     }
 }
@@ -47,4 +51,6 @@ struct UserDefaultsKeys {
     static let showChartTab = "showChartTab"
     static let highlighterPalette = "highlighterPalette"
     static let showProgress = "showProgress"
+    static let sendNotifications = "sendNotifications"
+    static let reminderTime = "reminderTime"
 }

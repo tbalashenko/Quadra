@@ -7,46 +7,47 @@
 
 import Foundation
 
-final class SettingsManager {
-    static let shared = SettingsManager()
-
-    public var voice: Voice {
+final class SettingsService {
+    static var voice: Voice {
         let identifier = UserDefaultsManager.stringForKey(UserDefaultsKeys.textToSpeechVoiceIdentifier) ?? Voice.englishUs0.identifier
         return Voice(identifier: identifier)
     }
 
-    public var aspectRatio: AspectRatio {
+    static var aspectRatio: AspectRatio {
         let rawValue = UserDefaultsManager.stringForKey(UserDefaultsKeys.aspectRatio) ?? AspectRatio.sixteenToNine.rawValue
         return AspectRatio(rawValue: rawValue) ?? .sixteenToNine
     }
 
-    public var imageScale: ImageScale {
+    static var imageScale: ImageScale {
         let rawValue = UserDefaultsManager.doubleForKey(UserDefaultsKeys.imageScale) ?? ImageScale.percent100.rawValue
         return ImageScale(rawValue: rawValue) ?? .percent100
     }
 
-    public var showConfetti: Bool {
+    static var showConfetti: Bool {
         UserDefaultsManager.boolForKey(UserDefaultsKeys.showConfetti) ?? true
     }
 
-    public var highliterPalette: HighlighterPalette {
+    static var highliterPalette: HighlighterPalette {
         let rawValue = UserDefaultsManager.integerForKey(UserDefaultsKeys.highlighterPalette) ?? 0
         return HighlighterPalette(rawValue: rawValue) ?? .pale
     }
 
-    public var showProgress: Bool {
+    static var showProgress: Bool {
         UserDefaultsManager.boolForKey(UserDefaultsKeys.showProgress) ?? true
     }
+    
+    static var reminderTime: Date {
+        UserDefaultsManager.dateForKey(UserDefaultsKeys.reminderTime) ?? Date()
+    }
 
-    private init() { }
-
-    public func save(
+    static func save(
         voice: Voice,
         aspectRatio: AspectRatio,
         imageScale: ImageScale,
         showConfetti: Bool,
         highliterPalette: HighlighterPalette,
-        showProgress: Bool
+        showProgress: Bool,
+        sendNotifications: Bool
     ) {
         UserDefaultsManager.saveObject(voice.identifier, forKey: UserDefaultsKeys.textToSpeechVoiceIdentifier)
         UserDefaultsManager.saveObject(aspectRatio.rawValue, forKey: UserDefaultsKeys.aspectRatio)
@@ -54,5 +55,6 @@ final class SettingsManager {
         UserDefaultsManager.saveObject(showConfetti, forKey: UserDefaultsKeys.showConfetti)
         UserDefaultsManager.saveObject(highliterPalette.rawValue, forKey: UserDefaultsKeys.highlighterPalette)
         UserDefaultsManager.saveObject(showProgress, forKey: UserDefaultsKeys.showProgress)
+        UserDefaultsManager.saveObject(sendNotifications, forKey: UserDefaultsKeys.sendNotifications)
     }
 }

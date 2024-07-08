@@ -13,7 +13,8 @@ extension Color {
     static let whiteCoffee = Color(hex: "e7d7d4")  // beige
     static let morningBlue = Color(hex: "#8c9da4")
     static let puce = Color(hex: "#c88ba2") // flower pink
-    static let offWhiteGray = Color(hex: "#F0F0F0") // light gray
+    static let platinum = Color(hex: "#E7E7E7").opacity(0.5) // light gray
+    static let smokyBlack = Color(hex: "#0F0F0F")
     static let yellowIris = Color(hex: "#EEE78E")
     static let accentOrange = Color(hex: "#FBB15B")
     static let greyish = Color(hex: "#B2B9BB")
@@ -24,6 +25,9 @@ extension Color {
     static let lightGray = Color(hex: "#D4D4D5")
     static let brightGray = Color(hex: "#EEEEEE") // -
     static let silverSand = Color(hex: "#C2C2C2") // -
+    
+    //dynamic colors
+    static let dynamicGray = Color(light: .platinum, dark: .smokyBlack)
 
     struct Green {
         static var isabelline = Color(hex: "#edf5ec") // very light green
@@ -56,9 +60,13 @@ extension Color {
 
         self.init(red: Double(red) / 255.0, green: Double(green) / 255.0, blue: Double(blue) / 255.0)
     }
-}
-
-extension Color {
+    
+    init(light: Color, dark: Color) {
+        self = Color(UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ? UIColor(dark) : UIColor(light)
+        })
+    }
+    
     init(hex: String) {
         let scanner = Scanner(string: hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted))
         var hexNumber: UInt64 = 0
@@ -74,7 +82,9 @@ extension Color {
         // If unable to scan hex value, default to black
         self.init(red: 0, green: 0, blue: 0)
     }
+}
 
+extension Color {
     func toHex() -> String {
         if let color = UIColor(self).cgColor.components {
             let red = Int(color[0] * 255.0)

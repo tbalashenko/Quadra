@@ -11,18 +11,22 @@ import Combine
 @MainActor
 final class SetupCardViewModel: ObservableObject {
     @Published var cardModel: CardModel?
-    @Published var tagCloudItems = [TagCloudItem]()
     
     @Published var image: Image?
     @Published var croppedImage: Image?
     @Published var showImageUrlSection = false
     @Published var phraseToRemember = AttributedString()
+    @Published var phraseToRememberError: String = ""
     @Published var translation = AttributedString()
+    @Published var translationError: String = ""
     @Published var transcription = ""
+    @Published var transcriptionError: String = ""
     @Published var url = ""
+    @Published var urlError: String = ""
     @Published var newSourceText = ""
-    
     @Published var selectedSources = [CardSource]()
+    @Published var tagCloudItems = [TagCloudItem]()
+    
     let mode: SetupCardViewMode
     private let sourceService = CardSourceService.shared
     private let cardService = CardService.shared
@@ -35,10 +39,12 @@ final class SetupCardViewModel: ObservableObject {
                 || transcription != cardModel?.card.transcription
                 
             case .create:
-                return !String(phraseToRemember.characters).isEmpty
-                || !String(translation.characters).isEmpty
-                || !transcription.isEmpty
+                return !phraseToRemember.isEmpty || !translation.isEmpty || !transcription.isEmpty
         }
+    }
+    
+    var isSaveButtonDisabled: Bool {
+        phraseToRemember.characters.isEmpty || !translationError.isEmpty && !transcriptionError.isEmpty
     }
     
     private var cancellables = Set<AnyCancellable>()
@@ -46,24 +52,29 @@ final class SetupCardViewModel: ObservableObject {
     init(mode: SetupCardViewMode, cardModel: CardModel? = nil) {
         self.mode = mode
         
-        if let cardModel {
-            self.cardModel = cardModel
-            phraseToRemember = cardModel.card.convertedPhraseToRemember
-            if let translation = cardModel.card.convertedTranslation {
-                self.translation = translation
-            }
-            transcription = cardModel.card.transcription ?? ""
-            if let sources = cardModel.card.sources?.allObjects as? [CardSource] {
-                selectedSources = sources
-            }
-            image = cardModel.card.convertedImage
-            croppedImage = cardModel.card.convertedCroppedImage
-        }
+        setup(from: cardModel)
         observeNewSourceTextChanges()
-        
+        observeLimits()
+        observeUrl()
     }
     
-    func observeNewSourceTextChanges() {
+    private func setup(from cardModel: CardModel?) {
+        guard let cardModel else { return }
+        
+        self.cardModel = cardModel
+        phraseToRemember = cardModel.card.convertedPhraseToRemember
+        if let translation = cardModel.card.convertedTranslation {
+            self.translation = translation
+        }
+        transcription = cardModel.card.transcription ?? ""
+        if let sources = cardModel.card.sources?.allObjects as? [CardSource] {
+            selectedSources = sources
+        }
+        image = cardModel.card.convertedImage
+        croppedImage = cardModel.card.convertedCroppedImage
+    }
+    
+    private func observeNewSourceTextChanges() {
         $newSourceText
             .sink { [weak self] _ in
                 self?.updateTagCloudItems()
@@ -71,7 +82,43 @@ final class SetupCardViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func updateTagCloudItems() {
+    private func observeLimits() {
+        $phraseToRemember
+            .sink { [weak self] value in
+                guard let self = self else { return }
+                
+                Helpers.getErrorMessage(for: value, errorText: &phraseToRememberError)
+            }
+            .store(in: &cancellables)
+        
+        $translation
+            .sink { [weak self] value in
+                guard let self = self else { return }
+                
+                Helpers.getErrorMessage(for: value, errorText: &translationError)
+            }
+            .store(in: &cancellables)
+        $transcription
+            .sink { [weak self] value in
+                guard let self = self else { return }
+                
+                Helpers.getErrorMessage(for: value, errorText: &transcriptionError)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func observeUrl() {
+        $url
+            .map { $0.count >= 10 ? $0 : "" }
+            .sink { [weak self] value in
+                guard let self = self else { return }
+                
+                self.urlError = value.isEmpty ? "" : (NetworkService.shared.isValidUrl(urlString: value) ? "" : TextConstants.invalidUrl)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func updateTagCloudItems() {
         tagCloudItems = sourceService.sources
             .filter { newSourceText.isEmpty ? true : $0.title.localizedCaseInsensitiveContains(newSourceText) }
             .map { source in
@@ -89,19 +136,24 @@ final class SetupCardViewModel: ObservableObject {
     func downloadImage() {
         guard let url = URL(string: url) else { return }
         
+        guard NetworkMonitor.shared.isConnected else { urlError = TextConstants.checkInternetConnection; return }
+        
+        urlError = ""
+        
         URLSession.shared.dataTaskPublisher(for: url)
             .map { $0.data }
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
                     case .failure(let error):
-                        print("Failed to download image: \(error)")
+                        self.urlError = TextConstants.failedToDownloadImage + (error.localizedDescription)
                     case .finished:
                         break
                 }
             }, receiveValue: { data in
                 guard let uiImage = UIImage(data: data) else {
-                    print("Failed to create UIImage from data")
+                    self.urlError = TextConstants.somethingWentWrong
+                    print("Failed to create image from data")
                     return
                 }
                 
@@ -112,16 +164,12 @@ final class SetupCardViewModel: ObservableObject {
     }
     
     private func toggleSourceSelection(source: CardSource) {
-        if selectedSources.contains(source) {
-            selectedSources.removeAll { $0.id == source.id }
-        } else {
-            selectedSources.append(source)
-        }
+        selectedSources.contains(source) ? selectedSources.removeAll { $0.id == source.id } : selectedSources.append(source)
     }
     
     @MainActor
     func saveCard() {
-        let image = image?.convert(scale: SettingsManager.shared.imageScale)
+        let image = image?.convert(scale: SettingsService.imageScale)
         let croppedImage = croppedImage?.convert(scale: ImageScale.percent100)
         
         switch mode {
@@ -192,9 +240,9 @@ extension SetupCardViewModel {
         var navigationTitle: String {
             switch self {
                 case .create:
-                    return "Add a new card"
+                    return TextConstants.addCard
                 case .edit:
-                    return "Edit your card"
+                    return TextConstants.editCard
             }
         }
     }

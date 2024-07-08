@@ -18,6 +18,7 @@ struct SamplePhrasesView: View {
                     VStack(alignment: .leading) {
                         TextFieldWithFlipableButton(
                             text: $viewModel.searchText,
+                            error: viewModel.searchTextError,
                             additionalButtonImage: Image(systemName: "magnifyingglass.circle.fill"),
                             additionalButtonAction: { viewModel.fetchDefinition() },
                             pasteButtonAction: {

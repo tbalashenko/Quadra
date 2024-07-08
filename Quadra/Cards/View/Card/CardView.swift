@@ -20,10 +20,13 @@ struct CardView: View {
                     .environmentObject(model)
                     .frame(size: SizeConstants.imageSize)
                     .padding(.bottom)
+                
                 FlipablePhraseView(model: model)
+                
                 if model.showAdditionalInfo {
                     AdditionalnfoView(model: model)
                 }
+                
                 Spacer()
             }
             .frame(size: SizeConstants.cardSize)
@@ -52,7 +55,10 @@ struct CardView: View {
         }
     }
 }
-//
-// #Preview {
-//    CardView()
-// }
+
+ #Preview {
+     @ObservedObject var cardModel = CardModel(card: MockData.cards.first!, mode: .view)
+     
+     CardView() { cardModel.backToInput() }
+         .environmentObject(cardModel)
+ }

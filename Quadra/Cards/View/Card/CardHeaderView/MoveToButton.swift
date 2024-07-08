@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct MoveToButton: View {
-    @EnvironmentObject var model: CardModel
+    var title: String
+    var color: Color
     var action: (() -> Void)?
 
     var body: some View {
@@ -19,8 +20,8 @@ struct MoveToButton: View {
                     item: TagCloudItem(
                         isSelected: true,
                         id: UUID(),
-                        title: model.card.getNewStatus.title,
-                        color: model.card.getNewStatus.color.toHex()
+                        title: title,
+                        color: color.toHex()
                     )
                 )
             }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TextFieldWithFlipableButton: View {
     @Binding var text: String
+    var error: String
     
     var additionalButtonImage: Image? = nil
     var additionalButtonAction: (() -> Void)? = nil
@@ -19,17 +20,20 @@ struct TextFieldWithFlipableButton: View {
     }
     
     var body: some View {
-        HStack {
-            TextField("", text: $text, axis: .vertical)
-                .textFieldStyle(NeuTextFieldStyle(text: $text))
-                .onSubmit { hideKeyboard() }
-                .submitLabel(.done)
-            
-            if showPasteButton {
-                PasteButton { pasteButtonAction?($0) }
-            } else {
-                additionalButton()
+        VStack(alignment: .leading) {
+            HStack {
+                TextField("", text: $text, axis: .vertical)
+                    .textFieldStyle(NeuTextFieldStyle(text: $text))
+                    .onSubmit { hideKeyboard() }
+                    .submitLabel(.done)
+                
+                if showPasteButton {
+                    PasteButton { pasteButtonAction?($0) }
+                } else {
+                    additionalButton()
+                }
             }
+            ErrorView(error: error)
         }
     }
     
@@ -43,6 +47,18 @@ struct TextFieldWithFlipableButton: View {
                     .smallButtonImage()
                     .foregroundStyle(Color.accentColor)
             }
+        }
+    }
+}
+
+struct ErrorView: View {
+    let error: String
+    
+    var body: some View {
+        if !error.isEmpty {
+            Text(error)
+                .font(.footnote)
+                .foregroundStyle(Color.red)
         }
     }
 }

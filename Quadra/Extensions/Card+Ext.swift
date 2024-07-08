@@ -198,6 +198,7 @@ extension Card {
         lhs.translation == rhs.translation &&
         lhs.transcription == rhs.transcription &&
         lhs.sources == rhs.sources &&
-        lhs.cardStatus == rhs.cardStatus
+        lhs.cardStatus == rhs.cardStatus &&
+        lhs.additionTime == rhs.additionTime
     }
 }

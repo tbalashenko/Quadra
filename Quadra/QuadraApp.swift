@@ -9,25 +9,26 @@ import SwiftUI
 
 @main
 struct QuadraApp: App {
-    @State private var selectedTab = 0
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var cardsViewModel = CardsViewModel()
+    @StateObject private var appState = AppState.shared
 
     var body: some Scene {
         WindowGroup {
-            TabView(selection: $selectedTab) {
+            TabView(selection: $appState.selectedTab) {
                 ContentView()
                     .environmentObject(cardsViewModel)
                     .tabItem { Image(systemName: "book.pages") }
-                    .tag(0)
+                    .tag(AppTab.review)
                 ListView()
                     .tabItem { Image(systemName: "list.bullet") }
-                    .tag(1)
+                    .tag(AppTab.list)
                 StatView()
                     .tabItem { Image(systemName: "chart.xyaxis.line") }
-                    .tag(2)
+                    .tag(AppTab.stat)
                 OtherView()
                     .tabItem { Image(systemName: "gearshape") }
-                    .tag(3)
+                    .tag(AppTab.other)
             }
         }
     }

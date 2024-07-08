@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SizeConstants {
+    static let textLimit = 200
+    
     static let screenWidth: CGFloat = UIScreen.main.bounds.width
     static let screenHeigh: CGFloat = UIScreen.main.bounds.height
 
@@ -33,7 +35,7 @@ struct SizeConstants {
     }
 
     static var imageHeigh: CGFloat {
-        imageWith * SettingsManager.shared.aspectRatio.ratio
+        imageWith * SettingsService.aspectRatio.ratio
     }
     static var imageWith: CGFloat = UIScreen.main.bounds.width - 2 * horizontalPadding
 
@@ -47,11 +49,11 @@ struct SizeConstants {
     static let listImageHeigh: CGFloat = 88
     
     static var listImageWidth: CGFloat {
-        listImageHeigh / SettingsManager.shared.aspectRatio.ratio
+        listImageHeigh / SettingsService.aspectRatio.ratio
     }
     
     static var listImageFullSize: CGSize {
-        CGSize(width: listRowWidth, height: listRowWidth * SettingsManager.shared.aspectRatio.ratio)
+        CGSize(width: listRowWidth, height: listRowWidth * SettingsService.aspectRatio.ratio)
     }
     
     static var listRowWidth: CGFloat = UIScreen.main.bounds.width - 16

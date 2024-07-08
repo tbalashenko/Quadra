@@ -16,7 +16,7 @@ struct SwipeableCardView: View {
     @State private var degrees: Double = 0
     
     var body: some View {
-        CardView() { swipeLeft(changeStatus: true) }
+        CardView { swipeLeft(changeStatus: true) }
             .environmentObject(model)
             .rotationEffect(.degrees(degrees))
             .offset(x: xOffset, y: yOffset)

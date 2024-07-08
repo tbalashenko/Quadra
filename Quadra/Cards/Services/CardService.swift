@@ -46,6 +46,7 @@ class CardService: ObservableObject {
         incrementAddedItemsCounter: Bool = true
     ) throws {
         let context = dataController.container.viewContext
+        
         let card = Card(context: context)
         
         card.phraseToRemember = NSAttributedString(phraseToRemember)
@@ -74,7 +75,7 @@ class CardService: ObservableObject {
         }
         
         do {
-            try dataController.container.viewContext.save()
+            try context.save()
             if let tag {
                 tag.addToCards(card)
             }
@@ -82,6 +83,7 @@ class CardService: ObservableObject {
             cards.append(card)
             if incrementAddedItemsCounter { StatDataService.shared.incrementAddedItemsCounter() }
         } catch {
+            context.rollback()
             throw DataServiceError.saveFailed(description: "Failed to save card: \(error.localizedDescription)")
         }
     }
@@ -95,6 +97,8 @@ class CardService: ObservableObject {
         croppedImageData: Data? = nil,
         sources: [CardSource]
     ) throws {
+        let context = dataController.container.viewContext
+        
         card.phraseToRemember = NSAttributedString(phraseToRemember)
         if let translation {
             card.translation = NSAttributedString(translation)
@@ -109,9 +113,10 @@ class CardService: ObservableObject {
         }
         
         do {
-            try dataController.container.viewContext.save()
+            try context.save()
             if let index = cards.firstIndex(where: { $0.id == card.id }) { cards[index] = card }
         } catch {
+            context.rollback()
             throw DataServiceError.saveFailed(description: "Failed to save card: \(error.localizedDescription)")
         }
     }
@@ -170,6 +175,23 @@ class CardService: ObservableObject {
         } catch {
             context.rollback()
             throw DataServiceError.saveFailed(description: "Failed to delete card: \(error.localizedDescription)")
+        }
+    }
+    
+    func backToInput(card: Card) throws {
+        let context = dataController.container.viewContext
+        card.cardStatus = 0
+        card.isArchived = false
+        card.additionTime = Date()
+        card.lastRepetition = nil
+        card.lastTimeStatusChanged = nil
+        
+        do {
+            try context.save()
+            if let index = cards.firstIndex(where: { $0.id == card.id }) { cards[index] = card }
+        } catch {
+            context.rollback()
+            throw DataServiceError.saveFailed(description: "Failed to save context: \(error.localizedDescription)")
         }
     }
 }

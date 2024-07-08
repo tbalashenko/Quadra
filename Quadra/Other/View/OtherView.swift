@@ -25,7 +25,7 @@ struct OtherView: View {
                         }
                     }
                 }
-                .listRowBackground(Color.highlight)
+                .listRowBackground(Color.dynamicGray)
             }
             .scrollContentBackground(.hidden)
             .background(Color.element)

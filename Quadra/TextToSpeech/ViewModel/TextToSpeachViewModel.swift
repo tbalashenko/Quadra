@@ -19,7 +19,7 @@ class TextToSpeechViewModel: NSObject, ObservableObject {
         }
         
         let utterance = AVSpeechUtterance(string: text)
-        let voice = voice ?? SettingsManager.shared.voice
+        let voice = voice ?? SettingsService.voice
         utterance.voice = AVSpeechSynthesisVoice(identifier: voice.identifier)
         synthesizer.delegate = self
         synthesizer.speak(utterance)

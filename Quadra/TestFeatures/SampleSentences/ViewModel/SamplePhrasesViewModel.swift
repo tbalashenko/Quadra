@@ -10,17 +10,23 @@ import Combine
 
 final class SamplePhrasesViewModel: ObservableObject {
     @Published var searchText: String = ""
+    @Published var searchTextError: String = ""
     @Published var samples = [String]()
     @Published var showError: Bool = false
     private var cancellables = Set<AnyCancellable>()
+    private let textLimit = 30
 
     init() {
         $searchText
             .sink { [weak self] value in
+                guard let self = self else { return }
+                
                 if value.replacingOccurrences(of: " ", with: "").isEmpty {
-                    self?.samples.removeAll()
-                    self?.showError = false
+                    samples.removeAll()
+                    showError = false
                 }
+                
+                _ = Helpers.getErrorMessage(for: value, errorText: &searchTextError, textLimit: textLimit)
             }
             .store(in: &cancellables)
     }

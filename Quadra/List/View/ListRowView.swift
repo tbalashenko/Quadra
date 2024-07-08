@@ -43,7 +43,11 @@ struct ListRowView: View {
         .background {
             NavigationLink(
                 "",
-                destination: CardView()
+                destination: CardView {
+                    withAnimation {
+                        cardModel.backToInput()
+                    }
+                }
                     .environmentObject(cardModel)
                     .toolbarTitleDisplayMode(.inline)
                     .toolbar(.hidden, for: .tabBar)

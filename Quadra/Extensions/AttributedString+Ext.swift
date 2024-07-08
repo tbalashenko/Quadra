@@ -34,3 +34,15 @@ class AttributedStringTransformer: NSSecureUnarchiveFromDataTransformer {
         return super.reverseTransformedValue(string)
     }
 }
+
+extension AttributedString: TextRepresentable {
+    var count: Int {
+        return self.characters.count
+    }
+}
+
+extension AttributedString {
+    var isEmpty: Bool {
+        self.characters.isEmpty
+    }
+}

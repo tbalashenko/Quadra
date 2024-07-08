@@ -54,6 +54,7 @@ struct SetupCardView: View {
             Section(TextConstants.imageUrl) {
                 TextFieldWithFlipableButton(
                     text: $viewModel.url,
+                    error: viewModel.urlError,
                     additionalButtonImage: Image(systemName: "square.and.arrow.down"),
                     additionalButtonAction: { viewModel.downloadImage() },
                     pasteButtonAction: {
@@ -68,7 +69,7 @@ struct SetupCardView: View {
     @ViewBuilder
     private func phraseToRememberSection() -> some View {
         Section(TextConstants.phraseToRemember) {
-            HighlightableTextView(text: $viewModel.phraseToRemember) {
+            HighlightableTextView(text: $viewModel.phraseToRemember, error: viewModel.phraseToRememberError) {
                 viewModel.formatAndSetPhrase($0, string: &viewModel.phraseToRemember)
                 showPopup = true
             }
@@ -78,7 +79,7 @@ struct SetupCardView: View {
     @ViewBuilder
     private func translationSection() -> some View {
         Section(TextConstants.translation) {
-            HighlightableTextView(text: $viewModel.translation) {
+            HighlightableTextView(text: $viewModel.translation, error: viewModel.translationError) {
                 viewModel.formatAndSetPhrase($0, string: &viewModel.translation)
                 showPopup = true
             }
@@ -90,6 +91,7 @@ struct SetupCardView: View {
         Section(TextConstants.transcription) {
             TextFieldWithFlipableButton(
                 text: $viewModel.transcription,
+                error: viewModel.translationError,
                 pasteButtonAction: {
                     viewModel.transcription = $0
                     showPopup = true
@@ -123,7 +125,7 @@ struct SetupCardView: View {
             showSetupCardView = false
             onDismiss?(true)
         }
-        .disabled(viewModel.phraseToRemember.characters.isEmpty)
+        .disabled(viewModel.isSaveButtonDisabled)
     }
     
     @ViewBuilder
