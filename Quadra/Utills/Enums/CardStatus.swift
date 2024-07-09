@@ -37,6 +37,19 @@ enum CardStatus: Int, CaseIterable {
                 Color.spanishGray
         }
     }
+    
+    var hexColor: String {
+        switch self {
+            case .input:
+                Color.Green.ashGray.toHex()
+            case .thisWeek:
+                Color.yellowIris.toHex()
+            case .thisMonth:
+                Color.accentOrange.toHex()
+            case .archive:
+                Color.spanishGray.toHex()
+        }
+    }
 }
 
 // MARK: - Identifiable

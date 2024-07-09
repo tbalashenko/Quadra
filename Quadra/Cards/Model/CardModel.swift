@@ -90,7 +90,8 @@ extension CardModel {
             isSelected: true,
             id: tag.id,
             title: tag.title,
-            color: tag.color)
+            hexColor: tag.color
+        )
         
         return archiveTag
     }
@@ -102,7 +103,8 @@ extension CardModel {
             isSelected: true,
             id: UUID(uuidString: String(status.id)) ?? UUID(),
             title: status.title,
-            color: status.color.toHex())
+            hexColor: status.color.toHex()
+        )
         
         return statusTag
     }
@@ -115,7 +117,7 @@ extension CardModel {
                 isSelected: true,
                 id: $0.id,
                 title: $0.title,
-                color: $0.color
+                hexColor: $0.color
             )
         }
         

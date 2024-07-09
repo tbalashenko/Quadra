@@ -11,24 +11,17 @@ struct MoveToButton: View {
     var title: String
     var color: Color
     var action: (() -> Void)?
-
+    
     var body: some View {
         AlignableTransparentButton(alignment: .topLeading) {
             HStack {
                 Text("→").bold()
-                TagView(
-                    item: TagCloudItem(
-                        isSelected: true,
-                        id: UUID(),
-                        title: title,
-                        color: color.toHex()
-                    )
-                )
+                TagView(text: title, backgroundColor: color)
             }
         } action: { action?() }
     }
 }
 
-// #Preview {
-//    MoveToButton()
-// }
+ #Preview {
+     MoveToButton(title: "input", color: Color.catawba)
+ }

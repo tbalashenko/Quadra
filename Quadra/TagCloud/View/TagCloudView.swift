@@ -14,7 +14,7 @@ struct TagCloudView: View {
         ScrollView {
             TagLayout {
                 ForEach(viewModel.displayedItems, id: \.id) { item in
-                    TagView(item: item) {
+                    SelectableTagView(item: item) {
                         if viewModel.isSelectable {
                             item.isSelected.toggle()
                             withAnimation {

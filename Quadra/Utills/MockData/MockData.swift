@@ -38,26 +38,26 @@ struct MockData {
             isSelected: true,
             id: UUID(),
             title: "Test",
-            color: Color.green.toHex()),
+            hexColor: Color.green.toHex()),
         TagCloudItem(
             isSelected: true,
             id: UUID(),
             title: "Testhfiuewhfiueh",
-            color: Color.green.toHex()),
+            hexColor: Color.green.toHex()),
         TagCloudItem(
             isSelected: true,
             id: UUID(),
             title: "Testofjeiuhfj",
-            color: Color.green.toHex()),
+            hexColor: Color.green.toHex()),
         TagCloudItem(
             isSelected: true,
             id: UUID(),
             title: "Testojhuhhuuuuuu",
-            color: Color.green.toHex()),
+            hexColor: Color.green.toHex()),
         TagCloudItem(
             isSelected: true,
             id: UUID(),
             title: "Testoheuiwhfiuehf",
-            color: Color.green.toHex())
+            hexColor: Color.green.toHex())
     ]
 }

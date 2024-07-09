@@ -126,7 +126,7 @@ final class SetupCardViewModel: ObservableObject {
                     isSelected: selectedSources.contains(source),
                     id: source.id,
                     title: source.title,
-                    color: source.color
+                    hexColor: source.color
                 ) { [weak self] in
                     self?.toggleSourceSelection(source: source)
                 }

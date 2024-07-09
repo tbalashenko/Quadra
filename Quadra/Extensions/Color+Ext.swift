@@ -96,10 +96,10 @@ extension Color {
     }
 
     var isDark: Bool {
-        var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
-        UIColor(self).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        let lum = 0.2126 * red + 0.7152 * green + 0.0722 * blue
-        return lum < 0.5
+        let uiColor = UIColor(self)
+        var white: CGFloat = 0
+        uiColor.getWhite(&white, alpha: nil)
+        return white < 0.5
     }
 
     static var randomColor: Color {

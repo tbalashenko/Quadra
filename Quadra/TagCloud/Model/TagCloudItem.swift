@@ -5,21 +5,24 @@
 //  Created by Tatyana Balashenko on 28/05/2024.
 //
 
-import Foundation
+import SwiftUI
 
 class TagCloudItem: ObservableObject {
     var isSelected: Bool
     var id: UUID
     var title: String
-    var color: String
-    var action: (() -> Void)?
+    var hexColor: String
     var isExceeded = false
+    var action: (() -> Void)?
+    var color: Color {
+        Color(hex: hexColor)
+    }
 
-    init(isSelected: Bool, id: UUID, title: String, color: String, action: (() -> Void)? = nil) {
+    init(isSelected: Bool, id: UUID, title: String, hexColor: String, action: (() -> Void)? = nil) {
         self.isSelected = isSelected
         self.id = id
         self.title = title
-        self.color = color
+        self.hexColor = hexColor
         self.action = action
     }
 }

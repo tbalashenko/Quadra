@@ -38,7 +38,7 @@ final class FilterViewModel: ObservableObject {
                 isSelected: FilterService.shared.selectedStatuses.contains(status),
                 id: UUID(uuidString: String(status.id)) ?? UUID(),
                 title: status.title,
-                color: status.color.toHex(),
+                hexColor: status.hexColor,
                 action: { FilterService.shared.toggleStatusSelection(status: status) }
             )
             statusTags.append(item)
@@ -54,7 +54,7 @@ final class FilterViewModel: ObservableObject {
                 isSelected: FilterService.shared.selectedArchiveTags.contains(tag),
                 id: tag.id,
                 title: tag.title,
-                color: tag.color,
+                hexColor: tag.color,
                 action: { FilterService.shared.toggleArchiveTagSelection(tag: tag) }
             )
             archiveTags.append(item)
@@ -70,7 +70,7 @@ final class FilterViewModel: ObservableObject {
                 isSelected: FilterService.shared.selectedSources.contains(source),
                 id: source.id,
                 title: source.title,
-                color: source.color,
+                hexColor: source.color,
                 action: { FilterService.shared.toggleSourceSelection(source: source) }
             )
             sourceTags.append(item)
