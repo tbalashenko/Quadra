@@ -37,7 +37,9 @@ struct HighlightableTextView: View {
                         HStack {
                             Spacer()
                             Button {
-                                text = ""
+                                withAnimation {
+                                    text = ""
+                                }
                             } label: {
                                 Image(systemName: "multiply.circle.fill")
                                     .resizable()
@@ -84,7 +86,9 @@ private struct UITextViewRepresentable: UIViewRepresentable {
         let newSize = view.sizeThatFits(CGSize(width: view.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
         if result.wrappedValue != newSize.height {
             DispatchQueue.main.async {
-                result.wrappedValue = newSize.height
+                withAnimation {
+                    result.wrappedValue = newSize.height
+                }
             }
         }
     }

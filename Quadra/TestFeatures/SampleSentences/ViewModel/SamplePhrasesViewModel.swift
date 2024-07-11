@@ -26,7 +26,7 @@ final class SamplePhrasesViewModel: ObservableObject {
                     showError = false
                 }
                 
-                _ = Helpers.getErrorMessage(for: value, errorText: &searchTextError, textLimit: textLimit)
+                Helpers.getErrorMessage(for: value, errorText: &searchTextError, textLimit: textLimit)
             }
             .store(in: &cancellables)
     }

@@ -87,7 +87,11 @@ final class SetupCardViewModel: ObservableObject {
             .sink { [weak self] value in
                 guard let self = self else { return }
                 
-                Helpers.getErrorMessage(for: value, errorText: &phraseToRememberError)
+                DispatchQueue.main.async {
+                    withAnimation {
+                        Helpers.getErrorMessage(for: value, errorText: &self.phraseToRememberError)
+                    }
+                }
             }
             .store(in: &cancellables)
         
@@ -95,14 +99,23 @@ final class SetupCardViewModel: ObservableObject {
             .sink { [weak self] value in
                 guard let self = self else { return }
                 
-                Helpers.getErrorMessage(for: value, errorText: &translationError)
+                DispatchQueue.main.async {
+                    withAnimation {
+                        Helpers.getErrorMessage(for: value, errorText: &self.translationError)
+                    }
+                }
             }
             .store(in: &cancellables)
+        
         $transcription
             .sink { [weak self] value in
                 guard let self = self else { return }
                 
-                Helpers.getErrorMessage(for: value, errorText: &transcriptionError)
+                DispatchQueue.main.async {
+                    withAnimation {
+                        Helpers.getErrorMessage(for: value, errorText: &self.transcriptionError)
+                    }
+                }
             }
             .store(in: &cancellables)
     }
@@ -228,7 +241,9 @@ final class SetupCardViewModel: ObservableObject {
         let attributedString = NSMutableAttributedString(string: text)
         attributedString.addAttributes(updatedAttributes, range: NSRange(location: 0, length: attributedString.length))
         
-        string = AttributedString(attributedString)
+        withAnimation {
+            string = AttributedString(attributedString)
+        }
     }
 }
 

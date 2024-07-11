@@ -18,6 +18,7 @@
 		A00B66DF2BEC0B2B00F5CA7F /* StatEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00B66DE2BEC0B2B00F5CA7F /* StatEmptyView.swift */; };
 		A0143AD32C062D7700AD7FBC /* TagCloudItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0143AD22C062D7700AD7FBC /* TagCloudItem.swift */; };
 		A0143AD52C062DB900AD7FBC /* TagCloudViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0143AD42C062DB900AD7FBC /* TagCloudViewModel.swift */; };
+		A014EA772C3F1C2E00FDA248 /* CropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D678B02C1B542700CF5717 /* CropView.swift */; };
 		A01BCECD2BD0655C00C35EA6 /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01BCECC2BD0655C00C35EA6 /* Period.swift */; };
 		A01D2A742BB4C4CA00AE1790 /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01D2A732BB4C4CA00AE1790 /* ListRowView.swift */; };
 		A01D2A762BB4C78800AE1790 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01D2A752BB4C78800AE1790 /* FilterView.swift */; };
@@ -133,7 +134,6 @@
 		A0D091132BCFEB4A00D8AED3 /* StatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D091122BCFEB4A00D8AED3 /* StatView.swift */; };
 		A0D091152BCFEEDC00D8AED3 /* Spirals.sks in Resources */ = {isa = PBXBuildFile; fileRef = A0D091142BCFEEDC00D8AED3 /* Spirals.sks */; };
 		A0D49F472BD29DC10083D0A5 /* ChartLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D49F462BD29DC10083D0A5 /* ChartLine.swift */; };
-		A0D678B12C1B542700CF5717 /* CropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D678B02C1B542700CF5717 /* CropView.swift */; };
 		A0F0B3C72C13ABC200776855 /* TagLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F0B3C62C13ABC200776855 /* TagLayout.swift */; };
 		A0F0B3CB2C1453E500776855 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F0B3CA2C1453E500776855 /* ListViewModel.swift */; };
 		A0F940632BC95C0B00424690 /* SourcesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F940622BC95C0B00424690 /* SourcesView.swift */; };
@@ -1158,6 +1158,8 @@
 				Base,
 			);
 			mainGroup = A01E188F2BA3211000A03412;
+			packageReferences = (
+			);
 			productRefGroup = A01E18992BA3211000A03412 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1305,11 +1307,11 @@
 				A0B21A872BF524A6008EAAD1 /* CardSourceService.swift in Sources */,
 				A0B21A7D2BF51381008EAAD1 /* ImageSettingsView.swift in Sources */,
 				A01BCECD2BD0655C00C35EA6 /* Period.swift in Sources */,
-				A0D678B12C1B542700CF5717 /* CropView.swift in Sources */,
 				A08825122C08FA85006458A1 /* CardView.swift in Sources */,
 				A01E18C22BA334F600A03412 /* Card+Ext.swift in Sources */,
 				A09D811E2C04BDD800ADFF20 /* GroupBoxStyleModifier.swift in Sources */,
 				A0B21A6D2BF3D0A9008EAAD1 /* StatViewModel.swift in Sources */,
+				A014EA772C3F1C2E00FDA248 /* CropView.swift in Sources */,
 				A09783722C23166900DB3827 /* StatData+CoreDataProperties.swift in Sources */,
 				A0B21A802BF514DC008EAAD1 /* SettingsViewModel.swift in Sources */,
 				A0B21A822BF5173C008EAAD1 /* HighliterPaletteView.swift in Sources */,
@@ -1451,6 +1453,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Quadra/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1463,9 +1466,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.balashenko.Quadra;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1482,6 +1489,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Quadra/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1494,9 +1502,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.balashenko.Quadra;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

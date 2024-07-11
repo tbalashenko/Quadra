@@ -91,9 +91,11 @@ struct SetupCardView: View {
         Section(TextConstants.transcription) {
             TextFieldWithFlipableButton(
                 text: $viewModel.transcription,
-                error: viewModel.translationError,
-                pasteButtonAction: {
-                    viewModel.transcription = $0
+                error: viewModel.transcriptionError,
+                pasteButtonAction: { text in
+                    withAnimation {
+                        viewModel.transcription = text
+                    }
                     showPopup = true
                 }
             )

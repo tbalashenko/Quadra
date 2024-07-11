@@ -96,20 +96,23 @@ struct CropView: View {
                                         return
                                     }
 
-                                    if rect.minX > 0 {
-                                        offset.width = offset.width - rect.minX
+                                    if rect.minX > 0  {
+                                        offset.width = offset.width.rounded() - (rect.minX / scale).rounded()
                                         haptic(.medium)
                                     }
-                                    if rect.minY > 0 {
-                                        offset.height = offset.height - rect.minY
-                                        haptic(.medium)
-                                    }
+                                    
                                     if rect.maxX < size.width {
-                                        offset.width = (rect.minX - offset.width)
+                                        offset.width = (rect.minX / scale).rounded() - offset.width.rounded()
                                         haptic(.medium)
                                     }
+                                    
+                                    if rect.minY > 0 {
+                                        offset.height = offset.height.rounded() - (rect.minY / scale).rounded()
+                                        haptic(.medium)
+                                    }
+
                                     if rect.maxY < size.height {
-                                        offset.height = (rect.minY - offset.height)
+                                        offset.height = (rect.minY / scale).rounded() - offset.height.rounded()
                                         haptic(.medium)
                                     }
                                 }
@@ -161,7 +164,6 @@ struct CropView: View {
 
     private func reset() {
         offset = .zero
-        magnifyBy = 1
         scale = 1
     }
 }
