@@ -94,6 +94,8 @@ struct TextConstants {
     static let invalidUrl = "Invalid URL"
     static let notificationsDisabled = "Notifications Disabled"
     static let enableNotificationsMessage = "Please enable notifications in Settings to stay on track."
+    static let allowAccessToPhotos = "Allow access to your photos"
+    static let allowPhotoAccessMessage = "This app needs access to your photo library to select images. Please go to Settings and allow photo access to continue."
     static let notificationsDenid = "Notifications are denied. Please enable them in settings."
     static let unknownAuthorizationStatus = "Unknown authorization status"
     

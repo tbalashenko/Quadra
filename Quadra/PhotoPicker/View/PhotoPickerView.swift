@@ -13,6 +13,7 @@ struct PhotoPickerView: View {
     
     @State private var photosPickerItem: PhotosPickerItem?
     @State private var showEditingView: Bool = false
+    @State var isPhotoLibraryAvailable = false
     
     var body: some View {
         ZStack(alignment: .center) {
@@ -45,13 +46,24 @@ struct PhotoPickerView: View {
     
     @ViewBuilder
     private func photoPicker() -> some View {
-        PhotosPicker(
-            selection: $photosPickerItem,
-            matching: .images
-        ) {
-            Label(TextConstants.selectPhoto, systemImage: "photo")
+        let label = Label(TextConstants.selectPhoto, systemImage: "photo")
+        
+        Group {
+            if isPhotoLibraryAvailable {
+                PhotosPicker(
+                    selection: $photosPickerItem,
+                    matching: .images,
+                    label: { label }
+                )
+            } else {
+                Button(
+                    action: { PhotoLibraryService.checkPhotoLibraryAccess { isPhotoLibraryAvailable = $0 }},
+                    label : { label }
+                )
+            }
         }
         .buttonStyle(TransparentButtonStyle())
+        .onAppear { PhotoLibraryService.checkPhotoLibraryAccess { isPhotoLibraryAvailable = $0 }}
     }
     
     @ViewBuilder

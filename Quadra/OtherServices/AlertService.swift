@@ -36,7 +36,7 @@ final class AlertService {
         if let windowScene = UIApplication.shared.connectedScenes
             .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
             
-            windowScene.windows.first?.rootViewController?.present(alertController, animated: true, completion: nil)
+            windowScene.windows.first?.rootViewController?.presentedViewController?.present(alertController, animated: true, completion: nil)
         }
     }
 }

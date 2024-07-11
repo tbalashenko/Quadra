@@ -19,6 +19,7 @@
 		A0143AD32C062D7700AD7FBC /* TagCloudItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0143AD22C062D7700AD7FBC /* TagCloudItem.swift */; };
 		A0143AD52C062DB900AD7FBC /* TagCloudViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0143AD42C062DB900AD7FBC /* TagCloudViewModel.swift */; };
 		A014EA772C3F1C2E00FDA248 /* CropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D678B02C1B542700CF5717 /* CropView.swift */; };
+		A014EA7A2C40086300FDA248 /* PhotoLibraryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A014EA792C40086300FDA248 /* PhotoLibraryService.swift */; };
 		A01BCECD2BD0655C00C35EA6 /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01BCECC2BD0655C00C35EA6 /* Period.swift */; };
 		A01D2A742BB4C4CA00AE1790 /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01D2A732BB4C4CA00AE1790 /* ListRowView.swift */; };
 		A01D2A762BB4C78800AE1790 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01D2A752BB4C78800AE1790 /* FilterView.swift */; };
@@ -152,11 +153,12 @@
 		A00B66DE2BEC0B2B00F5CA7F /* StatEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatEmptyView.swift; sourceTree = "<group>"; };
 		A0143AD22C062D7700AD7FBC /* TagCloudItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCloudItem.swift; sourceTree = "<group>"; };
 		A0143AD42C062DB900AD7FBC /* TagCloudViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCloudViewModel.swift; sourceTree = "<group>"; };
+		A014EA792C40086300FDA248 /* PhotoLibraryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryService.swift; sourceTree = "<group>"; };
 		A01BCECC2BD0655C00C35EA6 /* Period.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Period.swift; sourceTree = "<group>"; };
 		A01D2A732BB4C4CA00AE1790 /* ListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowView.swift; sourceTree = "<group>"; };
 		A01D2A752BB4C78800AE1790 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		A01D2A792BB9D6DD00AE1790 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
-		A01E18982BA3211000A03412 /* Quadra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Quadra.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A01E18982BA3211000A03412 /* Quadra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Quadra.app; path = "/Users/balashenko/Developer/Quadra/build/Debug-iphoneos/Quadra.app"; sourceTree = "<absolute>"; };
 		A01E189B2BA3211000A03412 /* QuadraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadraApp.swift; sourceTree = "<group>"; };
 		A01E189D2BA3211000A03412 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A01E189F2BA3211300A03412 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -431,26 +433,29 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		A014EA782C40083600FDA248 /* OtherServices */ = {
+			isa = PBXGroup;
+			children = (
+				A061615E2C37269D00D47CA8 /* AlertService.swift */,
+				A0B3516E2C2F554500FAD55E /* NotificationsService.swift */,
+				A0BC32A92C1730AC0006BF39 /* NetworkService.swift */,
+				A0B3516B2C2DE2D100FAD55E /* NetworkMonitor.swift */,
+				A014EA792C40086300FDA248 /* PhotoLibraryService.swift */,
+			);
+			path = OtherServices;
+			sourceTree = "<group>";
+		};
 		A01E188F2BA3211000A03412 = {
 			isa = PBXGroup;
 			children = (
 				A01E189A2BA3211000A03412 /* Quadra */,
-				A01E18992BA3211000A03412 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		A01E18992BA3211000A03412 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A01E18982BA3211000A03412 /* Quadra.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		A01E189A2BA3211000A03412 /* Quadra */ = {
 			isa = PBXGroup;
 			children = (
-				A061615D2C37269500D47CA8 /* Alerts */,
+				A014EA782C40083600FDA248 /* OtherServices */,
 				A0539AD92BC6BAF400158D05 /* Animation */,
 				A0B21A672BF3D021008EAAD1 /* ArchiveTags */,
 				A01E189F2BA3211300A03412 /* Assets.xcassets */,
@@ -460,8 +465,6 @@
 				A01E18C02BA334E600A03412 /* Extensions */,
 				A0751AD62BAC87CB00CF252C /* Info.plist */,
 				A0F0B3C82C1453C500776855 /* List */,
-				A0BC32A72C17308D0006BF39 /* Network */,
-				A0B3516D2C2F553200FAD55E /* Notifications */,
 				A0B21A8C2BF54E0A008EAAD1 /* Other */,
 				A09D81192C04BCCB00ADFF20 /* PhotoPicker */,
 				A01E18A12BA3211300A03412 /* Preview Content */,
@@ -586,14 +589,6 @@
 				A061615B2C37259800D47CA8 /* AppConfiguration.swift */,
 			);
 			path = SupportingFiles;
-			sourceTree = "<group>";
-		};
-		A061615D2C37269500D47CA8 /* Alerts */ = {
-			isa = PBXGroup;
-			children = (
-				A061615E2C37269D00D47CA8 /* AlertService.swift */,
-			);
-			path = Alerts;
 			sourceTree = "<group>";
 		};
 		A06749DE2BC7239800150D68 /* ConfettiView */ = {
@@ -976,14 +971,6 @@
 			path = ScrollViews;
 			sourceTree = "<group>";
 		};
-		A0B3516D2C2F553200FAD55E /* Notifications */ = {
-			isa = PBXGroup;
-			children = (
-				A0B3516E2C2F554500FAD55E /* NotificationsService.swift */,
-			);
-			path = Notifications;
-			sourceTree = "<group>";
-		};
 		A0B8BB642C3DE318007C51BA /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -1039,23 +1026,6 @@
 				A0BC32A52C172F5E0006BF39 /* DictionaryResponse.swift */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		A0BC32A72C17308D0006BF39 /* Network */ = {
-			isa = PBXGroup;
-			children = (
-				A0BC32A82C17309C0006BF39 /* Service */,
-			);
-			path = Network;
-			sourceTree = "<group>";
-		};
-		A0BC32A82C17309C0006BF39 /* Service */ = {
-			isa = PBXGroup;
-			children = (
-				A0BC32A92C1730AC0006BF39 /* NetworkService.swift */,
-				A0B3516B2C2DE2D100FAD55E /* NetworkMonitor.swift */,
-			);
-			path = Service;
 			sourceTree = "<group>";
 		};
 		A0C3F9F72C2985ED00E188B0 /* Services */ = {
@@ -1160,7 +1130,7 @@
 			mainGroup = A01E188F2BA3211000A03412;
 			packageReferences = (
 			);
-			productRefGroup = A01E18992BA3211000A03412 /* Products */;
+			productRefGroup = A01E188F2BA3211000A03412;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -1211,6 +1181,7 @@
 				A0F940712BC9D84F00424690 /* SourceListRowView.swift in Sources */,
 				A0B3515D2C29D75700FAD55E /* PasteButton.swift in Sources */,
 				A0B21A8B2BF524FB008EAAD1 /* SourceViewModel.swift in Sources */,
+				A014EA7A2C40086300FDA248 /* PhotoLibraryService.swift in Sources */,
 				A05EFA222BBDF122000460A3 /* OtherView.swift in Sources */,
 				A01D2A742BB4C4CA00AE1790 /* ListRowView.swift in Sources */,
 				A0B3515F2C2B4F4100FAD55E /* TextFieldWithFlipableButton.swift in Sources */,

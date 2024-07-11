@@ -145,7 +145,7 @@ struct CropView: View {
             HStack {
                 ForEach(1...2, id: \.self) { _ in
                     Rectangle()
-                        .fill(Color.white.opacity(0.7))
+                        .fill(Color.accentColor.opacity(0.5))
                         .frame(width: 1)
                         .frame(maxWidth: .infinity)
                 }
@@ -153,13 +153,13 @@ struct CropView: View {
             VStack {
                 ForEach(1...2, id: \.self) { _ in
                     Rectangle()
-                        .fill(Color.white.opacity(0.7))
+                        .fill(Color.accentColor.opacity(0.5))
                         .frame(height: 1)
                         .frame(maxHeight: .infinity)
                 }
             }
         }
-        .border(.white, width: 2)
+        .border(Color.accentColor, width: 2)
     }
 
     private func reset() {
