@@ -27,6 +27,7 @@ struct SizeConstants {
     static var cardWith: CGFloat = UIScreen.main.bounds.width - 2 * horizontalPadding
     static var cardHeigh: CGFloat = UIScreen.main.bounds.height * 0.7
     static var cardSize: CGSize = CGSize(width: cardWith, height: cardHeigh)
+    static var dummyCardSize: CGSize = CGSize(width: cardWith / 2, height: cardHeigh / 2)
 
     static var screenCutOff: CGFloat = cardWith * 0.4
 

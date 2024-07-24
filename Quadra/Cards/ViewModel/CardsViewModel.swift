@@ -28,10 +28,10 @@ final class CardsViewModel: ObservableObject {
     init() { }
     
     func clear() {
+        isLoading = false
         nonShownCards = cardModels
         cardModels = []
         visibleCardModels = []
-        isLoading = false
     }
     
     func prepareCards(resetNonShownCards: Bool = true) {
@@ -70,7 +70,7 @@ final class CardsViewModel: ObservableObject {
         } else {
             filteredCardModels = CardService.shared.cards
                 .filter { $0.isReadyToRepeat }
-                .map { CardModel(card: $0, mode: .repetition) }
+                .compactMap { CardModel(card: $0, mode: .repetition) }
         }
         
         return filteredCardModels

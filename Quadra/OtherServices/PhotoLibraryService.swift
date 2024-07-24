@@ -9,7 +9,6 @@ import UIKit
 import Photos
 
 final class PhotoLibraryService {
-    
     static func checkPhotoLibraryAccess(completion: @escaping (Bool) -> Void) {
         guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else {
             completion(false)

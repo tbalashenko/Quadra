@@ -8,34 +8,32 @@
 import SwiftUI
 
 struct StatEmptyView: View {
-    @EnvironmentObject var viewModel: StatViewModel
-
+    @ObservedObject var statDataService = StatDataService.shared
+    
     var body: some View {
         ScrollView {
-            Text(viewModel.getStatDataState().instructionFirstPart)
-                .padding()
-            HStack(spacing: 32) {
-                Spacer()
-                Image(systemName: "plus.circle.fill")
-                    .foregroundColor(.accent)
-                DummyCardView(
-                    viewModel: DummyCardsViewModel(),
-                    model: DummyCardModel(item: MockData.mockedCards[0]),
-                    mode: .view)
-                .frame(
-                    width: SizeConstants.cardWith / 2,
-                    height: SizeConstants.cardHeigh / 2
-                )
-                Spacer()
-            }
-            if let text = viewModel.getStatDataState().instructionSecondPart {
-                Text(text)
+            if statDataService.statData.isEmpty {
+                Text(TextConstants.addFirstCards)
                     .padding()
+                HStack(spacing: 32) {
+                    Spacer()
+                    Image(systemName: "plus.circle.fill")
+                        .foregroundColor(.accent)
+                    DummyCardView(
+                        viewModel: DummyCardsViewModel(),
+                        model: DummyCardModel(item: MockData.mockedCards[0]),
+                        mode: .view)
+                    .frame(size: SizeConstants.dummyCardSize)
+                    Spacer()
+                }
+            }
+            Text(TextConstants.continueAddAndRepHelp)
+                .padding()
+            HStack {
+                Spacer()
                 DummyCardStackView()
-                    .frame(
-                        width: SizeConstants.cardWith / 2,
-                        height: SizeConstants.cardHeigh / 2
-                    )
+                    .frame(size: SizeConstants.dummyCardSize)
+                Spacer()
             }
         }
         .background(.element)
@@ -45,5 +43,4 @@ struct StatEmptyView: View {
 
 #Preview {
     StatEmptyView()
-        .environmentObject(StatViewModel())
 }

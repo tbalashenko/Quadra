@@ -28,5 +28,5 @@ struct PlayableTextView: View {
 }
 
 #Preview {
-    PlayableTextView(model: CardModel(card: MockData.cards.first!, mode: .repetition))
+    PlayableTextView(model: CardModel(card: MockData.cards.first!, mode: .repetition)!)
 }

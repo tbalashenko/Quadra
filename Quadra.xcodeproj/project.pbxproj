@@ -20,16 +20,17 @@
 		A0143AD52C062DB900AD7FBC /* TagCloudViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0143AD42C062DB900AD7FBC /* TagCloudViewModel.swift */; };
 		A014EA772C3F1C2E00FDA248 /* CropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D678B02C1B542700CF5717 /* CropView.swift */; };
 		A014EA7A2C40086300FDA248 /* PhotoLibraryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A014EA792C40086300FDA248 /* PhotoLibraryService.swift */; };
+		A014EA802C402E0A00FDA248 /* Quadra.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A014EA7E2C402E0A00FDA248 /* Quadra.xcdatamodeld */; };
+		A014EA862C40302C00FDA248 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A014EA852C40302C00FDA248 /* Assets.xcassets */; };
+		A014EA892C43146900FDA248 /* SkeletonListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A014EA882C43146900FDA248 /* SkeletonListView.swift */; };
 		A01BCECD2BD0655C00C35EA6 /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01BCECC2BD0655C00C35EA6 /* Period.swift */; };
 		A01D2A742BB4C4CA00AE1790 /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01D2A732BB4C4CA00AE1790 /* ListRowView.swift */; };
 		A01D2A762BB4C78800AE1790 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01D2A752BB4C78800AE1790 /* FilterView.swift */; };
 		A01D2A7A2BB9D6DD00AE1790 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01D2A792BB9D6DD00AE1790 /* InfoView.swift */; };
 		A01E189C2BA3211000A03412 /* QuadraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E189B2BA3211000A03412 /* QuadraApp.swift */; };
 		A01E189E2BA3211000A03412 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E189D2BA3211000A03412 /* ContentView.swift */; };
-		A01E18A02BA3211300A03412 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A01E189F2BA3211300A03412 /* Assets.xcassets */; };
 		A01E18A32BA3211300A03412 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A01E18A22BA3211300A03412 /* Preview Assets.xcassets */; };
 		A01E18A52BA3211300A03412 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E18A42BA3211300A03412 /* DataController.swift */; };
-		A01E18A82BA3211300A03412 /* Quadra.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A01E18A62BA3211300A03412 /* Quadra.xcdatamodeld */; };
 		A01E18BD2BA32F9E00A03412 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E18BC2BA32F9E00A03412 /* ListView.swift */; };
 		A01E18C22BA334F600A03412 /* Card+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E18C12BA334F600A03412 /* Card+Ext.swift */; };
 		A01E18C82BA7179800A03412 /* View+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E18C72BA7179800A03412 /* View+Ext.swift */; };
@@ -101,6 +102,8 @@
 		A09D81182C04BC8B00ADFF20 /* SetupCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D81172C04BC8B00ADFF20 /* SetupCardViewModel.swift */; };
 		A09D811E2C04BDD800ADFF20 /* GroupBoxStyleModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D811D2C04BDD800ADFF20 /* GroupBoxStyleModifier.swift */; };
 		A09D81222C04E8DD00ADFF20 /* TextConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D81212C04E8DD00ADFF20 /* TextConstants.swift */; };
+		A0A81FCF2C518CC60023281E /* Dictionary+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A81FCE2C518CC60023281E /* Dictionary+Ext.swift */; };
+		A0A81FD12C518E5F0023281E /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A81FD02C518E5F0023281E /* UIImage+Ext.swift */; };
 		A0AC3A022BA9AB4C006DA5DA /* CardStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AC3A012BA9AB4C006DA5DA /* CardStatus.swift */; };
 		A0B21A622BF3CEF0008EAAD1 /* CardService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B21A612BF3CEF0008EAAD1 /* CardService.swift */; };
 		A0B21A662BF3CFA5008EAAD1 /* StatDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B21A652BF3CFA5008EAAD1 /* StatDataService.swift */; };
@@ -154,17 +157,18 @@
 		A0143AD22C062D7700AD7FBC /* TagCloudItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCloudItem.swift; sourceTree = "<group>"; };
 		A0143AD42C062DB900AD7FBC /* TagCloudViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCloudViewModel.swift; sourceTree = "<group>"; };
 		A014EA792C40086300FDA248 /* PhotoLibraryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryService.swift; sourceTree = "<group>"; };
+		A014EA7F2C402E0A00FDA248 /* Quadra.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Quadra.xcdatamodel; sourceTree = "<group>"; };
+		A014EA852C40302C00FDA248 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A014EA872C4312C900FDA248 /* Quadra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Quadra.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A014EA882C43146900FDA248 /* SkeletonListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonListView.swift; sourceTree = "<group>"; };
 		A01BCECC2BD0655C00C35EA6 /* Period.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Period.swift; sourceTree = "<group>"; };
 		A01D2A732BB4C4CA00AE1790 /* ListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowView.swift; sourceTree = "<group>"; };
 		A01D2A752BB4C78800AE1790 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		A01D2A792BB9D6DD00AE1790 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
-		A01E18982BA3211000A03412 /* Quadra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Quadra.app; path = "/Users/balashenko/Developer/Quadra/build/Debug-iphoneos/Quadra.app"; sourceTree = "<absolute>"; };
 		A01E189B2BA3211000A03412 /* QuadraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadraApp.swift; sourceTree = "<group>"; };
 		A01E189D2BA3211000A03412 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		A01E189F2BA3211300A03412 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A01E18A22BA3211300A03412 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A01E18A42BA3211300A03412 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
-		A01E18A72BA3211300A03412 /* Quadra.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Quadra.xcdatamodel; sourceTree = "<group>"; };
 		A01E18BC2BA32F9E00A03412 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		A01E18C12BA334F600A03412 /* Card+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Card+Ext.swift"; sourceTree = "<group>"; };
 		A01E18C72BA7179800A03412 /* View+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Ext.swift"; sourceTree = "<group>"; };
@@ -203,7 +207,7 @@
 		A07420A32BD990F0002B800F /* UITextView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+Ext.swift"; sourceTree = "<group>"; };
 		A07420A52BD99257002B800F /* UIColor+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Ext.swift"; sourceTree = "<group>"; };
 		A07420A72BD9A5A1002B800F /* HighlighterPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlighterPalette.swift; sourceTree = "<group>"; };
-		A0751AD62BAC87CB00CF252C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A0751AD62BAC87CB00CF252C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A0751AD72BAC89F000CF252C /* Font+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Ext.swift"; sourceTree = "<group>"; };
 		A0751AE72BADBED500CF252C /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
 		A07B38AD2BC046A000943F0E /* SkeletonCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonCardView.swift; sourceTree = "<group>"; };
@@ -237,6 +241,8 @@
 		A09D81172C04BC8B00ADFF20 /* SetupCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCardViewModel.swift; sourceTree = "<group>"; };
 		A09D811D2C04BDD800ADFF20 /* GroupBoxStyleModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupBoxStyleModifier.swift; sourceTree = "<group>"; };
 		A09D81212C04E8DD00ADFF20 /* TextConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextConstants.swift; sourceTree = "<group>"; };
+		A0A81FCE2C518CC60023281E /* Dictionary+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Ext.swift"; sourceTree = "<group>"; };
+		A0A81FD02C518E5F0023281E /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
 		A0AC3A012BA9AB4C006DA5DA /* CardStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStatus.swift; sourceTree = "<group>"; };
 		A0B21A612BF3CEF0008EAAD1 /* CardService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardService.swift; sourceTree = "<group>"; };
 		A0B21A652BF3CFA5008EAAD1 /* StatDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatDataService.swift; sourceTree = "<group>"; };
@@ -449,6 +455,7 @@
 			isa = PBXGroup;
 			children = (
 				A01E189A2BA3211000A03412 /* Quadra */,
+				A014EA872C4312C900FDA248 /* Quadra.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -458,18 +465,14 @@
 				A014EA782C40083600FDA248 /* OtherServices */,
 				A0539AD92BC6BAF400158D05 /* Animation */,
 				A0B21A672BF3D021008EAAD1 /* ArchiveTags */,
-				A01E189F2BA3211300A03412 /* Assets.xcassets */,
 				A0B21A5F2BF3CED6008EAAD1 /* Cards */,
 				A0B21AA62BF66BEB008EAAD1 /* Data */,
 				A00B66D22BEC075800F5CA7F /* DummyCards */,
 				A01E18C02BA334E600A03412 /* Extensions */,
-				A0751AD62BAC87CB00CF252C /* Info.plist */,
 				A0F0B3C82C1453C500776855 /* List */,
 				A0B21A8C2BF54E0A008EAAD1 /* Other */,
 				A09D81192C04BCCB00ADFF20 /* PhotoPicker */,
 				A01E18A12BA3211300A03412 /* Preview Content */,
-				A01E18A62BA3211300A03412 /* Quadra.xcdatamodeld */,
-				A01E189B2BA3211000A03412 /* QuadraApp.swift */,
 				A0B21A772BF512A2008EAAD1 /* Settings */,
 				A09D81142C04BC6200ADFF20 /* SetupCard */,
 				A07B38AF2BC046C200943F0E /* Skeleton */,
@@ -496,18 +499,20 @@
 		A01E18C02BA334E600A03412 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				A0B351672C2DCDA300FAD55E /* String+Ext.swift */,
 				A059AFD02BA8A5D600CAE6E8 /* AnyShape+Ext.swift */,
 				A07420A12BD8565C002B800F /* AttributedString+Ext.swift */,
 				A01E18C12BA334F600A03412 /* Card+Ext.swift */,
 				A0D0910C2BCF149E00D8AED3 /* CardArchiveTag+Ext.swift */,
 				A01E18CD2BA7398200A03412 /* Color+Ext.swift */,
 				A0751AE72BADBED500CF252C /* Date+Ext.swift */,
+				A0A81FCE2C518CC60023281E /* Dictionary+Ext.swift */,
 				A0751AD72BAC89F000CF252C /* Font+Ext.swift */,
 				A059AFD22BA8BD2500CAE6E8 /* Image+Ext.swift */,
+				A0B351672C2DCDA300FAD55E /* String+Ext.swift */,
 				A07420A52BD99257002B800F /* UIColor+Ext.swift */,
 				A07420A32BD990F0002B800F /* UITextView+Ext.swift */,
 				A01E18C72BA7179800A03412 /* View+Ext.swift */,
+				A0A81FD02C518E5F0023281E /* UIImage+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -584,9 +589,12 @@
 		A061615A2C37254400D47CA8 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
-				A06161602C38722500D47CA8 /* AppState.swift */,
-				A06161582C3711AE00D47CA8 /* AppDelegate.swift */,
 				A061615B2C37259800D47CA8 /* AppConfiguration.swift */,
+				A06161582C3711AE00D47CA8 /* AppDelegate.swift */,
+				A06161602C38722500D47CA8 /* AppState.swift */,
+				A014EA852C40302C00FDA248 /* Assets.xcassets */,
+				A0751AD62BAC87CB00CF252C /* Info.plist */,
+				A01E189B2BA3211000A03412 /* QuadraApp.swift */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";
@@ -868,6 +876,7 @@
 				A07B38AD2BC046A000943F0E /* SkeletonCardView.swift */,
 				A0C3E25A2BBECF47006ADC91 /* SkeletonView.swift */,
 				A0983B3F2BC45AFE009A3CCB /* SkeletonListRowView.swift */,
+				A014EA882C43146900FDA248 /* SkeletonListView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -940,6 +949,7 @@
 			isa = PBXGroup;
 			children = (
 				A01E18A42BA3211300A03412 /* DataController.swift */,
+				A014EA7E2C402E0A00FDA248 /* Quadra.xcdatamodeld */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -1101,7 +1111,7 @@
 			);
 			name = Quadra;
 			productName = Quadra;
-			productReference = A01E18982BA3211000A03412 /* Quadra.app */;
+			productReference = A014EA872C4312C900FDA248 /* Quadra.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1146,9 +1156,9 @@
 			files = (
 				A01E18A32BA3211300A03412 /* Preview Assets.xcassets in Resources */,
 				A0539AD02BC5D64300158D05 /* Assets.xcassets in Resources */,
-				A01E18A02BA3211300A03412 /* Assets.xcassets in Resources */,
 				A0539AD42BC5D6B500158D05 /* Confetti.sks in Resources */,
 				A0D091152BCFEEDC00D8AED3 /* Spirals.sks in Resources */,
+				A014EA862C40302C00FDA248 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1181,13 +1191,13 @@
 				A0F940712BC9D84F00424690 /* SourceListRowView.swift in Sources */,
 				A0B3515D2C29D75700FAD55E /* PasteButton.swift in Sources */,
 				A0B21A8B2BF524FB008EAAD1 /* SourceViewModel.swift in Sources */,
+				A0A81FCF2C518CC60023281E /* Dictionary+Ext.swift in Sources */,
 				A014EA7A2C40086300FDA248 /* PhotoLibraryService.swift in Sources */,
 				A05EFA222BBDF122000460A3 /* OtherView.swift in Sources */,
 				A01D2A742BB4C4CA00AE1790 /* ListRowView.swift in Sources */,
 				A0B3515F2C2B4F4100FAD55E /* TextFieldWithFlipableButton.swift in Sources */,
 				A07B38AE2BC046A000943F0E /* SkeletonCardView.swift in Sources */,
 				A0B351662C2C7A2E00FAD55E /* DynamicHeightScrollView.swift in Sources */,
-				A01E18A82BA3211300A03412 /* Quadra.xcdatamodeld in Sources */,
 				A097836F2C23166900DB3827 /* CardSource+CoreDataClass.swift in Sources */,
 				A0BC329E2C1462C20006BF39 /* CreationDateView.swift in Sources */,
 				A01D2A762BB4C78800AE1790 /* FilterView.swift in Sources */,
@@ -1204,6 +1214,7 @@
 				A01E18BD2BA32F9E00A03412 /* ListView.swift in Sources */,
 				A01E18CA2BA71C4700A03412 /* TransparentButtonStyle.swift in Sources */,
 				A02542602BFFC638004B5FA1 /* FlipablePhraseView.swift in Sources */,
+				A0A81FD12C518E5F0023281E /* UIImage+Ext.swift in Sources */,
 				A06161592C3711AE00D47CA8 /* AppDelegate.swift in Sources */,
 				A05DC6132BFE70570096844D /* CardsViewModel.swift in Sources */,
 				A061615F2C3726A500D47CA8 /* AlertService.swift in Sources */,
@@ -1269,6 +1280,7 @@
 				A0B21A6A2BF3D03E008EAAD1 /* ArhiveTagService.swift in Sources */,
 				A09D81182C04BC8B00ADFF20 /* SetupCardViewModel.swift in Sources */,
 				A02542552BFFB08C004B5FA1 /* CardHeaderView.swift in Sources */,
+				A014EA892C43146900FDA248 /* SkeletonListView.swift in Sources */,
 				A01E189C2BA3211000A03412 /* QuadraApp.swift in Sources */,
 				A0751AD82BAC89F000CF252C /* Font+Ext.swift in Sources */,
 				A059AFD12BA8A5D600CAE6E8 /* AnyShape+Ext.swift in Sources */,
@@ -1285,6 +1297,7 @@
 				A014EA772C3F1C2E00FDA248 /* CropView.swift in Sources */,
 				A09783722C23166900DB3827 /* StatData+CoreDataProperties.swift in Sources */,
 				A0B21A802BF514DC008EAAD1 /* SettingsViewModel.swift in Sources */,
+				A014EA802C402E0A00FDA248 /* Quadra.xcdatamodeld in Sources */,
 				A0B21A822BF5173C008EAAD1 /* HighliterPaletteView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1418,18 +1431,18 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Quadra/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "Quadra/Preview\\ Content";
 				DEVELOPMENT_TEAM = 965K7TW82R;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Quadra/Info.plist;
+				INFOPLIST_FILE = Quadra/SupportingFiles/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs access to your photo library to select images for your cards.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1454,18 +1467,18 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Quadra/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "Quadra/Preview\\ Content";
 				DEVELOPMENT_TEAM = 965K7TW82R;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Quadra/Info.plist;
+				INFOPLIST_FILE = Quadra/SupportingFiles/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs access to your photo library to select images for your cards.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1507,12 +1520,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		A01E18A62BA3211300A03412 /* Quadra.xcdatamodeld */ = {
+		A014EA7E2C402E0A00FDA248 /* Quadra.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				A01E18A72BA3211300A03412 /* Quadra.xcdatamodel */,
+				A014EA7F2C402E0A00FDA248 /* Quadra.xcdatamodel */,
 			);
-			currentVersion = A01E18A72BA3211300A03412 /* Quadra.xcdatamodel */;
+			currentVersion = A014EA7F2C402E0A00FDA248 /* Quadra.xcdatamodel */;
 			path = Quadra.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

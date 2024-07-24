@@ -167,10 +167,10 @@ class CardService: ObservableObject {
     func delete(card: Card) throws {
         let context = dataController.container.viewContext
         context.delete(card)
-        if let index = cards.firstIndex(where: { $0.id == card.id }) { cards.remove(at: index) }
 
         do {
             try context.save()
+            if let index = cards.firstIndex(where: { $0.id == card.id }) { cards.remove(at: index) }
             StatDataService.shared.incrementDeletedItemsCounter()
         } catch {
             context.rollback()

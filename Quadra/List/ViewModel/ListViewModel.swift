@@ -5,12 +5,13 @@
 //  Created by Tatyana Balashenko on 08/06/2024.
 //
 
-import Foundation
 import Combine
+import SwiftUI
 
 final class ListViewModel: ObservableObject {
     @Published var filteredCards: [CardStatus: [Card]] = [:]
     @Published var searchText: String = ""
+    @Published var isLoading: Bool = false
     
     private var cancellables = Set<AnyCancellable>()
     private let service = FilterService.shared
@@ -24,7 +25,11 @@ final class ListViewModel: ObservableObject {
     private func observeCardServiceChanges() {
         CardService.shared.$cards
             .sink { [weak self] _ in
-                self?.filterCards()
+                guard let self = self else { return }
+                
+                Task {
+                    await self.filterCards()
+                }
             }
             .store(in: &cancellables)
     }
@@ -32,7 +37,11 @@ final class ListViewModel: ObservableObject {
     private func observeSearchTextChanges() {
         $searchText
             .sink { [weak self] _ in
-                self?.filterCards()
+                guard let self = self else { return }
+                
+                Task {
+                    await self.filterCards()
+                }
             }
             .store(in: &cancellables)
     }
@@ -46,31 +55,39 @@ final class ListViewModel: ObservableObject {
         )
         .combineLatest(service.$toDate)
         .sink { [weak self] _ in
-            self?.filterCards()
+            guard let self = self else { return }
+            
+            Task {
+                await self.filterCards()
+            }
         }
         .store(in: &cancellables)
     }
     
-    private func filterCards() {
+    @MainActor
+    func filterCards() {
         Task {
-            await MainActor.run { [weak self] in
-                guard let self = self else { return }
-                
-                let filteredCards = CardService.shared.cards
-                    .filter { !$0.isFault || !$0.isDeleted}
-                    .filter { card in
-                        let textMatch = self.checkTextMatch(card: card)
-                        let statusMatches = self.checkStatusMatches(card: card)
-                        let sourceMatches = self.checkSourceMatches(card: card)
-                        let dateRangeMatches = self.checkDateRangeMatches(card: card)
-                        let archiveTagMatches = self.checkArchiveTagMatches(card: card)
-                        
-                        return textMatch && statusMatches && sourceMatches && dateRangeMatches && archiveTagMatches
-                    }
-                self.filteredCards = Dictionary(grouping: filteredCards, by: { CardStatus(rawValue: $0.cardStatus) ?? .input })
+            let filteredCards = CardService.shared.cards
+                .filter { !$0.isFault || !$0.isDeleted }
+                .filter { card in
+                    let textMatch = self.checkTextMatch(card: card)
+                    let statusMatches = self.checkStatusMatches(card: card)
+                    let sourceMatches = self.checkSourceMatches(card: card)
+                    let dateRangeMatches = self.checkDateRangeMatches(card: card)
+                    let archiveTagMatches = self.checkArchiveTagMatches(card: card)
+                    
+                    return textMatch && statusMatches && sourceMatches && dateRangeMatches && archiveTagMatches
+                }
+            
+            let newFilteredCards = Dictionary(grouping: filteredCards, by: { CardStatus(rawValue: $0.cardStatus) ?? .input })
+                .mapValues { $0.sorted(by: { $0.additionTime < $1.additionTime }) }
+            
+            if !self.filteredCards.isEqual(to: newFilteredCards) {
+                self.filteredCards = newFilteredCards
             }
         }
     }
+
     
     func delete(card: Card) {
         do {

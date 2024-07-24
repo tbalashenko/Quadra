@@ -57,7 +57,7 @@ struct CardView: View {
 }
 
  #Preview {
-     @ObservedObject var cardModel = CardModel(card: MockData.cards.first!, mode: .view)
+     @ObservedObject var cardModel = CardModel(card: MockData.cards.first!, mode: .view)!
      
      CardView() { cardModel.backToInput() }
          .environmentObject(cardModel)

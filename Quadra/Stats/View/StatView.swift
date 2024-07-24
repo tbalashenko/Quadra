@@ -26,7 +26,6 @@ struct StatView: View {
         NavigationStack {
             if StatDataService.shared.statData.count < 3 {
                 StatEmptyView()
-                    .environmentObject(viewModel)
             } else {
                 ChartView(
                     selectedPeriod: $selectedPeriod,

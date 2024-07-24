@@ -18,9 +18,11 @@ struct ListView: View {
                     if let cards = viewModel.filteredCards[status], !cards.isEmpty {
                         Section(header: Text(status.title)) {
                             ForEach(cards, id: \.id) { card in
-                                ListRowView()
-                                    .customListRow()
-                                    .environmentObject(CardModel(card: card, mode: .view))
+                                if let model = CardModel(card: card, mode: .view) {
+                                    ListRowView()
+                                        .customListRow()
+                                        .environmentObject(model)
+                                }
                             }
                             .onDelete { indexSet in
                                 for index in indexSet {
@@ -40,10 +42,7 @@ struct ListView: View {
             .toolbar(.visible, for: .tabBar)
             .toolbar {
                 ToolbarItem {
-                    NavigationLink(
-                        destination: FilterView()
-                            .toolbar(.hidden, for: .tabBar)
-                    ) {
+                    NavigationLink(destination: FilterView()) {
                         Image(systemName: "line.3.horizontal.decrease.circle.fill")
                             .smallButtonImage()
                             .foregroundStyle(Color.accentColor)

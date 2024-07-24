@@ -42,6 +42,7 @@ struct FilterView: View {
         }
         .customListStyle()
         .navigationTitle(TextConstants.filter)
+        .toolbar(.hidden, for: .tabBar)
         .toolbar {
             Button {
                 viewModel.resetFilter()

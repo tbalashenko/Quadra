@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HighlightableTextView: View {
-    @State private var dynamicHeight: CGFloat = 100
+    @State private var dynamicHeight: CGFloat = 50
     @State private var showingPlaceholder = true
     @Binding var text: AttributedString
     var error: String

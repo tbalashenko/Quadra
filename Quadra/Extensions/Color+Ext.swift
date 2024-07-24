@@ -8,6 +8,8 @@
 import SwiftUI
 
 extension Color {
+    static let pureWhite = Color(hex: "#FFFFFF")
+    static let pureBlack = Color(hex: "#000000")
     static let dustRose = Color(hex: "#a35b6e")
     static let catawba = Color(hex: "#6c3946") // pale cherry
     static let whiteCoffee = Color(hex: "e7d7d4")  // beige

@@ -55,6 +55,16 @@ extension Card {
         return Image(uiImage: uiImage)
     }
     
+    var isImageDark: Bool? {
+        guard
+            let imageData = croppedImage,
+            let uiImage = UIImage(data: imageData),
+            let uiColor = uiImage.averageColor
+        else { return nil }
+        
+        return Color(uiColor).isDark
+    }
+    
     var needSetNewStatus: Bool {
         needMoveToThisWeek || needMoveToThisMonth || needMoveToArchive
     }

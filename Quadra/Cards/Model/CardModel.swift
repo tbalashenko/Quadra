@@ -28,7 +28,9 @@ final class CardModel: ObservableObject {
     var showBackToInputButton: Bool { mode == .view && card.cardStatus == 3 }
     private var cancellables = Set<AnyCancellable>()
     
-    init(card: Card, mode: CardViewMode) {
+    init?(card: Card, mode: CardViewMode) {
+        guard !card.isFault && !card.isDeleted else { return nil }
+        
         self.card = card
         self.mode = mode
         showAdditionalInfo = mode == .view

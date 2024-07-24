@@ -62,7 +62,6 @@ struct ContentView: View {
             .overlay { ConfettiView(isPresented: $viewModel.showConfetti) }
             .onAppear { viewModel.prepareCards(resetNonShownCards: false) }
             .onDisappear { viewModel.clear() }
-
         }
     }
 }

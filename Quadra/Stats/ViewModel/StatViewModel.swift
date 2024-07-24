@@ -29,38 +29,4 @@ class StatViewModel: ObservableObject {
 
         statData = data
     }
-
-    func getStatDataState() -> StatDataState {
-        return StatDataService.shared.statData.isEmpty ? .empty : .notEnoughData
-    }
-}
-
-extension StatViewModel {
-    enum StatDataState {
-        case empty
-        case notEnoughData
-        case noDataForPeriod
-
-        var instructionFirstPart: String {
-            switch self {
-                case .empty:
-                    return TextConstants.addFirstCards
-                case .notEnoughData:
-                    return TextConstants.continueAddAndRepHelp
-                case .noDataForPeriod:
-                    return ""
-            }
-        }
-
-        var instructionSecondPart: String? {
-            switch self {
-                case .empty:
-                    return TextConstants.continueAddAndRepHelp
-                case .notEnoughData:
-                    return nil
-                case .noDataForPeriod:
-                    return ""
-            }
-        }
-    }
 }

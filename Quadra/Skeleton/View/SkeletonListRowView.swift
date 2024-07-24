@@ -10,6 +10,8 @@ import SwiftUI
 struct SkeletonListRowView: View {
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
+            SkeletonView()
+                .frame(width: 88, height: 88)
             VStack(alignment: .leading, spacing: 8) {
                 SkeletonView()
                     .frame(height: 22)
@@ -19,8 +21,7 @@ struct SkeletonListRowView: View {
                            height: 22)
                     .padding([.leading, .bottom])
             }
-            SkeletonView()
-                .frame(width: 88, height: 88)
+            .padding(.trailing, 8)
         }
         .background(Color.element
             .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
