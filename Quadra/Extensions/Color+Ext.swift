@@ -34,8 +34,16 @@ extension Color {
     struct Green {
         static var isabelline = Color(hex: "#edf5ec") // very light green
         static var gainsboro = Color(hex: "#d7e7d4") // light green
-        static var ashGray = Color(hex: "#afc7b3") // pastel light green
         static var darkSeaGreen = Color(hex: "#96b4a0") // pastel green
+    }
+    
+    struct Status {
+        static var ashGray0 = Color(hex: "#EFF4F0")
+        static var ashGray1 = Color(hex: "#E7EEE8")
+        static var ashGray2 = Color(hex: "#DFE9E1")
+        static var ashGray3 = Color(hex: "#D7E3D9")
+        static var ashGray4 = Color(hex: "#CFDDD1")
+        static var ashGray5 = Color(hex: "#C7D8CA")
     }
 
     struct Month {

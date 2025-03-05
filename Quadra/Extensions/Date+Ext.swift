@@ -8,6 +8,13 @@
 import Foundation
 
 extension Date {
+    var isDateToday: Bool {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let otherDate = calendar.startOfDay(for: self)
+        return today == otherDate
+    }
+    
     enum Month: Int {
         case january = 1, february, march, april, may, june, july, august, september, october, november, december
     }
@@ -76,13 +83,6 @@ extension Date {
         let now = Date()
         let components = calendar.dateComponents([.day], from: date, to: now)
         return components.day ?? 0
-    }
-
-    func isDateToday() -> Bool {
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        let otherDate = calendar.startOfDay(for: self)
-        return today == otherDate
     }
 
     func subtractingDays(_ days: Int) -> Date? {

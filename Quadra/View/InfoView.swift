@@ -37,12 +37,12 @@ struct InfoView: View {
     
     var body: some View {
         VStack {
-            Button {
-                
-            } label: {
-                Label(TextConstants.howToUseApp, systemImage: "info.circle")
-            }
-            .buttonStyle(NeuButtonStyle(size: SizeConstants.plainButtonSize))
+//            NavigationLink {
+//                HowToUseTheAppView()
+//            } label: {
+//                Label(TextConstants.howToUseTheApp, systemImage: "info.circle")
+//            }
+//            .buttonStyle(NeuButtonStyle(size: SizeConstants.plainButtonSize))
             Spacer()
                 .frame(height: 16)
             

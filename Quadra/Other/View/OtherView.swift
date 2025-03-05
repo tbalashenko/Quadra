@@ -16,6 +16,10 @@ struct OtherView: View {
                         SettingsView()
                     }
                     
+                    NavigationLink(TextConstants.aboutApp) {
+                        AboutAppView()
+                    }
+                    
                     Section(TextConstants.testFeatures) {
                         NavigationLink(TextConstants.getSample) {
                             SamplePhrasesView()

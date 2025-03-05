@@ -16,7 +16,7 @@ struct SwipeableCardView: View {
     @State private var degrees: Double = 0
     
     var body: some View {
-        CardView { swipeLeft(changeStatus: true) }
+        CardView { swipeLeft() }
             .environmentObject(model)
             .rotationEffect(.degrees(degrees))
             .offset(x: xOffset, y: yOffset)
@@ -37,21 +37,21 @@ private extension SwipeableCardView {
         degrees = 0
     }
 
-    private func swipeRight(changeStatus: Bool = false) {
+    private func swipeRight() {
         withAnimation(.snappy(duration: 1)) {
             xOffset = 500
             degrees = 12
         } completion: {
-            viewModel.removeCard(model: model, changeStatus: changeStatus)
+            viewModel.removeCard(model: model)
         }
     }
 
-    private func swipeLeft(changeStatus: Bool = false) {
+    private func swipeLeft() {
         withAnimation(.snappy(duration: 1)) {
             xOffset = -500
             degrees = -12
         } completion: {
-            viewModel.removeCard(model: model, changeStatus: changeStatus)
+            viewModel.removeCard(model: model)
         }
     }
 }

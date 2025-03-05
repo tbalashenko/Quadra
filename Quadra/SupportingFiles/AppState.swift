@@ -8,11 +8,11 @@
 import Foundation
 
 enum AppTab: Int {
-    case review = 0, list, stat, other
+    case cards = 0, list, stat, settings
 }
 
 class AppState: ObservableObject {
-    @Published var selectedTab: AppTab = .review
+    @Published var selectedTab: AppTab = .cards
     
     static let shared = AppState()
     

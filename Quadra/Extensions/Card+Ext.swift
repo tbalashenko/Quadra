@@ -65,20 +65,16 @@ extension Card {
         return Color(uiColor).isDark
     }
     
-    var needSetNewStatus: Bool {
-        needMoveToThisWeek || needMoveToThisMonth || needMoveToArchive
+    var currentStatus: CardStatus? {
+        return CardStatus(rawValue: cardStatus)
     }
     
     var getNewStatus: CardStatus {
-        if needMoveToThisWeek {
-            return .thisWeek
-        } else if needMoveToThisMonth {
-            return .thisMonth
-        } else if needMoveToArchive {
-            return .archive
+        if currentStatus == .input, Date().daysAgo(from: additionTime) < 1 {
+            return .input
+        } else {
+            return currentStatus?.next() ?? .input
         }
-        
-        return CardStatus(rawValue: cardStatus) ?? .input
     }
     
     /// - Throughout the day (several times as new phrases are added) →  inbox  + Source tag   +
@@ -92,74 +88,37 @@ extension Card {
         // phrase should be repeated throughout the day several times
         guard let lastRepetitionDate = lastRepetition else { return true }
         
-        let firstSunday = Date().firstSunday(after: lastRepetitionDate)
-        let isLastRepetitionDateToday = lastRepetitionDate.isDateToday()
-        
         switch cardStatus {
                 // input, should be repeatet throughout the day
             case 0:
                 return true
-                // this week, should be repeatet once a day
+                // nextDay, should be repeatet the next day since addition
             case 1:
-                return !isLastRepetitionDateToday
-                // this month, should be repeated every sunday throughout the month
-            case 2:
-                if let firstSundayAfterLastRepetition = firstSunday, Date() >= firstSundayAfterLastRepetition {
+                if Date().daysAgo(from: additionTime) >= 1,  Date().daysAgo(from: lastRepetitionDate) >= 1 {
                     return true
-                } else {
-                    return false
                 }
-                // archive, should be repeated one month later, three months later, Six months later, one year later
-            case 3:
-                if let lastTimeStatusChanged {
-                    if Date().daysAgo(from: lastTimeStatusChanged) >= 30,
-                       Date().daysAgo(from: lastRepetitionDate) >= 30 {
-                        return true
-                    } else if Date().daysAgo(from: lastTimeStatusChanged) >= 90,
-                              Date().daysAgo(from: lastRepetitionDate) >= 60 {
-                        return true
-                    } else if Date().daysAgo(from: lastTimeStatusChanged) >= 180,
-                              Date().daysAgo(from: lastRepetitionDate) >= 90 {
-                        return true
-                    } else if Date().daysAgo(from: lastTimeStatusChanged) >= 360,
-                              Date().daysAgo(from: lastRepetitionDate) >= 180 {
-                        return true
-                    }
-                } else {
-                    return false
+                // day7, should be repeated 7 days since addition
+            case 7:
+                if Date().daysAgo(from: additionTime) >= 7,  Date().daysAgo(from: lastRepetitionDate) >= 7 {
+                    return true
+                }
+                // day30, should be repeated 30 days since addition
+            case 30:
+                if Date().daysAgo(from: additionTime) >= 30,  Date().daysAgo(from: lastRepetitionDate) >= 30 {
+                    return true
+                }
+                // day60, should be repeated 60 days since addition
+            case 60:
+                if Date().daysAgo(from: additionTime) >= 60,  Date().daysAgo(from: lastRepetitionDate) >= 60 {
+                    return true
+                }
+                // day90, should be repeated 30 days since addition
+            case 90:
+                if Date().daysAgo(from: additionTime) >= 90,  Date().daysAgo(from: lastRepetitionDate) >= 90 {
+                    return true
                 }
             default:
                 break
-        }
-        
-        return false
-    }
-    
-    var needMoveToArchive: Bool {
-        if let date = lastTimeStatusChanged, date.isDateToday() || isArchived { return false }
-        
-        if let date = Date().lastSundayOfMonth(for: additionTime), date <= Date() {
-            return true
-        }
-        
-        return false
-    }
-    
-    var needMoveToThisMonth: Bool {
-        if let date = lastTimeStatusChanged, date.isDateToday() || isArchived { return false }
-        
-        if cardStatus == 0 || cardStatus == 1, let date = Date().firstSunday(after: additionTime), date <= Date() {
-            return true
-        }
-        
-        return false
-    }
-    
-    var needMoveToThisWeek: Bool {
-        if let date = lastTimeStatusChanged, date.isDateToday() || isArchived { return false }
-        
-        if cardStatus == 0, Date().isNextDay(from: additionTime) {
-            return true
         }
         
         return false
@@ -210,5 +169,14 @@ extension Card {
         lhs.sources == rhs.sources &&
         lhs.cardStatus == rhs.cardStatus &&
         lhs.additionTime == rhs.additionTime
+    }
+}
+
+extension CaseIterable where Self: Equatable {
+    func next() -> Self {
+        let all = Self.allCases
+        let idx = all.firstIndex(of: self)!
+        let next = all.index(after: idx)
+        return all[next == all.endIndex ? all.endIndex : next]
     }
 }

@@ -24,8 +24,6 @@ final class CardModel: ObservableObject {
     
     var canBeChanged: Bool { mode == .view }
     var showInfoButton: Bool { mode == .repetition }
-    var showMoveToButton: Bool { card.needSetNewStatus && mode == .repetition }
-    var showBackToInputButton: Bool { mode == .view && card.cardStatus == 3 }
     private var cancellables = Set<AnyCancellable>()
     
     init?(card: Card, mode: CardViewMode) {
@@ -86,7 +84,7 @@ final class CardModel: ObservableObject {
 
 extension CardModel {
     private func prepareArchiveTag() -> TagCloudItem?  {
-        guard card.cardStatus == 3, let tag = card.archiveTag else { return nil }
+        guard card.cardStatus == 91, let tag = card.archiveTag else { return nil }
         
         let archiveTag = TagCloudItem(
             isSelected: true,

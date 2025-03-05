@@ -145,16 +145,7 @@ class CardService: ObservableObject {
     }
     
     func setNewStatus(card: Card) {
-        if card.needMoveToThisWeek {
-            card.cardStatus = 1
-        } else if card.needMoveToThisMonth {
-            card.cardStatus = 2
-        } else if card.needMoveToArchive {
-            card.cardStatus = 3
-            card.isArchived = true
-        }
-        
-        card.lastTimeStatusChanged = Date()
+        card.cardStatus = card.getNewStatus.rawValue
         
         do {
             try dataController.container.viewContext.save()

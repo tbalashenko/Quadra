@@ -39,7 +39,6 @@ struct TextConstants {
     
     static let addFirstCards = "Add your first cards"
     static let continueAddAndRepHelp = "Continue adding and repeating your cards daily to see statistics"
-    static let howToUseApp = "How to use the app"
     static let added = "Added:"
     static let numberOfRepetitions = "Number of repetitions:"
     static let lastRepetition = "Last repetition:"
@@ -69,6 +68,7 @@ struct TextConstants {
     static let cropImage = "Crop Image"
     static let addCard = "Add a new card"
     static let editCard = "Edit your card"
+    static let aboutApp = "About Quadra"
     
     // Buttons
     static let reset = "Reset"
@@ -83,8 +83,11 @@ struct TextConstants {
     
     // Statuses
     static let input = "#input"
-    static let thisWeek = "#thisWeek"
-    static let thisMonth = "#thisMonth"
+    static let nextDay = "#nextDay"
+    static let day7 = "#7days"
+    static let day30 = "#30days"
+    static let day60 = "#60days"
+    static let day90 = "#90days"
     static let archive = "#archive"
     
     //Errors

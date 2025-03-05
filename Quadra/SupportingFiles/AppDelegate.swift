@@ -33,7 +33,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     ) {
         if response.notification.request.identifier == "dailyReminder" {
             DispatchQueue.main.async {
-                AppState.shared.selectedTab = .review
+                AppState.shared.selectedTab = .cards
             }
         }
         completionHandler()

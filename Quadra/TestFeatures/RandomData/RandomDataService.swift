@@ -44,7 +44,7 @@ final class RandomDataService {
                 }
             } else {
                 do {
-                    try StatDataService.shared.saveStatData(
+                    try _ = StatDataService.shared.saveStatData(
                         date: currentDate ?? Date(),
                         repeatedItemsCounter: Int.random(in: 1...5),
                         addedItemsCounter: Int.random(in: 1...3),

@@ -19,7 +19,7 @@ struct QuadraApp: App {
                 ContentView()
                     .environmentObject(cardsViewModel)
                     .tabItem { Image(systemName: "book.pages") }
-                    .tag(AppTab.review)
+                    .tag(AppTab.cards)
                 ListView()
                     .tabItem { Image(systemName: "list.bullet") }
                     .tag(AppTab.list)
@@ -28,7 +28,7 @@ struct QuadraApp: App {
                     .tag(AppTab.stat)
                 OtherView()
                     .tabItem { Image(systemName: "gearshape") }
-                    .tag(AppTab.other)
+                    .tag(AppTab.settings)
             }
         }
     }

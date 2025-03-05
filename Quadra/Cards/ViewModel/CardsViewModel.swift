@@ -82,10 +82,8 @@ final class CardsViewModel: ObservableObject {
         self.visibleCardModels = Array(cardModels.prefix(visibleCardCount).reversed())
     }
     
-    func removeCard(model: CardModel, changeStatus: Bool = false) {
-        if changeStatus {
-            CardService.shared.setNewStatus(card: model.card)
-        }
+    func removeCard(model: CardModel) {
+        CardService.shared.setNewStatus(card: model.card)
         cardModels.removeAll { $0.card.id == model.card.id }
         visibleCardModels.removeAll { $0.card.id == model.card.id }
         

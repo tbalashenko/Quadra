@@ -27,19 +27,10 @@ struct CardHeaderView: View {
                         model.showAdditionalInfo.toggle()
                     }
                 }
-                if model.showMoveToButton {
-                    MoveToButton(
-                        title: model.card.getNewStatus.title,
-                        color: model.card.getNewStatus.color,
-                        action: action
-                    )
-                }
-                if model.showBackToInputButton {
-                    MoveToButton(
-                        title: CardStatus.input.title,
-                        color: CardStatus.input.color,
-                        action: action
-                    )
+                if let status = model.card.currentStatus {
+                    AlignableView(alignment: .topLeading) {
+                        TagView(text: status.title, backgroundColor: status.color)
+                    } action: { }
                 }
             }
             .frame(size: geometry.size)
